@@ -3,12 +3,12 @@ package classes;
 public class Book {
     private String title;
     private String author;
-    private int ISBN;
+    private String ISBN;
     private String description;
     private String photograph; //filename of the image
     private boolean borrowed;
 
-    public Book(String title, String author, int ISBN, String description, String photograph) {
+    public Book(String title, String author, String ISBN, String description, String photograph) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -33,11 +33,11 @@ public class Book {
         this.author = author;
     }
 
-    public int getISBN() {
+    public String getISBN() {
         return ISBN;
     }
 
-    public void setISBN(int ISBN) {
+    public void setISBN(String ISBN) {
         this.ISBN = ISBN;
     }
 

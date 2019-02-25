@@ -8,8 +8,9 @@ public class BookSearch {
     }
 
     public Booklist searchDatabase(String keyword) {
-        //TODO
+        //TODO: Have a booklist of books related to keyword by accessing a database
         Booklist booklist = new Booklist();
+        // Add books to this booklist depending on keyword specified
         return booklist;
     }
 
