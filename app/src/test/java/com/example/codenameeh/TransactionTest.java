@@ -38,3 +38,5 @@ public class TransactionUnitTest{
         //TEST completeTransaction
         t.completeTransaction();
         assertTrue(user1.getBorrowing().contains(book)); //borrower should now have the book in their borrowed list
+      }
+}  
