@@ -2,6 +2,9 @@ package com.example.codenameeh;
 
 import org.junit.Test;
 
+import classes.BookSearch;
+import classes.Booklist;
+import classes.User;
 import classes.UserValidifier;
 
 import static junit.framework.TestCase.assertFalse;
@@ -17,7 +20,7 @@ public class BookSearchUnitTest{
         BookSearch bsearch = new BookSearch(Tester);
         User NewTester = new User("Temp", 456456456, "mytest@gmail.com", "test101", "newpassword");
         bsearch.setUser(NewTester);
-        assertEquals(bsearch.getUser,NewTester);
+        assertEquals(bsearch.getUser(),NewTester);
         
         
         //Add to data base a book with a keyword as "Keyword"

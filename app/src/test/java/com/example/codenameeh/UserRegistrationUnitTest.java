@@ -11,7 +11,7 @@ public class UserRegistrationUnitTest{
       @Test
       public void test(){
       
-        User testUser = new User(name, 1234567890, email, username, password);
+        User testUser = new User("name", 1234567890, "email", "username", "password");
       
         UserRegistration userReg = new UserRegistration(testUser);
         
