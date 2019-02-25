@@ -21,9 +21,7 @@ public class Userlist {
         userList.remove(user);
     }
 
-    public void contains(User user) {
-        userList.contains(user);
-    }
+    public boolean contains(User user) { return userList.contains(user); }
 
     public ArrayList<User> getUserList() {
         return userList;
