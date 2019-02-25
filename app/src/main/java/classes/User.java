@@ -9,7 +9,7 @@ public class User {
     private String username;
     private String password;
     private ArrayList<String> keywords;
-    private ArrayList<String> searchWords;
+    private KeywordTracker searchWords;
     private Booklist owning;
     private Booklist borrowing;
     private Booklist borrowedHistory;
@@ -25,6 +25,7 @@ public class User {
         this.borrowing = new Booklist();
         this.borrowedHistory = new Booklist();
         this.requesting = new Booklist();
+        this.searchWords = new KeywordTracker();
     }
 
     public void newOwn(Book book) {
@@ -91,11 +92,11 @@ public class User {
         this.keywords = keywords;
     }
 
-    public ArrayList<String> getSearchWords() {
+    public KeywordTracker getSearchWords() {
         return searchWords;
     }
 
-    public void setSearchWords(ArrayList<String> searchWords) {
+    public void setSearchWords(KeywordTracker searchWords) {
         this.searchWords = searchWords;
     }
 
