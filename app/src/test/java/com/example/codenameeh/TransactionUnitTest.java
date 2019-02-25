@@ -15,12 +15,12 @@ public class TransactionUnitTest{
     public void test(){
 
         Transaction t = new Transaction(null, null, null, null);
-
+        
         User user1 = new User("name1", 123123123, "email1", "username1", "password1");
         User user2 = new User("name2", 456456456, "email2", "username2", "password2");
 
         Book book = new Book("NA", "NA", "0", "NA", "NA");
-
+        
         Geolocation location = new Geolocation("country", "city", "address");
 
         //TEST GETTERS and SETTERS
@@ -39,5 +39,5 @@ public class TransactionUnitTest{
         //TEST completeTransaction
         t.completeTransaction();
         assertTrue(user1.getBorrowing().contains(book)); //borrower should now have the book in their borrowed list
-    }
+      }
 }

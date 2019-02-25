@@ -13,6 +13,10 @@ public class KeywordTracker {
         //TODO
     }
 
+    public void add(String newKeyword){
+        this.keywords.add(newKeyword);
+    }
+
     public ArrayList<String> getKeywords() {
         return keywords;
     }
