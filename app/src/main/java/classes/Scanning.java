@@ -3,12 +3,13 @@ package classes;
 public class Scanning {
     private int ISBN;
 
-    public Scanning(int ISBN) {
-        this.ISBN = ISBN;
+    public Scanning() {
+
     }
 
-    public int scanISBN(String image) {
-        return 0;
+    public String scanISBN(String image) {
+        //TODO
+        return "";
     }
 
     public void changeBookProperties(Book book) {

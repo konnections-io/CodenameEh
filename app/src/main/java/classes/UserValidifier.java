@@ -9,7 +9,7 @@ public class UserValidifier {
         this.password = password;
     }
 
-    public boolean validify(String user, String pass) {
+    public boolean validify() {
         //TODO
         return true;
     }
