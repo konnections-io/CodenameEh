@@ -2,8 +2,8 @@ package com.example.codenameeh;
 
 import org.junit.Test;
 
-import classes.Book;
-import classes.Booklist;
+import com.codenameeh.classes.Book;
+import com.codenameeh.classes.Booklist;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;

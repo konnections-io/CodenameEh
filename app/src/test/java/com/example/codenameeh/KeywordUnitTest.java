@@ -2,7 +2,7 @@ package com.example.codenameeh;
 
 import org.junit.Test;
 
-import classes.KeywordTracker;
+import com.codenameeh.classes.KeywordTracker;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

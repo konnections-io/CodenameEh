@@ -1,4 +1,4 @@
-package classes;
+package com.codenameeh.classes;
 
 public class UserSearch {
     private String keyword;

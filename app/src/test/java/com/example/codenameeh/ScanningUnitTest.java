@@ -2,7 +2,7 @@ package com.example.codenameeh;
 
 import org.junit.Test;
 import java.io.File;
-import classes.Scanning;
+import com.codenameeh.classes.Scanning;
 import static junit.framework.TestCase.assertEquals;
 
 public class ScanningUnitTest {

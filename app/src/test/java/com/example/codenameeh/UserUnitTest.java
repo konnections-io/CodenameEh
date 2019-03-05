@@ -2,8 +2,8 @@ package com.example.codenameeh;
 
 import org.junit.Test;
 
-import classes.Book;
-import classes.User;
+import com.codenameeh.classes.Book;
+import com.codenameeh.classes.User;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
