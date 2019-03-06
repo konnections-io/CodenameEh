@@ -2,7 +2,7 @@ package com.example.codenameeh;
 
 import org.junit.Test;
 
-import classes.Geolocation;
+import com.example.codenameeh.classes.Geolocation;
 
 import static org.junit.Assert.assertEquals;
 

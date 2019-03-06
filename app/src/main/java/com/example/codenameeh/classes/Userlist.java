@@ -1,4 +1,4 @@
-package classes;
+package com.example.codenameeh.classes;
 
 import java.util.ArrayList;
 

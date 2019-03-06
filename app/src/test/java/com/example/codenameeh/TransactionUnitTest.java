@@ -2,10 +2,10 @@ package com.example.codenameeh;
 
 import org.junit.Test;
 
-import classes.Transaction;
-import classes.User;
-import classes.Book;
-import classes.Geolocation;
+import com.example.codenameeh.classes.Transaction;
+import com.example.codenameeh.classes.User;
+import com.example.codenameeh.classes.Book;
+import com.example.codenameeh.classes.Geolocation;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;

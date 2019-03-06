@@ -2,9 +2,9 @@ package com.example.codenameeh;
 
 import org.junit.Test;
 
-import classes.User;
-import classes.UserSearch;
-import classes.Userlist;
+import com.example.codenameeh.classes.User;
+import com.example.codenameeh.classes.UserSearch;
+import com.example.codenameeh.classes.Userlist;
 
 import static org.junit.Assert.assertEquals;
 

@@ -2,10 +2,9 @@ package com.example.codenameeh;
 
 import org.junit.Test;
 
-import classes.BookSearch;
-import classes.Booklist;
-import classes.User;
-import classes.UserValidifier;
+import com.example.codenameeh.classes.BookSearch;
+import com.example.codenameeh.classes.Booklist;
+import com.example.codenameeh.classes.User;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;

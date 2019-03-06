@@ -2,8 +2,7 @@ package com.example.codenameeh;
 
 import org.junit.Test;
 
-import classes.Book;
-import classes.UserValidifier;
+import com.example.codenameeh.classes.Book;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;

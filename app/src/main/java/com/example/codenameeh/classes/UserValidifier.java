@@ -1,4 +1,4 @@
-package classes;
+package com.example.codenameeh.classes;
 
 public class UserValidifier {
     private String username;

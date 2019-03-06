@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import classes.Notification;
-import classes.User;
+import com.example.codenameeh.classes.Notification;
+import com.example.codenameeh.classes.User;
 
 import static org.junit.Assert.assertEquals;
 
