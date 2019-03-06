@@ -2,8 +2,8 @@ package com.example.codenameeh;
 
 import org.junit.Test;
 
-import com.codenameeh.classes.UserRegistration;
-import com.codenameeh.classes.User;
+import com.example.codenameeh.classes.UserRegistration;
+import com.example.codenameeh.classes.User;
 
 import static junit.framework.TestCase.assertTrue;
 

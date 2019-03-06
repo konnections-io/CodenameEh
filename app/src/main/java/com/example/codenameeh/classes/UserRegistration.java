@@ -1,4 +1,4 @@
-package com.codenameeh.classes;
+package com.example.codenameeh.classes;
 
 public class UserRegistration {
     private User user;

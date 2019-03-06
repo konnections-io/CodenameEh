@@ -2,7 +2,7 @@ package com.example.codenameeh;
 
 import org.junit.Test;
 
-import com.codenameeh.classes.Book;
+import com.example.codenameeh.classes.Book;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
