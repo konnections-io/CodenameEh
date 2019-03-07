@@ -4,8 +4,12 @@ public class CurrentUser extends User {
 
     private static CurrentUser instance;
 
-    public CurrentUser(String name, int phone, String email, String username, String password) {
-        super(name, phone, email, username, password);
+    private CurrentUser(String name, String phone, String email, String username) {
+        super(name, phone, email, username);
+    }
+
+    public static void setInstance(String name, String phone, String email, String username) {
+        instance = new CurrentUser(name, phone, email, username);
     }
 
     public static CurrentUser getInstance() {

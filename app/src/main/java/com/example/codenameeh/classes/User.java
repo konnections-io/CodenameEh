@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 public class User {
     private String name;
-    private int phone;
+    private String phone;
     private String email;
     private String username;
-    private String password;
     private ArrayList<String> keywords;
     private KeywordTracker searchWords;
     private Booklist owning;
@@ -15,12 +14,11 @@ public class User {
     private Booklist borrowedHistory;
     private Booklist requesting;
 
-    public User(String name, int phone, String email, String username, String password) {
+    public User(String name, String phone, String email, String username) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.username = username;
-        this.password = password;
         this.owning = new Booklist();
         this.borrowing = new Booklist();
         this.borrowedHistory = new Booklist();
@@ -52,11 +50,11 @@ public class User {
         this.name = name;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -74,14 +72,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public ArrayList<String> getKeywords() {
