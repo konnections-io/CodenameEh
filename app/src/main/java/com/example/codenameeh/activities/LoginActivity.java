@@ -35,7 +35,8 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null)
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null) {
-            updateUI(currentUser);
+            //updateUI(currentUser);
+            Log.d("TEST", currentUser.getDisplayName());
         }
     }
 
@@ -57,6 +58,15 @@ public class LoginActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
+
+        Button register = findViewById(R.id.register);
+        register.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void attemptLogin() {
@@ -69,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            updateUI(viewUsername.getText().toString());
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
@@ -79,9 +89,9 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
+    private void updateUI(String username) {
         Intent intent = new Intent(this, MainActivity.class);
-
+        intent.putExtra("username", username);
         startActivity(intent);
     }
 }

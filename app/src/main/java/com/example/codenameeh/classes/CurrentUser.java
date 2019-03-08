@@ -8,7 +8,11 @@ public class CurrentUser extends User {
         super(name, phone, email, username);
     }
 
-    public static void setInstance(String name, String phone, String email, String username) {
+    public static void setInstance(User user) {
+        String name = user.getName();
+        String phone = user.getPhone();
+        String email = user.getEmail();
+        String username = user.getUsername();
         instance = new CurrentUser(name, phone, email, username);
     }
 

@@ -14,6 +14,10 @@ public class User {
     private Booklist borrowedHistory;
     private Booklist requesting;
 
+    public User() {
+        //Empty Constructor
+    }
+
     public User(String name, String phone, String email, String username) {
         this.name = name;
         this.phone = phone;
