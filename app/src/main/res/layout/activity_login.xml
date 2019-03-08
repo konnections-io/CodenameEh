@@ -23,7 +23,7 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="702dp">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -68,11 +68,21 @@
                 android:id="@+id/sign_in"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_marginTop="16dp"
                 android:text="Sign In"
                 android:textStyle="bold" />
 
+            <Button
+                android:id="@+id/register"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:fontFamily="sans-serif"
+                android:text="Register"
+                android:textStyle="bold" />
+
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

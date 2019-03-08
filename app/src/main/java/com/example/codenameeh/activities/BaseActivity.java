@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.CurrentUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
