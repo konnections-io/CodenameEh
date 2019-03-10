@@ -21,7 +21,7 @@ public class BorrowingListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_borrowing_list);
+        getLayoutInflater().inflate(R.layout.activity_borrowing_list, frameLayout);
 
          dataList = findViewById(R.id.BorrowingList);
 

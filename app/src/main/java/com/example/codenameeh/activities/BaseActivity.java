@@ -97,6 +97,12 @@ public class BaseActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_logout) {
 
+        } else if (id == R.id.nav_my_books) {
+            Intent intent = new Intent(this, BookListActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_my_borrowing){
+            Intent intent = new Intent(this, BorrowingListActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

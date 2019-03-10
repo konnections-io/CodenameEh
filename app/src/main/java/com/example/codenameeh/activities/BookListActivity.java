@@ -84,7 +84,6 @@ public class BookListActivity extends BaseActivity {
             String isbn = data.getStringExtra(EXTRA_MESSAGE_ISBN);
             String description = data.getStringExtra(EXTRA_MESSAGE_DESCRIPTION);
             Book newBook = new Book(title, author, isbn, description, currentUser);
-            currentUser.newOwn(newBook);
             booksOwned.add(newBook);
             booksOwnedList = booksOwned.getBookList();
             adapter.notifyDataSetChanged();
@@ -94,7 +93,6 @@ public class BookListActivity extends BaseActivity {
             if ((data.getStringExtra(EXTRA_MESSAGE_DELETE)).equals("TRUE")) {
                 booksOwned.remove(booksOwnedList.get(positionclicked));
                 booksOwnedList.remove(positionclicked);
-                CurrentUser.getInstance().removeOwn(booksOwnedList.get(positionclicked));
             }
             adapter.notifyDataSetChanged();
         }
