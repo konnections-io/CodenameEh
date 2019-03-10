@@ -14,6 +14,13 @@ import com.example.codenameeh.R;
 import com.example.codenameeh.classes.CurrentUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * @author Cole Boytinck
+ * @version 1.0
+ * The EditProfileActivity allows a user to edit their contact information.
+ * When the contact information has been changed, the CurrentUser singleton is updated, and
+ * information is uploaded to firebase
+ */
 public class EditProfileActivity extends AppCompatActivity {
 
     private EditText viewName;

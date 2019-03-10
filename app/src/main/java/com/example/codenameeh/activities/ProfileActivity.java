@@ -12,6 +12,16 @@ import android.widget.TextView;
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.CurrentUser;
 
+/**
+ * @author Cole Boytinck
+ * @version 1.0
+ * Profile Activity is used to view either your own profile information,
+ * or can be used to view others profile information.
+ * To pick the information shown, pass the username you want to view in
+ * the intent passed to this activity.
+ * If the username passed is the name as the the current user, a button
+ * to edit your information is also shown.
+ */
 public class ProfileActivity extends BaseActivity {
 
     TextView viewUsername;
@@ -19,6 +29,10 @@ public class ProfileActivity extends BaseActivity {
     TextView viewPhone;
     TextView viewEmail;
 
+    /**
+     * onCreate gets the intent, gets the users information that needs to be displayed,
+     * and displays the data. It also sets a button in the user is the current user.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +82,10 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
+    /**
+     * onRestart resets the data shown, this will only get called when a user
+     * goes from the EditProfileActivity back to this activity.
+     */
     @Override
     protected void onRestart() {
         super.onRestart();
