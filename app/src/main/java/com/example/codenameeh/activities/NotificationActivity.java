@@ -39,7 +39,6 @@ public class NotificationActivity extends AppCompatActivity {
         for(int a = 0; a < 5; a++){
             booksAccepted.add("TEST");
         }
-        Intent intent = getIntent();
         bookAcceptedList = (ListView)findViewById(R.id.bookAcceptedList);
         requestedList = (ListView) findViewById(R.id.requestBookList);
 
@@ -47,6 +46,7 @@ public class NotificationActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Intent intent = getIntent();
         bookAcceptedAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,booksAccepted);
         requestedAdapter = new ArrayAdapter<String>(NotificationActivity.this,android.R.layout.simple_list_item_1,booksAccepted);
         bookAcceptedList.setAdapter(bookAcceptedAdapter);

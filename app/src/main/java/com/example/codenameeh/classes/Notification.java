@@ -3,6 +3,7 @@ package com.example.codenameeh.classes;
 import java.util.ArrayList;
 
 public class Notification {
+
     private User user;
     private ArrayList<String> notifications;
 
