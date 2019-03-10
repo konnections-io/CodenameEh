@@ -23,4 +23,11 @@
     </string>
     <string name="title_activity_register">Register</string>
     <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="BookListTitle">Books Owned</string>
+    <string name="newBook">Add New</string>
+    <string name="bookDescription">Description</string>
+    <string name="bookTitle">Book Title</string>
+    <string name="bookAuthor">Book Author</string>
+    <string name="bookISBN">Book ISBN</string>
+    <string name="bookDelete" >Delete</string>
 </resources>
