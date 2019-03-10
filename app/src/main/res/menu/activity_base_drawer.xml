@@ -17,6 +17,12 @@
             android:id="@+id/nav_search_books"
             android:title="Search Books" />
         <item
+            android:id="@+id/nav_my_books"
+            android:title="My Books" />
+        <item
+            android:id="@+id/nav_my_borrowing"
+            android:title="Borrowing" />
+        <item
             android:id="@+id/nav_logout"
             android:title="Logout" />
     </group>

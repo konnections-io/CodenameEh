@@ -1,15 +1,21 @@
 package com.example.codenameeh.classes;
 
-public class Book {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Book implements Parcelable {
     private String title;
     private String author;
     private String ISBN;
     private String description;
     private String photograph; //filename of the image
-    private User owner;
+    private String owner;
     private boolean borrowed;
+    // empty constructor for serial reconstruction
+    public Book (){
 
-    public Book(String title, String author, String ISBN, String description, String photograph, User Owner) {
+    }
+    public Book(String title, String author, String ISBN, String description, String photograph, String Owner) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -19,7 +25,7 @@ public class Book {
         this.owner = Owner;
     }
     // no photograph
-    public Book(String title, String author, String ISBN, String description, User Owner) {
+    public Book(String title, String author, String ISBN, String description, String Owner) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -29,10 +35,10 @@ public class Book {
         this.owner = Owner;
     }
 
-    public void setOwner(User owner){
+    public void setOwner(String owner){
         this.owner = owner;
     }
-    public User getOwner(){
+    public String getOwner(){
         return this.owner;
     }
 
@@ -99,4 +105,43 @@ public class Book {
         }
         return (output);
     }
+
+    protected Book(Parcel in) {
+        title = in.readString();
+        author = in.readString();
+        ISBN = in.readString();
+        description = in.readString();
+        photograph = in.readString();
+        owner =  in.readString();
+        borrowed = in.readByte() != 0x00;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(author);
+        dest.writeString(ISBN);
+        dest.writeString(description);
+        dest.writeString(photograph);
+        dest.writeString(owner);
+        dest.writeByte((byte) (borrowed ? 0x01 : 0x00));
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Book> CREATOR = new Parcelable.Creator<Book>() {
+        @Override
+        public Book createFromParcel(Parcel in) {
+            return new Book(in);
+        }
+
+        @Override
+        public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
 }

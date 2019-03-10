@@ -1,8 +1,11 @@
 package com.example.codenameeh.classes;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
-public class User {
+public class User implements Parcelable {
     private String name;
     private String phone;
     private String email;
@@ -32,7 +35,7 @@ public class User {
 
     public void newOwn(Book book) {
         this.owning.add(book);
-        book.setOwner(this);
+        book.setOwner(this.username);
     }
 
     public void removeOwn(Book book) {
@@ -131,4 +134,59 @@ public class User {
     public void setRequesting(Booklist requesting) {
         this.requesting = requesting;
     }
+
+    protected User(Parcel in) {
+        name = in.readString();
+        phone = in.readString();
+        email = in.readString();
+        username = in.readString();
+        if (in.readByte() == 0x01) {
+            keywords = new ArrayList<String>();
+            in.readList(keywords, String.class.getClassLoader());
+        } else {
+            keywords = null;
+        }
+        searchWords = (KeywordTracker) in.readValue(KeywordTracker.class.getClassLoader());
+        owning = (Booklist) in.readValue(Booklist.class.getClassLoader());
+        borrowing = (Booklist) in.readValue(Booklist.class.getClassLoader());
+        borrowedHistory = (Booklist) in.readValue(Booklist.class.getClassLoader());
+        requesting = (Booklist) in.readValue(Booklist.class.getClassLoader());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(phone);
+        dest.writeString(email);
+        dest.writeString(username);
+        if (keywords == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(keywords);
+        }
+        dest.writeValue(searchWords);
+        dest.writeValue(owning);
+        dest.writeValue(borrowing);
+        dest.writeValue(borrowedHistory);
+        dest.writeValue(requesting);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }

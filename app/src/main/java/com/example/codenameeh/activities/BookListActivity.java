@@ -50,7 +50,7 @@ public class BookListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_list);
+        getLayoutInflater().inflate(R.layout.activity_book_list, frameLayout);
 
         bookView = findViewById(R.id.BooksOwnedView);
 
@@ -83,8 +83,7 @@ public class BookListActivity extends BaseActivity {
             String author = data.getStringExtra(EXTRA_MESSAGE_AUTHOR);
             String isbn = data.getStringExtra(EXTRA_MESSAGE_ISBN);
             String description = data.getStringExtra(EXTRA_MESSAGE_DESCRIPTION);
-            Book newBook = new Book(title, author, isbn, description, currentUser);
-            currentUser.newOwn(newBook);
+            Book newBook = new Book(title, author, isbn, description, currentUser.getUsername());
             booksOwned.add(newBook);
             booksOwnedList = booksOwned.getBookList();
             adapter.notifyDataSetChanged();
@@ -94,7 +93,6 @@ public class BookListActivity extends BaseActivity {
             if ((data.getStringExtra(EXTRA_MESSAGE_DELETE)).equals("TRUE")) {
                 booksOwned.remove(booksOwnedList.get(positionclicked));
                 booksOwnedList.remove(positionclicked);
-                CurrentUser.getInstance().removeOwn(booksOwnedList.get(positionclicked));
             }
             adapter.notifyDataSetChanged();
         }
