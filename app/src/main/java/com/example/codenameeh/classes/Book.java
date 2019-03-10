@@ -18,6 +18,17 @@ public class Book {
         this.borrowed = false;
         this.owner = Owner;
     }
+    // no photograph
+    public Book(String title, String author, String ISBN, String description, User Owner) {
+        this.title = title;
+        this.author = author;
+        this.ISBN = ISBN;
+        this.description = description;
+        this.photograph = null;
+        this.borrowed = false;
+        this.owner = Owner;
+    }
+
     public void setOwner(User owner){
         this.owner = owner;
     }
