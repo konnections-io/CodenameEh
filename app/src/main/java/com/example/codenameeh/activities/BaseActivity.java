@@ -90,7 +90,12 @@ public class BaseActivity extends AppCompatActivity
             intent.putExtra("username", message);
             startActivity(intent);
         } else if (id == R.id.nav_notifications) {
+            Intent intent = new Intent(this, NotificationActivity.class);
 
+            String message = CurrentUser.getInstance().getUsername();
+            intent.putExtra("username", message);
+
+            startActivity(intent);
         } else if (id == R.id.nav_scan) {
 
         } else if (id == R.id.nav_search_books) {
