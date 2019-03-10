@@ -32,19 +32,23 @@ public class User {
 
     public void newOwn(Book book) {
         this.owning.add(book);
+        book.setOwner(this);
     }
 
     public void removeOwn(Book book) {
         this.owning.remove(book);
+        book.setOwner(null);
     }
 
     public void newBorrow(Book book) {
         this.borrowing.add(book);
         this.borrowedHistory.add(book);
+        book.setBorrowed(true);
     }
 
     public void removeBorrow(Book book) {
         this.borrowing.remove(book);
+        book.setBorrowed(false);
         // Don't think we want this to remove the borrow history
     }
 
