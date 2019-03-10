@@ -50,7 +50,7 @@ public class BookListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_list);
+        getLayoutInflater().inflate(R.layout.activity_book_list, frameLayout);
 
         bookView = findViewById(R.id.BooksOwnedView);
 

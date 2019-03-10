@@ -32,7 +32,7 @@ public class BooklistAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null){
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_list_item, parent);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_list_item, parent, false);
         }
         TextView bookTitleView = convertView.findViewById(R.id.BookTitleList);
         bookTitleView.setText(booklist.get(position).getTitle());

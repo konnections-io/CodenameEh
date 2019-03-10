@@ -11,7 +11,10 @@ public class Book implements Parcelable {
     private String photograph; //filename of the image
     private String owner;
     private boolean borrowed;
+    // empty constructor for serial reconstruction
+    public Book (){
 
+    }
     public Book(String title, String author, String ISBN, String description, String photograph, String Owner) {
         this.title = title;
         this.author = author;
