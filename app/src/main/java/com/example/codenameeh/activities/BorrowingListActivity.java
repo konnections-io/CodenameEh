@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.codenameeh.R;
@@ -18,6 +17,7 @@ public class BorrowingListActivity extends BaseActivity {
     BooklistAdapter adapter;
     User currentUser;
     ListView dataList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +41,9 @@ public class BorrowingListActivity extends BaseActivity {
                 Intent intent = new Intent(BorrowingListActivity.this, BookView.class);
                 intent.putExtra("book", ourBookList.get(position));
                 startActivity(intent);
+
             }
-        });
-        */
+        });*/
+
     }
 }
