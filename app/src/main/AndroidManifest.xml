@@ -41,7 +41,7 @@
             android:name=".activities.BaseActivity"
             android:label="@string/title_activity_base"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.NotificationActivity"></activity>
+        <activity android:name=".activities.NotificationActivity" android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
