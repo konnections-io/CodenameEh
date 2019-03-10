@@ -83,7 +83,7 @@ public class BookListActivity extends BaseActivity {
             String author = data.getStringExtra(EXTRA_MESSAGE_AUTHOR);
             String isbn = data.getStringExtra(EXTRA_MESSAGE_ISBN);
             String description = data.getStringExtra(EXTRA_MESSAGE_DESCRIPTION);
-            Book newBook = new Book(title, author, isbn, description, currentUser);
+            Book newBook = new Book(title, author, isbn, description, currentUser.getUsername());
             booksOwned.add(newBook);
             booksOwnedList = booksOwned.getBookList();
             adapter.notifyDataSetChanged();

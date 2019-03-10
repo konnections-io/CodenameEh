@@ -35,7 +35,7 @@ public class User implements Parcelable {
 
     public void newOwn(Book book) {
         this.owning.add(book);
-        book.setOwner(this);
+        book.setOwner(this.username);
     }
 
     public void removeOwn(Book book) {

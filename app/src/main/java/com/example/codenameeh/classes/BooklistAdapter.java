@@ -41,7 +41,7 @@ public class BooklistAdapter extends BaseAdapter {
             usernameView.setText("");
         }
         else{
-            usernameView.setText(booklist.get(position).getOwner().getUsername());
+            usernameView.setText(booklist.get(position).getOwner());
         }
         TextView descriptionView = convertView.findViewById(R.id.Description);
         descriptionView.setText(booklist.get(position).getDescription());

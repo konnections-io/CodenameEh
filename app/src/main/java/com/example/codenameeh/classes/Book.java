@@ -9,10 +9,10 @@ public class Book implements Parcelable {
     private String ISBN;
     private String description;
     private String photograph; //filename of the image
-    private User owner;
+    private String owner;
     private boolean borrowed;
 
-    public Book(String title, String author, String ISBN, String description, String photograph, User Owner) {
+    public Book(String title, String author, String ISBN, String description, String photograph, String Owner) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -22,7 +22,7 @@ public class Book implements Parcelable {
         this.owner = Owner;
     }
     // no photograph
-    public Book(String title, String author, String ISBN, String description, User Owner) {
+    public Book(String title, String author, String ISBN, String description, String Owner) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -32,10 +32,10 @@ public class Book implements Parcelable {
         this.owner = Owner;
     }
 
-    public void setOwner(User owner){
+    public void setOwner(String owner){
         this.owner = owner;
     }
-    public User getOwner(){
+    public String getOwner(){
         return this.owner;
     }
 
@@ -109,7 +109,7 @@ public class Book implements Parcelable {
         ISBN = in.readString();
         description = in.readString();
         photograph = in.readString();
-        owner = (User) in.readValue(User.class.getClassLoader());
+        owner =  in.readString();
         borrowed = in.readByte() != 0x00;
     }
 
@@ -125,7 +125,7 @@ public class Book implements Parcelable {
         dest.writeString(ISBN);
         dest.writeString(description);
         dest.writeString(photograph);
-        dest.writeValue(owner);
+        dest.writeString(owner);
         dest.writeByte((byte) (borrowed ? 0x01 : 0x00));
     }
 
