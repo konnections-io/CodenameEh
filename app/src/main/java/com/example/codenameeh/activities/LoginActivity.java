@@ -20,7 +20,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
- * A login screen that offers login via username/password.
+ * @author Cole Boytinck
+ * @version 1.0
+ * Login activity is the activity that get started on launch.
+ * This activity allows the user to login to their accounr
+ * The credentials are checked against the firebase auth
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -29,6 +33,10 @@ public class LoginActivity extends AppCompatActivity {
     private EditText viewPassword;
     private FirebaseAuth mAuth;
 
+    /**
+     * onStart can give the functionality in the future to keep
+     * people logged in even after they close the app
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -40,6 +48,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * onCrease set the login form, and the login and register buttons
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +80,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Attempt login checks the login credentials against the firebase auth
+     */
     private void attemptLogin() {
         final String username = viewUsername.getText().toString() + "@codenameeh.ca";
         final String password = viewPassword.getText().toString();
@@ -89,6 +103,10 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * updateUI sends the current user to the main screen of the app
+     * @param username User that was validated
+     */
     private void updateUI(String username) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("username", username);

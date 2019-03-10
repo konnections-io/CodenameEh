@@ -20,11 +20,21 @@ import com.example.codenameeh.R;
 import com.example.codenameeh.classes.CurrentUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * @author Cole Boytinck
+ * @version 1.0
+ * The base activity represents functionality that is seen app wide
+ * The main purpose of the base activity is to allow the app drawer to be accessed
+ * app wide
+ */
 public class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     protected FrameLayout frameLayout;
 
+    /**
+     * onCrease sets the application drawer and the navigation view
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +55,9 @@ public class BaseActivity extends AppCompatActivity
 
     }
 
+    /**
+     * The action taken by the drawer when back is pressed
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -55,18 +68,26 @@ public class BaseActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Inflate the menu; this adds items to the action bar if it is present.
+     * @param menu
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.base, menu);
         return true;
     }
 
+    /**
+     * Handle action bar item clicks here. The action bar will
+     * automatically handle clicks on the Home/Up button, so long
+     * as you specify a parent activity in AndroidManifest.xml.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -77,6 +98,12 @@ public class BaseActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Determines the action taken by each button in the sidebar
+     * navigation panel
+     * @param item
+     * @return true
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
