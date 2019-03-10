@@ -64,4 +64,20 @@ public class Book {
     public void setBorrowed(boolean borrowed) {
         this.borrowed = borrowed;
     }
+
+    @Override
+    public String toString() {
+        String output = "Title: "+this.title+ "\t\t\tAuthor: "+ this.author
+                + "\t\t\t ISBN: " + this.ISBN;
+        if (this.description != "") {
+            output = output + "\nDescription: " + this.description;
+        }
+        if (this.borrowed) {
+            output = output + "\nCURRENTLY BORROWED";
+        }
+        else {
+            output = output + "\nAVAILABLE FOR BORROW";
+        }
+        return (output);
+    }
 }
