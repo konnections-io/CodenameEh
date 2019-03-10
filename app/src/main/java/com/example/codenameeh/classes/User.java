@@ -31,19 +31,25 @@ public class User {
     }
 
     public void newOwn(Book book) {
-        //TODO
+        this.owning.add(book);
+        book.setOwner(this);
     }
 
     public void removeOwn(Book book) {
-        //TODO
+        this.owning.remove(book);
+        book.setOwner(null);
     }
 
     public void newBorrow(Book book) {
-        //TODO
+        this.borrowing.add(book);
+        this.borrowedHistory.add(book);
+        book.setBorrowed(true);
     }
 
     public void removeBorrow(Book book) {
-        //TODO
+        this.borrowing.remove(book);
+        book.setBorrowed(false);
+        // Don't think we want this to remove the borrow history
     }
 
     public String getName() {

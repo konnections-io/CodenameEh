@@ -6,15 +6,34 @@ public class Book {
     private String ISBN;
     private String description;
     private String photograph; //filename of the image
+    private User owner;
     private boolean borrowed;
 
-    public Book(String title, String author, String ISBN, String description, String photograph) {
+    public Book(String title, String author, String ISBN, String description, String photograph, User Owner) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
         this.description = description;
         this.photograph = photograph;
         this.borrowed = false;
+        this.owner = Owner;
+    }
+    // no photograph
+    public Book(String title, String author, String ISBN, String description, User Owner) {
+        this.title = title;
+        this.author = author;
+        this.ISBN = ISBN;
+        this.description = description;
+        this.photograph = null;
+        this.borrowed = false;
+        this.owner = Owner;
+    }
+
+    public void setOwner(User owner){
+        this.owner = owner;
+    }
+    public User getOwner(){
+        return this.owner;
     }
 
     public String getTitle() {
@@ -63,5 +82,21 @@ public class Book {
 
     public void setBorrowed(boolean borrowed) {
         this.borrowed = borrowed;
+    }
+
+    @Override
+    public String toString() {
+        String output = "Title: "+this.title+ "\t\t\tAuthor: "+ this.author
+                + "\t\t\t ISBN: " + this.ISBN;
+        if (this.description != "") {
+            output = output + "\nDescription: " + this.description;
+        }
+        if (this.borrowed) {
+            output = output + "\nCURRENTLY BORROWED";
+        }
+        else {
+            output = output + "\nAVAILABLE FOR BORROW";
+        }
+        return (output);
     }
 }
