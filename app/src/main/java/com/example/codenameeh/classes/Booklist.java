@@ -25,6 +25,8 @@ public class Booklist {
         return bookList.contains(book);
     }
 
+    public Book get(int index){return bookList.get(index);}
+
     public ArrayList<Book> getBookList() {
         return bookList;
     }
