@@ -29,5 +29,5 @@
     <string name="bookTitle">Book Title</string>
     <string name="bookAuthor">Book Author</string>
     <string name="bookISBN">Book ISBN</string>
-    <string name="bookDelete" >Delete</string>
+    <string name="bookDelete">Delete</string>
 </resources>
