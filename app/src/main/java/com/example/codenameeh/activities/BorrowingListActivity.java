@@ -26,7 +26,7 @@ public class BorrowingListActivity extends BaseActivity {
     ListView dataList;
 
     /**
-     * Fixs the layout of the BorrowingList
+     * Sets the layout of the BorrowingList, adds the onClick Listener
      * @param savedInstanceState
      */
     @Override
@@ -34,7 +34,7 @@ public class BorrowingListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_borrowing_list, frameLayout);
 
-         dataList = findViewById(R.id.BorrowingList);
+        dataList = findViewById(R.id.BorrowingList);
         dataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -47,13 +47,14 @@ public class BorrowingListActivity extends BaseActivity {
     }
 
     /**
-     * Obtain the data for the list, and input it into the adapter. Sets up onClick Actions
+     * Obtain the data for the list, and input it into the adapter.
      */
     @Override
     protected void onStart() {
         super.onStart();
         currentUser = CurrentUser.getInstance();
-        currentUser.getBorrowing().add(new Book("test", "testing","123456","desc", "Diodone"));
+        // currentUser.getBorrowing().add(new Book("test", "testing","123456","desc", "Diodone"));
+        // Uncomment for testing/showing
         ourBookList = currentUser.getBorrowing();
         adapter = new BooklistAdapter(ourBookList);
         dataList.setAdapter(adapter);
