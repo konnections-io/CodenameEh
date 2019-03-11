@@ -45,18 +45,16 @@ public class BorrowingListActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         currentUser = CurrentUser.getInstance();
-        currentUser.newBorrow(new Book("TestBook", "Charlie", "123456789", "This is a test book", "Diodone"));
-        //FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
+        currentUser.getBorrowing().add(new Book("test", "testing","123456","desc", "Diodone"));
         ourBookList = currentUser.getBorrowing();
         adapter = new BooklistAdapter(ourBookList);
         dataList.setAdapter(adapter);
-        // TODO
         dataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(BorrowingListActivity.this, ViewBookActivity.class);
                 intent.putExtra("book", ourBookList.get(position));
-                // startActivity(intent);
+                startActivity(intent);
             }
         });
 
