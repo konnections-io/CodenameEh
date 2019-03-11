@@ -15,8 +15,8 @@ import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+//import com.google.firebase.storage.FirebaseStorage;
+//import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 
@@ -47,12 +47,12 @@ public class ViewBookActivity extends BaseActivity {
     User currentUser;
     Button requestButton;
     TextView userView;
-    private StorageReference mStorageRef;
+    //private StorageReference mStorageRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_view_book, frameLayout);
-        mStorageRef = FirebaseStorage.getInstance().getReference();
+        //mStorageRef = FirebaseStorage.getInstance().getReference();
         Intent intent = getIntent();
         book = intent.getParcelableExtra("book");
         currentUser = CurrentUser.getInstance();
