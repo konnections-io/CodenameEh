@@ -54,6 +54,8 @@ public class ViewRequestsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_requests, frameLayout);
         currentUser = CurrentUser.getInstance();
+        booksAcceptedList = new ArrayList<Book>();
+        booksPendingList = new ArrayList<Book>();
 
         acceptedView = findViewById(R.id.requestedAcceptedListView);
         acceptedView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -89,21 +91,20 @@ public class ViewRequestsActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-//
-//        //For some reason, getRequesting().getBookList returns null at times, preventing this from working
-//            for (Book requestedBook : currentUser.getRequesting().getBookList()) {
-//                if (requestedBook.getAcceptedStatus()) {
-//                    booksAccepted.add(requestedBook);
-//                } else {
-//                    booksPending.add(requestedBook);
-//                }
-//            }
-//
-//            booksAcceptedAdapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksAcceptedList);
-//            acceptedView.setAdapter(booksAcceptedAdapter);
-//
-//            booksPendingAdapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksPendingList);
-//            pendingView.setAdapter(booksPendingAdapter);
+
+            for (Book requestedBook : currentUser.getRequesting().getBookList()) {
+                if (requestedBook.getAcceptedStatus()) {
+                    booksAccepted.add(requestedBook);
+                } else {
+                    booksPending.add(requestedBook);
+                }
+            }
+
+            booksAcceptedAdapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksAcceptedList);
+            acceptedView.setAdapter(booksAcceptedAdapter);
+
+            booksPendingAdapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksPendingList);
+            pendingView.setAdapter(booksPendingAdapter);
         }
 
 
