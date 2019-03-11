@@ -58,7 +58,17 @@
             android:name=".activities.BaseActivity"
             android:label="@string/title_activity_base"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.RequestActivity"></activity>
+        <activity
+            android:name=".activities.NotificationActivity"
+            android:label="NotificationActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.RequestActivity" />
+        <activity android:name=".activities.ViewRequestsActivity"
+            android:label="ViewRequestsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
+
     </application>
 
 </manifest>
