@@ -15,9 +15,9 @@ public class BookSearchUnitTest{
       @Test
       public void test(){
         //Test getUser, setUser, searchDatabase
-        User Tester = new User("Paul", 123123123, "myemail@gmail.com", "paul101", "mypassword");
+        User Tester = new User("Paul", "3123123", "myemail@gmail.com", "paul101");
         BookSearch bsearch = new BookSearch(Tester);
-        User NewTester = new User("Temp", 456456456, "mytest@gmail.com", "test101", "newpassword");
+        User NewTester = new User("Temp", "456456456", "mytest@gmail.com", "test101");
         bsearch.setUser(NewTester);
         assertEquals(bsearch.getUser(),NewTester);
         
