@@ -16,7 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * @author Ryan Jensen
- * Views what the user is borrowing
+ * Views what the user is borrowing, and allows clicks for more details on the specific book
  *
  */
 public class BorrowingListActivity extends BaseActivity {
@@ -26,7 +26,7 @@ public class BorrowingListActivity extends BaseActivity {
     ListView dataList;
 
     /**
-     * Fix the layout of the BorrowingList
+     * Fixs the layout of the BorrowingList
      * @param savedInstanceState
      */
     @Override
@@ -35,11 +35,19 @@ public class BorrowingListActivity extends BaseActivity {
         getLayoutInflater().inflate(R.layout.activity_borrowing_list, frameLayout);
 
          dataList = findViewById(R.id.BorrowingList);
+        dataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(BorrowingListActivity.this, ViewBookActivity.class);
+                intent.putExtra("book", ourBookList.get(position));
+                startActivity(intent);
+            }
+        });
 
     }
 
     /**
-     * Obtain
+     * Obtain the data for the list, and input it into the adapter. Sets up onClick Actions
      */
     @Override
     protected void onStart() {
@@ -49,14 +57,7 @@ public class BorrowingListActivity extends BaseActivity {
         ourBookList = currentUser.getBorrowing();
         adapter = new BooklistAdapter(ourBookList);
         dataList.setAdapter(adapter);
-        dataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(BorrowingListActivity.this, ViewBookActivity.class);
-                intent.putExtra("book", ourBookList.get(position));
-                startActivity(intent);
-            }
-        });
+
 
     }
 }
