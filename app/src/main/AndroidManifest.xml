@@ -17,14 +17,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.ViewBookActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activities.TakeNewBookActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activities.BookListActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activities.BorrowingListActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.EditBookActivity"></activity>
+        <activity
+            android:name=".activities.ViewBookActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.TakeNewBookActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.BookListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.BorrowingListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.EditProfileActivity"
             android:label="@string/title_activity_edit_profile"
