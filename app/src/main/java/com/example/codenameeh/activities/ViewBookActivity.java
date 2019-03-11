@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,8 @@ import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.io.IOException;
 
 import static com.example.codenameeh.activities.BookListActivity.EXTRA_MESSAGE_DELETE;
 
@@ -116,7 +119,12 @@ public class ViewBookActivity extends BaseActivity {
             photo.setVisibility(View.INVISIBLE);
         } else{
             photo.setVisibility(View.VISIBLE);
-            Bitmap image = BitmapFactory.decodeFile(book.getPhotograph());
+            Bitmap image = null;
+            try {
+                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), book.getPhotograph());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             photo.setImageBitmap(image);
         }
     }
@@ -170,26 +178,6 @@ public class ViewBookActivity extends BaseActivity {
             Book newBook = data.getParcelableExtra("book");
             if (newBook != null) {
                 book = newBook;
-                TextView txtView = findViewById(R.id.book_title_view);
-                txtView.setText("Title: " + book.getTitle());
-
-                TextView txtView2 = findViewById(R.id.book_author_view);
-                txtView2.setText("Author: " + book.getAuthor());
-
-                TextView txtView3 = findViewById(R.id.book_ISBN_view);
-                txtView3.setText("ISBN: " + book.getISBN());
-
-                TextView txtView4 = findViewById(R.id.book_description);
-                txtView4.setText("Description: " + book.getDescription());
-                ImageView photo = findViewById(R.id.book_photo);
-                if (book.getPhotograph() == null) {
-                    // no photograph
-                    photo.setVisibility(View.INVISIBLE);
-                } else {
-                    photo.setVisibility(View.VISIBLE);
-                    Bitmap image = BitmapFactory.decodeFile(book.getPhotograph());
-                    photo.setImageBitmap(image);
-                }
             }
         }
     }

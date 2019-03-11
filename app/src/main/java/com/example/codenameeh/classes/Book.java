@@ -3,6 +3,7 @@ package com.example.codenameeh.classes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import android.net.Uri;
 import java.util.ArrayList;
 
 public class Book implements Parcelable {
@@ -10,7 +11,7 @@ public class Book implements Parcelable {
     private String author;
     private String ISBN;
     private String description;
-    private String photograph; //filename of the image
+    private Uri photograph; //filename of the image
     private String owner;
     private ArrayList<String> requestedBy;
     private boolean borrowed;
@@ -18,7 +19,7 @@ public class Book implements Parcelable {
     public Book (){
 
     }
-    public Book(String title, String author, String ISBN, String description, String photograph, String Owner) {
+    public Book(String title, String author, String ISBN, String description, Uri photograph, String Owner) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -94,11 +95,11 @@ public class Book implements Parcelable {
         this.description = description;
     }
 
-    public String getPhotograph() {
+    public Uri getPhotograph() {
         return photograph;
     }
 
-    public void setPhotograph(String photograph) {
+    public void setPhotograph(Uri photograph) {
         this.photograph = photograph;
     }
 
@@ -131,7 +132,7 @@ public class Book implements Parcelable {
         author = in.readString();
         ISBN = in.readString();
         description = in.readString();
-        photograph = in.readString();
+        photograph = (Uri) in.readValue(Uri.class.getClassLoader());
         owner =  in.readString();
         if (in.readByte() == 0x01) {
             requestedBy = new ArrayList<String>();
@@ -153,7 +154,7 @@ public class Book implements Parcelable {
         dest.writeString(author);
         dest.writeString(ISBN);
         dest.writeString(description);
-        dest.writeString(photograph);
+        dest.writeValue(photograph);
         dest.writeString(owner);
         if (requestedBy == null) {
             dest.writeByte((byte) (0x00));

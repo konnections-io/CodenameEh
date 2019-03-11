@@ -32,7 +32,7 @@ public class MainActivity extends BaseActivity {
                     User user = documentSnapshot.toObject(User.class);
                     //Set current user singleton
                     CurrentUser.setInstance(user);
-                }
+                } // Might need an OnFailure, since I keep sometimes having user = null
             }
         });
 
