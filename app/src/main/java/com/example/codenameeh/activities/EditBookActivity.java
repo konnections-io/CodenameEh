@@ -99,7 +99,7 @@ public class EditBookActivity extends AppCompatActivity {
         }
     }
     /**
-     * Return the edited book to the previous activity. Called on
+     * Return the edited book to the previous activity. Called on saveButton click.
      * @param v
      */
     public void saveClick(View v){
