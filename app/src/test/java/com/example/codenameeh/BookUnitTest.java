@@ -28,6 +28,7 @@ public class BookUnitTest{
          // Photograph is not represented with a string anymore, unsure as to how to change this adequately
          // book.setPhotograph("Cat.png");
          assertEquals(book.getPhotograph(),null);
+
          
          assertFalse(book.isBorrowed());
          book.setBorrowed(true);

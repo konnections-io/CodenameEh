@@ -119,16 +119,22 @@ public class Book implements Parcelable {
 
     @Override
     public String toString() {
-        String output = "Title: "+this.title+ "\t\t\tAuthor: "+ this.author
-                + "\t\t\t ISBN: " + this.ISBN;
+        String output = "Title: "+this.title+ "\t\tAuthor: "+ this.author
+                + "\t\t ISBN: " + this.ISBN;
         if (this.description != "") {
             output = output + "\nDescription: " + this.description;
         }
         if (this.borrowed) {
-            output = output + "\nCURRENTLY BORROWED";
+            output = output + "\nBORROWED";
+        }
+        else if (this.acceptedStatus){
+            output = output + "\nACCEPTED";
+        }
+        else if (this.requestedBy.isEmpty()) {
+            output = output + "\nREQUESTED";
         }
         else {
-            output = output + "\nAVAILABLE FOR BORROW";
+            output = output + "\nAVAILABLE";
         }
         return (output);
     }
