@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.CurrentUser;
+import com.example.codenameeh.classes.User;
 
 import static com.example.codenameeh.activities.BookListActivity.EXTRA_MESSAGE_AUTHOR;
 import static com.example.codenameeh.activities.BookListActivity.EXTRA_MESSAGE_DELETE;
@@ -39,6 +40,7 @@ public class ViewBookActivity extends BaseActivity {
      * @param savedInstanceState
      */
     Book book;
+    User currentUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,15 +48,16 @@ public class ViewBookActivity extends BaseActivity {
 
         Intent intent = getIntent();
         book = intent.getParcelableExtra("book");
+        currentUser = CurrentUser.getInstance();
         Button requestButton= findViewById(R.id.requestBookButton);
         Button deleteButton = findViewById(R.id.deleteBookButton);
         Button editButton = findViewById(R.id.editBookButton);
-        if(CurrentUser.getInstance().getUsername().equals(book.getOwner())) {
+        if(currentUser.getUsername().equals(book.getOwner())) {
             // We are the owner of the book, so show the owning buttons
             deleteButton.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.VISIBLE);
             requestButton.setVisibility(View.INVISIBLE);
-        } else if(CurrentUser.getInstance().getRequesting().contains(book)){
+        } else if(currentUser.getRequesting().contains(book)){
             // We are currently requesting the book, allow cancelling requests
             deleteButton.setVisibility(View.INVISIBLE);
             editButton.setVisibility(View.INVISIBLE);
@@ -87,7 +90,7 @@ public class ViewBookActivity extends BaseActivity {
         String availabilityText;
         if(book.isBorrowed()){
             availabilityText = "Borrowed";
-        } else if(CurrentUser.getInstance().getRequesting().contains(book)){
+        } else if(currentUser.getRequesting().contains(book)){
             availabilityText = "Requested";
         } else{
             availabilityText = "Available";
@@ -109,10 +112,12 @@ public class ViewBookActivity extends BaseActivity {
     }
 
     public void changeRequestStatus(View v){
-        if(CurrentUser.getInstance().getRequesting().contains(book)){
-            // Cancel request
+        if(currentUser.getRequesting().contains(book)){
+            currentUser.getRequesting().remove(book);
+            book.removeRequest(currentUser.getUsername());
         } else{
-            // Do a request
+            currentUser.getRequesting().add(book);
+            book.addRequest(currentUser.getUsername());
         }
     }
 }
