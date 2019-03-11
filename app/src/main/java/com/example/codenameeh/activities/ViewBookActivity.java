@@ -2,6 +2,8 @@ package com.example.codenameeh.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,6 +12,11 @@ import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import static com.example.codenameeh.activities.BookListActivity.EXTRA_MESSAGE_AUTHOR;
 import static com.example.codenameeh.activities.BookListActivity.EXTRA_MESSAGE_DELETE;
@@ -63,7 +70,7 @@ public class ViewBookActivity extends BaseActivity {
             editButton.setVisibility(View.INVISIBLE);
             requestButton.setVisibility(View.VISIBLE);
             requestButton.setText("Cancel Request");
-        } else if(book.isBorrowed()){
+        } else if(book.getAcceptedStatus()){
             // Disable requesting
             deleteButton.setVisibility(View.INVISIBLE);
             editButton.setVisibility(View.INVISIBLE);
@@ -96,6 +103,30 @@ public class ViewBookActivity extends BaseActivity {
             availabilityText = "Available";
         }
         txtView5.setText(availabilityText);
+        /**
+         * When request button is clicked, retrieve the user that is currently holding the book that
+         * their book is requested in the notifications
+         */
+        requestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(book.getOwner());
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null) {
+                                User userToInform = task.getResult().toObject(User.class);
+
+                            } else {
+                            }
+                        } else {
+                        }
+                    }
+                });
+            }
+        });
     }
 
     /**

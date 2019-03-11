@@ -135,6 +135,9 @@ public class BaseActivity extends AppCompatActivity
         } else if (id == R.id.nav_my_borrowing){
             Intent intent = new Intent(this, BorrowingListActivity.class);
             startActivity(intent);
+        } else if (id == R.id.nav_requests){
+            Intent intent = new Intent (this, ViewRequestsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

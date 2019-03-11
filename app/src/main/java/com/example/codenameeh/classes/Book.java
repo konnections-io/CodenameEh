@@ -14,6 +14,7 @@ public class Book implements Parcelable {
     private String owner;
     private ArrayList<String> requestedBy;
     private boolean borrowed;
+    private boolean acceptedStatus;
     // empty constructor for serial reconstruction
     public Book (){
 
@@ -27,6 +28,7 @@ public class Book implements Parcelable {
         this.borrowed = false;
         this.owner = Owner;
         this.requestedBy = new ArrayList<>();
+        this.acceptedStatus = false;
     }
     // no photograph
     public Book(String title, String author, String ISBN, String description, String Owner) {
@@ -38,6 +40,7 @@ public class Book implements Parcelable {
         this.borrowed = false;
         this.owner = Owner;
         this.requestedBy = new ArrayList<>();
+        this.acceptedStatus = false;
     }
     public void addRequest(String user){
         this.requestedBy.add(user);
@@ -110,6 +113,9 @@ public class Book implements Parcelable {
         this.borrowed = borrowed;
     }
 
+    public void setAcceptedStatus(boolean status){this.acceptedStatus = status;}
+    public boolean getAcceptedStatus(){return this.acceptedStatus;}
+
     @Override
     public String toString() {
         String output = "Title: "+this.title+ "\t\t\tAuthor: "+ this.author
@@ -140,6 +146,7 @@ public class Book implements Parcelable {
             requestedBy = null;
         }
         borrowed = in.readByte() != 0x00;
+        acceptedStatus = in.readByte() != 0x00;
     }
 
     @Override
@@ -162,6 +169,7 @@ public class Book implements Parcelable {
             dest.writeList(requestedBy);
         }
         dest.writeByte((byte) (borrowed ? 0x01 : 0x00));
+        dest.writeByte((byte) (acceptedStatus ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")
