@@ -18,14 +18,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.ViewBookActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activities.TakeNewBookActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activities.BookListActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activities.BorrowingListActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.ViewBookActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.TakeNewBookActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.BookListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.BorrowingListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.EditProfileActivity"
             android:label="@string/title_activity_edit_profile"
@@ -53,7 +57,7 @@
             android:name=".activities.BaseActivity"
             android:label="@string/title_activity_base"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.NotificationActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.RequestActivity"></activity>
     </application>
 
 </manifest>
