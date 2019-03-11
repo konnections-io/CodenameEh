@@ -13,24 +13,24 @@ import static org.junit.Assert.fail;
 
 public class UserUnitTest {
     String testName = "name";
-    int testPhone = 123;
+    String testPhone = "123";
     String testEmail = "r";
     String testUsername = "diodone";
     String testPassword = "password";
 
     @Test
     public void testBasicFunctionality(){
-        User test = new User(testName, testPhone, testEmail, testUsername, testPassword);
+        User test = new User(testName, testPhone, testEmail, testUsername);
         assertEquals(testEmail, test.getEmail());
         assertEquals(testName, test.getName());
-        assertEquals(testPassword, test.getPassword());
+        //assertEquals(testPassword, test.getPassword());
         assertEquals(testUsername, test.getUsername());
         assertEquals(testPhone, test.getPhone());
         // random increases, so that we didn't stumble upon a default which just happens to be right
-        User test2 = new User(testName + 1, testPhone+3, testEmail+5, testUsername +7, testPassword + 9);
+        User test2 = new User(testName + 1, testPhone+3, testEmail+5, testUsername +7);
         assertEquals(testEmail+5, test2.getEmail());
         assertEquals(testName+1, test2.getName());
-        assertEquals(testPassword+9, test2.getPassword());
+        //assertEquals(testPassword+9, test2.getPassword());
         assertEquals(testUsername+7, test2.getUsername());
         assertEquals(testPhone+3, test2.getPhone());
     }
@@ -38,7 +38,7 @@ public class UserUnitTest {
     @Test
     public void testNewOwn(){
         // Change to ensure all values are changeable that should be
-        User test = new User(testName, testPhone, testEmail, testUsername, testPassword);
+        User test = new User(testName, testPhone, testEmail, testUsername);
         Book newBook = new Book("1", "2", "3", "4", "5");
         Book alternateBook = new Book("6", "7", "8", "9", "10");
         assertEquals(0, test.getOwning().size());
@@ -66,7 +66,7 @@ public class UserUnitTest {
 
     @Test
     public void testRemoveOwn(){
-        User test = new User(testName, testPhone, testEmail, testUsername, testPassword);
+        User test = new User(testName, testPhone, testEmail, testUsername);
         Book newBook = new Book("1", "2", "3", "4", "5");
         Book alternateBook = new Book("6", "7", "8", "9", "10");
 
@@ -98,7 +98,7 @@ public class UserUnitTest {
 
     @Test
     public void testNewBorrow(){
-        User test = new User(testName, testPhone, testEmail, testUsername, testPassword);
+        User test = new User(testName, testPhone, testEmail, testUsername);
         Book newBook = new Book("1", "2", "3", "4", "5");
         Book alternateBook = new Book("6", "7", "8", "9", "10");
         assertEquals(0, test.getBorrowing().size());
@@ -126,7 +126,7 @@ public class UserUnitTest {
 
     @Test
     public void testRemoveBorrow(){
-        User test = new User(testName, testPhone, testEmail, testUsername, testPassword);
+        User test = new User(testName, testPhone, testEmail, testUsername);
         Book newBook = new Book("1", "2", "3", "4", "5");
         Book alternateBook = new Book("6", "7", "8", "9", "10");
 
