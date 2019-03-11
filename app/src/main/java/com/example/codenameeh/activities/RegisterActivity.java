@@ -20,7 +20,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
- * A Register screen
+ * @author Cole Boytinck
+ * @version 1.0
+ * The RegisterActivity is an activity that allows new users to register for the applicaation
+ * When the user attempts to register, the activity checks the data to make sure it matches
+ * the constraints, then sets up authentication via firebase, then saves the other data via firestore
  */
 public class RegisterActivity extends AppCompatActivity {
 
@@ -33,6 +37,10 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
 
+    /**
+     * onCreate sets the data fields, and sets the button to trigger attemptRegister when
+     * the data is valid
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +66,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Attempt register takes the user info, and sets up authentication viw firebase,
+     * then registers the user info in firestore aswell
+     */
     public void attemptRegister() {
         String email = viewUsername.getText().toString() + "@codenameeh.ca";
         String password = viewPassword.getText().toString();
@@ -90,14 +102,20 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Changes the activity to the MainActivity
+     */
     public void updateUI(String username) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("username", username);
         startActivity(intent);
     }
 
+    /**
+     * //TODO
+     * @return true if the data is valid, false otherwise
+     */
     public boolean validateData() {
-        //TODO
         return true;
     }
 

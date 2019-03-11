@@ -13,6 +13,7 @@ import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -50,7 +51,7 @@ public class BookListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_list);
+        getLayoutInflater().inflate(R.layout.activity_book_list, frameLayout);
 
         bookView = findViewById(R.id.BooksOwnedView);
 
@@ -83,20 +84,20 @@ public class BookListActivity extends BaseActivity {
             String author = data.getStringExtra(EXTRA_MESSAGE_AUTHOR);
             String isbn = data.getStringExtra(EXTRA_MESSAGE_ISBN);
             String description = data.getStringExtra(EXTRA_MESSAGE_DESCRIPTION);
-            Book newBook = new Book(title, author, isbn, description, currentUser);
-            currentUser.newOwn(newBook);
+            Book newBook = new Book(title, author, isbn, description, currentUser.getUsername());
             booksOwned.add(newBook);
             booksOwnedList = booksOwned.getBookList();
             adapter.notifyDataSetChanged();
+            FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
         }
         if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
             //view details of book returned
             if ((data.getStringExtra(EXTRA_MESSAGE_DELETE)).equals("TRUE")) {
                 booksOwned.remove(booksOwnedList.get(positionclicked));
-                booksOwnedList.remove(positionclicked);
-                CurrentUser.getInstance().removeOwn(booksOwnedList.get(positionclicked));
+                booksOwnedList = booksOwned.getBookList();
             }
             adapter.notifyDataSetChanged();
+            FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
         }
     }
 
@@ -124,16 +125,7 @@ public class BookListActivity extends BaseActivity {
      */
     private void viewBook(int i) {
         Intent intent = new Intent(this, ViewBookActivity.class);
-        intent.putExtra(EXTRA_MESSAGE_TITLE, (booksOwnedList.get(i).getTitle()));
-        intent.putExtra(EXTRA_MESSAGE_AUTHOR, (booksOwnedList.get(i).getAuthor()));
-        intent.putExtra(EXTRA_MESSAGE_ISBN, (booksOwnedList.get(i).getISBN()));
-        intent.putExtra(EXTRA_MESSAGE_DESCRIPTION, (booksOwnedList.get(i).getDescription()));
-        if (booksOwnedList.get(i).isBorrowed()) {
-            intent.putExtra(EXTRA_MESSAGE_STATUS, ("Borrowed"));
-        }
-        else {
-            intent.putExtra(EXTRA_MESSAGE_STATUS, ("Not Borrowed"));
-        }
+        intent.putExtra("book", booksOwnedList.get(i));
         startActivityForResult(intent, 2);
     }
 
