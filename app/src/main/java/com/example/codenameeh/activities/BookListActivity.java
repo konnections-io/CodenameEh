@@ -92,7 +92,7 @@ public class BookListActivity extends BaseActivity {
             //view details of book returned
             if ((data.getStringExtra(EXTRA_MESSAGE_DELETE)).equals("TRUE")) {
                 booksOwned.remove(booksOwnedList.get(positionclicked));
-                booksOwnedList.remove(positionclicked);
+                booksOwnedList = booksOwned.getBookList();
             }
             adapter.notifyDataSetChanged();
         }

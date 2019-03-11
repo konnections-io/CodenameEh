@@ -37,7 +37,7 @@ public class ViewBookActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_book);
+        getLayoutInflater().inflate(R.layout.activity_view_book, frameLayout);
 
         Intent intent = getIntent();
         String title = intent.getStringExtra(EXTRA_MESSAGE_TITLE);
