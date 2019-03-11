@@ -133,6 +133,12 @@ public class Book implements Parcelable {
         description = in.readString();
         photograph = in.readString();
         owner =  in.readString();
+        if (in.readByte() == 0x01) {
+            requestedBy = new ArrayList<String>();
+            in.readList(requestedBy, String.class.getClassLoader());
+        } else {
+            requestedBy = null;
+        }
         borrowed = in.readByte() != 0x00;
     }
 
@@ -149,6 +155,12 @@ public class Book implements Parcelable {
         dest.writeString(description);
         dest.writeString(photograph);
         dest.writeString(owner);
+        if (requestedBy == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(requestedBy);
+        }
         dest.writeByte((byte) (borrowed ? 0x01 : 0x00));
     }
 
