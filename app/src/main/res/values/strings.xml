@@ -22,4 +22,6 @@
         completions."
     </string>
     <string name="title_activity_register">Register</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search for a book</string>
 </resources>
