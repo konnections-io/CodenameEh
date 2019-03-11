@@ -32,4 +32,6 @@
     <string name="bookDelete">Delete</string>
     <string name="bookEdit">Edit</string>
     <string name="bookRequest">Request</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search for a book</string>
 </resources>
