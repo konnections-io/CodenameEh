@@ -3,6 +3,8 @@ package com.example.codenameeh.classes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 public class Book implements Parcelable {
     private String title;
     private String author;
@@ -10,6 +12,7 @@ public class Book implements Parcelable {
     private String description;
     private String photograph; //filename of the image
     private String owner;
+    private ArrayList<String> requestedBy;
     private boolean borrowed;
     // empty constructor for serial reconstruction
     public Book (){
@@ -23,6 +26,7 @@ public class Book implements Parcelable {
         this.photograph = photograph;
         this.borrowed = false;
         this.owner = Owner;
+        this.requestedBy = new ArrayList<>();
     }
     // no photograph
     public Book(String title, String author, String ISBN, String description, String Owner) {
@@ -33,6 +37,22 @@ public class Book implements Parcelable {
         this.photograph = null;
         this.borrowed = false;
         this.owner = Owner;
+        this.requestedBy = new ArrayList<>();
+    }
+    public void addRequest(String user){
+        this.requestedBy.add(user);
+    }
+
+    public void removeAllRequests(){
+        this.requestedBy.clear();
+    }
+
+    public ArrayList<String> getRequestedBy(){
+        return (ArrayList<String>) this.requestedBy.clone();
+    }
+
+    public void removeRequest(String user){
+        this.requestedBy.remove(user);
     }
 
     public void setOwner(String owner){
@@ -113,6 +133,12 @@ public class Book implements Parcelable {
         description = in.readString();
         photograph = in.readString();
         owner =  in.readString();
+        if (in.readByte() == 0x01) {
+            requestedBy = new ArrayList<String>();
+            in.readList(requestedBy, String.class.getClassLoader());
+        } else {
+            requestedBy = null;
+        }
         borrowed = in.readByte() != 0x00;
     }
 
@@ -129,6 +155,12 @@ public class Book implements Parcelable {
         dest.writeString(description);
         dest.writeString(photograph);
         dest.writeString(owner);
+        if (requestedBy == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(requestedBy);
+        }
         dest.writeByte((byte) (borrowed ? 0x01 : 0x00));
     }
 
