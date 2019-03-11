@@ -13,7 +13,8 @@ public class User {
     private Booklist borrowing;
     private Booklist borrowedHistory;
     private Booklist requesting;
-
+    private Notification otherRequestNotifications;
+    private Notification requestAcceptedNotifications;
     public User() {
         //Empty Constructor
     }
@@ -28,22 +29,30 @@ public class User {
         this.borrowedHistory = new Booklist();
         this.requesting = new Booklist();
         this.searchWords = new KeywordTracker();
+        this.otherRequestNotifications = new Notification();
+        this.requestAcceptedNotifications = new Notification();
     }
 
     public void newOwn(Book book) {
-        //TODO
+        this.owning.add(book);
+        book.setOwner(this.name);
     }
 
     public void removeOwn(Book book) {
-        //TODO
+        this.owning.remove(book);
+        book.setOwner(null);
     }
 
     public void newBorrow(Book book) {
-        //TODO
+        this.borrowing.add(book);
+        this.borrowedHistory.add(book);
+        book.setBorrowed(true);
     }
 
     public void removeBorrow(Book book) {
-        //TODO
+        this.borrowing.remove(book);
+        book.setBorrowed(false);
+        // Don't think we want this to remove the borrow history
     }
 
     public String getName() {
@@ -125,4 +134,9 @@ public class User {
     public void setRequesting(Booklist requesting) {
         this.requesting = requesting;
     }
+
+    public Notification getOtherRequestNotifications() { return otherRequestNotifications;}
+    public void setOtherRequestNotifications(Notification notification) {this.otherRequestNotifications = notification;}
+    public Notification getRequestAcceptedNotifications() { return requestAcceptedNotifications;}
+    public void setRequestAcceptedNotifications(Notification notification) {this.requestAcceptedNotifications = notification;}
 }
