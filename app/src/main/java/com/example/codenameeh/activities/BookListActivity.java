@@ -40,7 +40,6 @@ public class BookListActivity extends BaseActivity {
     public static final String EXTRA_MESSAGE_AUTHOR = "com.example.codenameeh.author";
     public static final String EXTRA_MESSAGE_ISBN = "com.example.codenameeh.isbn";
     public static final String EXTRA_MESSAGE_DESCRIPTION = "com.example.codenameeh.description";
-    public static final String EXTRA_MESSAGE_STATUS = "com.example.codenameeh.status";
     public static final String EXTRA_MESSAGE_DELETE = "com.example.codenameeh.delete";
 
     /**
