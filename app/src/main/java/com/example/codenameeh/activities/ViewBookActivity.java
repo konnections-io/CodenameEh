@@ -2,7 +2,6 @@ package com.example.codenameeh.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -86,6 +85,9 @@ public class ViewBookActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Set the values of the TextViews, and set the photo, if any exists
+     */
     @Override
     protected void onStart() {
         super.onStart();
