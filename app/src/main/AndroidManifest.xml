@@ -66,9 +66,10 @@
         <activity android:name=".activities.ViewRequestsActivity"
             android:label="ViewRequestsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
-
-
+        <activity
+            android:name=".activities.SearchBooksActivity"
+            android:label="SearchBooksActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
-
 </manifest>
