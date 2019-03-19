@@ -12,12 +12,17 @@ import com.example.codenameeh.classes.Request;
 /**
  * @author Dan Sune
  * @version 1.0
- * Request activity is used to view a specific request for a book. The user can then choose to
- * accept or decline the request to borrow one of their books.
+ * Request activity extends BaseActivity is used to view a specific request for a book.
+ * The user can then choose to accept or decline the request to borrow one of their books.
  * Pass the Request you would like to view in the intent which calls this activity.
  */
 public class RequestActivity extends BaseActivity {
 
+    /**
+     * onCreate displays the specific request information when it is clicked
+     * also initiates the accept/decline buttons
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +43,11 @@ public class RequestActivity extends BaseActivity {
         Button declineButton = findViewById(R.id.decline);
 
         acceptButton.setOnClickListener(new View.OnClickListener(){
+
+            /**
+             * onClick handles the actions to be taken when the accept button is clicked
+             * @param v
+             */
             @Override
             public void onClick(View v){
                 request.accept();
@@ -45,6 +55,11 @@ public class RequestActivity extends BaseActivity {
         });
 
         declineButton.setOnClickListener(new View.OnClickListener(){
+
+            /**
+             * onClick handles the actions to be taken when the decline button is clicked
+             * @param v
+             */
             @Override
             public void onClick(View v){
                 request.decline();
