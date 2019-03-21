@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.codenameeh">
-
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -9,6 +8,12 @@
 
     <uses-feature
         android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
         android:required="false" />
 
     <application
@@ -18,7 +23,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.EditBookActivity"></activity>
+        <activity android:name=".activities.ScanActivity"></activity>
+        <activity android:name=".activities.EditBookActivity" />
         <activity
             android:name=".activities.ViewBookActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -63,7 +69,8 @@
             android:label="NotificationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.RequestActivity" />
-        <activity android:name=".activities.ViewRequestsActivity"
+        <activity
+            android:name=".activities.ViewRequestsActivity"
             android:label="ViewRequestsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
