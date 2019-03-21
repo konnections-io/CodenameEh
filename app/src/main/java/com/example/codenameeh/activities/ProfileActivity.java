@@ -11,6 +11,11 @@ import android.widget.TextView;
 
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.CurrentUser;
+import com.example.codenameeh.classes.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * @author Cole Boytinck
@@ -28,6 +33,7 @@ public class ProfileActivity extends BaseActivity {
     TextView viewName;
     TextView viewPhone;
     TextView viewEmail;
+    String username, name, phone, email;
 
     /**
      * onCreate gets the intent, gets the users information that needs to be displayed,
@@ -39,7 +45,6 @@ public class ProfileActivity extends BaseActivity {
         //setContentView(R.layout.activity_profile);
         getLayoutInflater().inflate(R.layout.activity_profile, frameLayout);
 
-        String username, name, phone, email;
         Button edit  = findViewById(R.id.edit);
 
         Intent intent = getIntent();
@@ -54,12 +59,27 @@ public class ProfileActivity extends BaseActivity {
             email = CurrentUser.getInstance().getEmail();
         } else {
             edit.setVisibility(View.GONE);
-            //get user info from firebase
-            //TODO
+            //Set default to be nothing
             username = "";
             name = "";
             phone = "";
             email = "";
+
+            //Get user information from firebase
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference docRef = db.collection("users").document(message);
+            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if(documentSnapshot.exists()) {
+                        User user = documentSnapshot.toObject(User.class);
+                        username = user.getUsername();
+                        name = user.getName();
+                        phone = user.getPhone();
+                        email = user.getEmail();
+                    }
+                }
+            });
         }
 
         viewUsername = findViewById(R.id.username);
