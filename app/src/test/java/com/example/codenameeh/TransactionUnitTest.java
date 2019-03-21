@@ -16,8 +16,8 @@ public class TransactionUnitTest{
 
         Transaction t = new Transaction(null, null, null, null);
         
-        User user1 = new User("name1", 123123123, "email1", "username1", "password1");
-        User user2 = new User("name2", 456456456, "email2", "username2", "password2");
+        User user1 = new User("name1", "123123123", "email1", "username1");
+        User user2 = new User("name2", "456456456", "email2", "username2");
 
         Book book = new Book("NA", "NA", "0", "NA", "NA");
         

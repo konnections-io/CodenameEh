@@ -27,7 +27,6 @@ import java.util.ArrayList;
  * Have not yet implemented bringing in the lists from the current user
  * Involves having requested books having a status boolean for accepted that's
  * different from other books to separate them into 2 lists.
- * Currently, there is an error in bringing in the user's receiving book list, a null exception
  */
 
 public class ViewRequestsActivity extends BaseActivity {
@@ -53,6 +52,8 @@ public class ViewRequestsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_requests, frameLayout);
+        booksAcceptedList = new ArrayList<Book>();
+        booksPendingList = new ArrayList<Book>();
         currentUser = CurrentUser.getInstance();
 
         acceptedView = findViewById(R.id.requestedAcceptedListView);
@@ -89,21 +90,20 @@ public class ViewRequestsActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-//
-//        //For some reason, getRequesting().getBookList returns null at times, preventing this from working
-//            for (Book requestedBook : currentUser.getRequesting().getBookList()) {
-//                if (requestedBook.getAcceptedStatus()) {
-//                    booksAccepted.add(requestedBook);
-//                } else {
-//                    booksPending.add(requestedBook);
-//                }
-//            }
-//
-//            booksAcceptedAdapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksAcceptedList);
-//            acceptedView.setAdapter(booksAcceptedAdapter);
-//
-//            booksPendingAdapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksPendingList);
-//            pendingView.setAdapter(booksPendingAdapter);
+
+           for (Book requestedBook : currentUser.getRequesting().getBookList()) {
+               if (requestedBook.getAcceptedStatus()) {
+                   booksAccepted.add(requestedBook);
+               } else {
+                   booksPending.add(requestedBook);
+               }
+           }
+
+           booksAcceptedAdapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksAcceptedList);
+           acceptedView.setAdapter(booksAcceptedAdapter);
+
+           booksPendingAdapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksPendingList);
+           pendingView.setAdapter(booksPendingAdapter);
         }
 
 

@@ -127,7 +127,8 @@ public class BaseActivity extends AppCompatActivity
             Intent intent = new Intent(this, ScanActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_search_books) {
-
+            Intent intent = new Intent(this, SearchBooksActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_logout) {
 
         } else if (id == R.id.nav_my_books) {

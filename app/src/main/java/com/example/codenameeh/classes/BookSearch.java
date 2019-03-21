@@ -7,11 +7,18 @@ public class BookSearch {
         this.user = user;
     }
 
-    public Booklist searchDatabase(String keyword) {
+    public Booklist searchDatabase(String keyword, Booklist booklist) {
         //TODO: Have a booklist of books related to keyword by accessing a database
-        Booklist booklist = new Booklist();
+        Booklist originalList = booklist;
+        Booklist filteredBookList = new Booklist();
         // Add books to this booklist depending on keyword specified
-        return booklist;
+        for (Book book: originalList.getBookList()) {
+            if (book.getTitle().contains(keyword)) {
+                filteredBookList.add(book);
+            }
+        }
+
+        return filteredBookList;
     }
 
     public User getUser() {

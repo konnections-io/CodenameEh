@@ -13,7 +13,7 @@ public class userSearchUnitTest {
     public void testUserSearch() {
         // Create a new Userlist that contains one generic user
         Userlist users = new Userlist();
-        User newUser = new User("Generic Name", 1234567890, "generic@email.com", "Generically", "password123");
+        User newUser = new User("Generic Name", "1234567890", "generic@email.com", "Generically");
         users.add(newUser);
 
         // Using the search method to find all users with the username "Generically"

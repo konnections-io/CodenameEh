@@ -14,8 +14,8 @@ public class userlistUnitTest {
     public void testUserlist() {
         // Creates the Userlist and adds two users
         Userlist users = new Userlist();
-        User newUser = new User("Generic Name", 1234567890, "generic@email.com", "Generically", "password123");
-        User newUser2 = new User("Example Person", 1111111011, "example@email.com", "exampleUser", "examplePass");
+        User newUser = new User("Generic Name", "1234567890", "generic@email.com", "Generically");
+        User newUser2 = new User("Example Person", "1111111011", "example@email.com", "exampleUser");
         users.add(newUser);
         users.add(newUser2);
 
