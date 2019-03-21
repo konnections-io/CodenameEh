@@ -32,7 +32,7 @@ public class BooklistAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null){
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_list_item, parent);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_list_item, parent, false);
         }
         TextView bookTitleView = convertView.findViewById(R.id.BookTitleList);
         bookTitleView.setText(booklist.get(position).getTitle());
@@ -41,7 +41,7 @@ public class BooklistAdapter extends BaseAdapter {
             usernameView.setText("");
         }
         else{
-            usernameView.setText(booklist.get(position).getOwner().getUsername());
+            usernameView.setText(booklist.get(position).getOwner());
         }
         TextView descriptionView = convertView.findViewById(R.id.Description);
         descriptionView.setText(booklist.get(position).getDescription());

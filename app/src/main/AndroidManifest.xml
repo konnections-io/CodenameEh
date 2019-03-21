@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.codenameeh">
+
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -17,10 +18,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.ViewBookActivity"></activity>
-        <activity android:name=".activities.TakeNewBookActivity" />
-        <activity android:name=".activities.BookListActivity" />
-        <activity android:name=".activities.BorrowingListActivity" />
+        <activity android:name=".activities.EditBookActivity"></activity>
+        <activity
+            android:name=".activities.ViewBookActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.TakeNewBookActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.BookListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.BorrowingListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.EditProfileActivity"
             android:label="@string/title_activity_edit_profile"
@@ -48,6 +58,17 @@
             android:name=".activities.BaseActivity"
             android:label="@string/title_activity_base"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.NotificationActivity"
+            android:label="NotificationActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.RequestActivity" />
+        <activity android:name=".activities.ViewRequestsActivity"
+            android:label="ViewRequestsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
+
     </application>
 
 </manifest>

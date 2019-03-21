@@ -117,13 +117,27 @@ public class BaseActivity extends AppCompatActivity
             intent.putExtra("username", message);
             startActivity(intent);
         } else if (id == R.id.nav_notifications) {
+            Intent intent = new Intent(this, NotificationActivity.class);
 
+            String message = CurrentUser.getInstance().getUsername();
+            intent.putExtra("username", message);
+
+            startActivity(intent);
         } else if (id == R.id.nav_scan) {
 
         } else if (id == R.id.nav_search_books) {
 
         } else if (id == R.id.nav_logout) {
 
+        } else if (id == R.id.nav_my_books) {
+            Intent intent = new Intent(this, BookListActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_my_borrowing){
+            Intent intent = new Intent(this, BorrowingListActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_requests){
+            Intent intent = new Intent (this, ViewRequestsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

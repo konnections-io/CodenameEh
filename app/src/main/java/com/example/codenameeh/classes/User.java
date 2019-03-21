@@ -13,7 +13,8 @@ public class User {
     private Booklist borrowing;
     private Booklist borrowedHistory;
     private Booklist requesting;
-
+    private Notification otherRequestNotifications;
+    private Notification requestAcceptedNotifications;
     public User() {
         //Empty Constructor
     }
@@ -28,11 +29,13 @@ public class User {
         this.borrowedHistory = new Booklist();
         this.requesting = new Booklist();
         this.searchWords = new KeywordTracker();
+        this.otherRequestNotifications = new Notification();
+        this.requestAcceptedNotifications = new Notification();
     }
 
     public void newOwn(Book book) {
         this.owning.add(book);
-        book.setOwner(this);
+        book.setOwner(this.name);
     }
 
     public void removeOwn(Book book) {
@@ -131,4 +134,9 @@ public class User {
     public void setRequesting(Booklist requesting) {
         this.requesting = requesting;
     }
+
+    public Notification getOtherRequestNotifications() { return otherRequestNotifications;}
+    public void setOtherRequestNotifications(Notification notification) {this.otherRequestNotifications = notification;}
+    public Notification getRequestAcceptedNotifications() { return requestAcceptedNotifications;}
+    public void setRequestAcceptedNotifications(Notification notification) {this.requestAcceptedNotifications = notification;}
 }

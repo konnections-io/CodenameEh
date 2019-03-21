@@ -1,15 +1,26 @@
 package com.example.codenameeh.classes;
 
-public class Book {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import android.net.Uri;
+import java.util.ArrayList;
+
+public class Book implements Parcelable {
     private String title;
     private String author;
     private String ISBN;
     private String description;
-    private String photograph; //filename of the image
-    private User owner;
+    private Uri photograph; //filename of the image
+    private String owner;
+    private ArrayList<String> requestedBy;
     private boolean borrowed;
+    private boolean acceptedStatus;
+    // empty constructor for serial reconstruction
+    public Book (){
 
-    public Book(String title, String author, String ISBN, String description, String photograph, User Owner) {
+    }
+    public Book(String title, String author, String ISBN, String description, Uri photograph, String Owner) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -17,9 +28,11 @@ public class Book {
         this.photograph = photograph;
         this.borrowed = false;
         this.owner = Owner;
+        this.requestedBy = new ArrayList<>();
+        this.acceptedStatus = false;
     }
     // no photograph
-    public Book(String title, String author, String ISBN, String description, User Owner) {
+    public Book(String title, String author, String ISBN, String description, String Owner) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -27,12 +40,29 @@ public class Book {
         this.photograph = null;
         this.borrowed = false;
         this.owner = Owner;
+        this.requestedBy = new ArrayList<>();
+        this.acceptedStatus = false;
+    }
+    public void addRequest(String user){
+        this.requestedBy.add(user);
     }
 
-    public void setOwner(User owner){
+    public void removeAllRequests(){
+        this.requestedBy.clear();
+    }
+
+    public ArrayList<String> getRequestedBy(){
+        return (ArrayList<String>) this.requestedBy.clone();
+    }
+
+    public void removeRequest(String user){
+        this.requestedBy.remove(user);
+    }
+
+    public void setOwner(String owner){
         this.owner = owner;
     }
-    public User getOwner(){
+    public String getOwner(){
         return this.owner;
     }
 
@@ -68,11 +98,11 @@ public class Book {
         this.description = description;
     }
 
-    public String getPhotograph() {
+    public Uri getPhotograph() {
         return photograph;
     }
 
-    public void setPhotograph(String photograph) {
+    public void setPhotograph(Uri photograph) {
         this.photograph = photograph;
     }
 
@@ -83,6 +113,9 @@ public class Book {
     public void setBorrowed(boolean borrowed) {
         this.borrowed = borrowed;
     }
+
+    public void setAcceptedStatus(boolean status){this.acceptedStatus = status;}
+    public boolean getAcceptedStatus(){return this.acceptedStatus;}
 
     @Override
     public String toString() {
@@ -99,4 +132,57 @@ public class Book {
         }
         return (output);
     }
+
+    protected Book(Parcel in) {
+        title = in.readString();
+        author = in.readString();
+        ISBN = in.readString();
+        description = in.readString();
+        photograph = (Uri) in.readValue(Uri.class.getClassLoader());
+        owner =  in.readString();
+        if (in.readByte() == 0x01) {
+            requestedBy = new ArrayList<String>();
+            in.readList(requestedBy, String.class.getClassLoader());
+        } else {
+            requestedBy = null;
+        }
+        borrowed = in.readByte() != 0x00;
+        acceptedStatus = in.readByte() != 0x00;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(author);
+        dest.writeString(ISBN);
+        dest.writeString(description);
+        dest.writeValue(photograph);
+        dest.writeString(owner);
+        if (requestedBy == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(requestedBy);
+        }
+        dest.writeByte((byte) (borrowed ? 0x01 : 0x00));
+        dest.writeByte((byte) (acceptedStatus ? 0x01 : 0x00));
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Book> CREATOR = new Parcelable.Creator<Book>() {
+        @Override
+        public Book createFromParcel(Parcel in) {
+            return new Book(in);
+        }
+
+        @Override
+        public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
 }
