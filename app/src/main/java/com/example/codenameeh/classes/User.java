@@ -13,8 +13,7 @@ public class User {
     private Booklist borrowing;
     private Booklist borrowedHistory;
     private Booklist requesting;
-    private Notification otherRequestNotifications;
-    private Notification requestAcceptedNotifications;
+    private ArrayList<Notification> notifications;
     public User() {
         //Empty Constructor
     }
@@ -29,8 +28,7 @@ public class User {
         this.borrowedHistory = new Booklist();
         this.requesting = new Booklist();
         this.searchWords = new KeywordTracker();
-        this.otherRequestNotifications = new Notification();
-        this.requestAcceptedNotifications = new Notification();
+        this.notifications = new ArrayList<Notification>();
     }
 
     public void newOwn(Book book) {
@@ -135,8 +133,10 @@ public class User {
         this.requesting = requesting;
     }
 
-    public Notification getOtherRequestNotifications() { return otherRequestNotifications;}
-    public void setOtherRequestNotifications(Notification notification) {this.otherRequestNotifications = notification;}
-    public Notification getRequestAcceptedNotifications() { return requestAcceptedNotifications;}
-    public void setRequestAcceptedNotifications(Notification notification) {this.requestAcceptedNotifications = notification;}
+    public void setNotifications(ArrayList<Notification> notifications){
+        this.notifications = notifications;
+    }
+    public ArrayList<Notification> getNotifications(){
+        return this.notifications;
+    }
 }
