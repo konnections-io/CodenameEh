@@ -2,14 +2,22 @@ package com.example.codenameeh.activities;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
+import com.example.codenameeh.classes.CurrentUser;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 /**
  * @author Ryan Jensen
@@ -25,6 +33,8 @@ public class EditBookActivity extends AppCompatActivity {
     EditText author;
     EditText ISBN;
     EditText desc;
+    FirebaseStorage storage;
+    StorageReference storageRef;
 
     /**
      * Create the layout of the page, and put the appropriate labels on the EditViews, button, and get the book from the Intent
@@ -40,6 +50,8 @@ public class EditBookActivity extends AppCompatActivity {
         author =  findViewById(R.id.book_author_edit);
         ISBN = findViewById(R.id.book_ISBN_edit);
         desc = findViewById(R.id.book_desc_edit);
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
 
     }
 
@@ -93,7 +105,26 @@ public class EditBookActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
                 Uri uri = data.getData();
-                book.setPhotograph(uri);
+                StorageReference photoRef = storageRef.child(CurrentUser.getInstance().getUsername() +"/"+uri.getLastPathSegment());
+                UploadTask uploadTask = photoRef.putFile(uri);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        Toast.makeText(EditBookActivity.this, "Upload Failure.",
+                                Toast.LENGTH_SHORT).show();
+                        // Break out of next statements
+                        return;
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                        Toast.makeText(EditBookActivity.this, "Upload Success.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+                book.setPhotograph(uri.getLastPathSegment());
                 photoButton.setText("Remove photo");
             }
         }

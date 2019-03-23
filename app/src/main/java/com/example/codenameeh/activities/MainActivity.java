@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.CurrentUser;
@@ -32,6 +33,8 @@ public class MainActivity extends BaseActivity {
                     User user = documentSnapshot.toObject(User.class);
                     //Set current user singleton
                     CurrentUser.setInstance(user);
+                    Toast.makeText(MainActivity.this, "User Loaded.",
+                            Toast.LENGTH_SHORT).show();
                 } // Might need an OnFailure, since I keep sometimes having user = null
             }
         });

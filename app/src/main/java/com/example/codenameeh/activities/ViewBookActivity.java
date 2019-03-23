@@ -10,12 +10,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.codenameeh.GlideApp;
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
-//import com.google.firebase.storage.FirebaseStorage;
-//import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 
@@ -46,6 +47,8 @@ public class ViewBookActivity extends BaseActivity {
     User currentUser;
     Button requestButton;
     TextView userView;
+    // Create a storage reference from our app
+    StorageReference storageRef;
     //private StorageReference mStorageRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +86,7 @@ public class ViewBookActivity extends BaseActivity {
             editButton.setVisibility(View.INVISIBLE);
             requestButton.setVisibility(View.VISIBLE);
         }
+        storageRef = FirebaseStorage.getInstance().getReference();
     }
 
     /**
@@ -121,13 +125,8 @@ public class ViewBookActivity extends BaseActivity {
             photo.setVisibility(View.INVISIBLE);
         } else{
             photo.setVisibility(View.VISIBLE);
-            Bitmap image = null;
-            try {
-                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), book.getPhotograph());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            photo.setImageBitmap(image);
+            StorageReference photoRef = storageRef.child(book.getOwner()+"/"+book.getPhotograph());
+            GlideApp.with(this).load(photoRef).into(photo);
         }
     }
 
