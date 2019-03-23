@@ -16,14 +16,31 @@ import android.widget.Toast;
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.Notification;
+import com.example.codenameeh.classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.MetadataChanges;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Brian Qi
@@ -43,7 +60,8 @@ public class NotificationActivity extends BaseActivity {
     private ArrayList<String> requested = new ArrayList<String>();
     private ArrayAdapter<String> bookAcceptedAdapter;
     private ArrayAdapter<String> requestedAdapter;
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    DocumentReference ref = db.collection("users").document(CurrentUser.getInstance().getUsername());
 
     /**
      * Listviews are identified here. Each listview contains a different type of notification
@@ -57,18 +75,8 @@ public class NotificationActivity extends BaseActivity {
         getLayoutInflater().inflate(R.layout.activity_notification, frameLayout);
         bookAcceptedListView = (ListView) findViewById(R.id.bookAcceptedList);
         requestedListView = (ListView) findViewById(R.id.requestBookList);
-        
-        //TESTS
-        for(int a = 0; a < 2; a++) {
-            CurrentUser.getInstance().getRequestAcceptedNotifications().add("arthur123", "Dictionary", "my house");
-            CurrentUser.getInstance().getRequestAcceptedNotifications().add("barney", "Cook book", "Museum");
-            CurrentUser.getInstance().getRequestAcceptedNotifications().add("charlie", "Dinosaurs", "23 Street");
-            CurrentUser.getInstance().getOtherRequestNotifications().add("amanda", "knowledge");
-            CurrentUser.getInstance().getOtherRequestNotifications().add("brett", "map");
-            CurrentUser.getInstance().getOtherRequestNotifications().add("carl", "zoology");
-        }
-
     }
+
 
     /**
      * Displays each visual notification via the user, sets up the 2 adapters
@@ -80,18 +88,33 @@ public class NotificationActivity extends BaseActivity {
         Intent intent = getIntent();
         bookAcceptedAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,booksAccepted);
         requestedAdapter = new ArrayAdapter<String>(NotificationActivity.this,android.R.layout.simple_list_item_1,requested);
+        loadNotifications();
+    }
 
-
-        /**
-         * Visually display all notifications for when a request is accepted
-         */
-        for(String bookAcceptedNotification: CurrentUser.getInstance().getRequestAcceptedNotifications().getNotificationsList()){
-            booksAccepted.add(bookAcceptedNotification);
-        }
-        for(String requestNotification: CurrentUser.getInstance().getOtherRequestNotifications().getNotificationsList()){
-            requested.add(requestNotification);
-        }
-        bookAcceptedListView.setAdapter(bookAcceptedAdapter);
-        requestedListView.setAdapter(requestedAdapter);
+    /**
+     * Method reads from Firestore for all notifications, then updates the adapters based on these
+     * notifications. There are 2 adapters for 2 types of notifications; Borrow requests and accepted
+     * requests.
+     */
+    public void loadNotifications(){
+        ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    User user = documentSnapshot.toObject(User.class);
+                    CurrentUser.getInstance().setNotifications(user.getNotifications());
+                    for(Notification notification: CurrentUser.getInstance().getNotifications()){
+                        if(notification.getTypeNotification().equals("Borrow Request")){
+                            requested.add(notification.toString());
+                        }
+                        else if(notification.getTypeNotification().equals("Accepted Request")){
+                            booksAccepted.add(notification.toString());
+                        }
+                    }
+                    bookAcceptedListView.setAdapter(bookAcceptedAdapter);
+                    requestedListView.setAdapter(requestedAdapter);
+                }
+            }
+        });
     }
 }

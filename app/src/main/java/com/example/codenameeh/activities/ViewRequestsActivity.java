@@ -55,7 +55,6 @@ public class ViewRequestsActivity extends BaseActivity {
         booksAcceptedList = new ArrayList<Book>();
         booksPendingList = new ArrayList<Book>();
         currentUser = CurrentUser.getInstance();
-
         acceptedView = findViewById(R.id.requestedAcceptedListView);
         acceptedView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -91,19 +90,21 @@ public class ViewRequestsActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
 
-           for (Book requestedBook : currentUser.getRequesting().getBookList()) {
-               if (requestedBook.getAcceptedStatus()) {
-                   booksAccepted.add(requestedBook);
-               } else {
-                   booksPending.add(requestedBook);
-               }
-           }
 
-           booksAcceptedAdapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksAcceptedList);
-           acceptedView.setAdapter(booksAcceptedAdapter);
+            for (Book requestedBook : currentUser.getRequesting().getBookList()) {
+                if (requestedBook.getAcceptedStatus()) {
+                    booksAccepted.add(requestedBook);
+                } else {
+                    booksPending.add(requestedBook);
+                }
+            }
 
-           booksPendingAdapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksPendingList);
-           pendingView.setAdapter(booksPendingAdapter);
+            booksAcceptedAdapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksAcceptedList);
+            acceptedView.setAdapter(booksAcceptedAdapter);
+
+            booksPendingAdapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksPendingList);
+            pendingView.setAdapter(booksPendingAdapter);
+
         }
 
 
