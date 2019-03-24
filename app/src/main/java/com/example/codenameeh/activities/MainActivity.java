@@ -69,7 +69,7 @@ public class MainActivity extends BaseActivity {
         Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         final PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, 0);
-        notificationManager = NotificationManagerCompat.from(this);
+        notificationManager = NotificationManagerCompat.from(MainActivity.this);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(CurrentUser.getInstance().getUsername());
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -89,7 +89,7 @@ public class MainActivity extends BaseActivity {
                                     .setSmallIcon(R.drawable.ic_test)
                                     .setContentTitle("New "+notification.getTypeNotification())
                                     .setContentText(notification.toString())
-                                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
                                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                                     .setContentIntent(pendingIntent)
                                     .setAutoCancel(true)
