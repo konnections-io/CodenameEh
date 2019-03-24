@@ -4,17 +4,28 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Book implements Parcelable {
     private String title;
     private String author;
     private String ISBN;
     private String description;
-    private String photograph; //filename of the image
+    private String photograph; //filename of the image in database
     private String owner;
     private ArrayList<String> requestedBy;
     private boolean borrowed;
     private boolean acceptedStatus;
+
+    public UUID getUnique() {
+        return unique;
+    }
+
+    public void setUnique(UUID unique) {
+        this.unique = unique;
+    }
+
+    private UUID unique;
     // empty constructor for serial reconstruction
     public Book (){
 
@@ -29,6 +40,7 @@ public class Book implements Parcelable {
         this.owner = Owner;
         this.requestedBy = new ArrayList<>();
         this.acceptedStatus = false;
+        this.unique = UUID.randomUUID();
     }
     // no photograph
     public Book(String title, String author, String ISBN, String description, String Owner) {
@@ -41,6 +53,7 @@ public class Book implements Parcelable {
         this.owner = Owner;
         this.requestedBy = new ArrayList<>();
         this.acceptedStatus = false;
+        this.unique = UUID.randomUUID();
     }
     public void addRequest(String user){
         this.requestedBy.add(user);
@@ -145,6 +158,7 @@ public class Book implements Parcelable {
         description = in.readString();
         photograph = in.readString();
         owner =  in.readString();
+        unique = (UUID)in.readValue(UUID.class.getClassLoader());
         if (in.readByte() == 0x01) {
             requestedBy = new ArrayList<String>();
             in.readList(requestedBy, String.class.getClassLoader());
@@ -168,6 +182,7 @@ public class Book implements Parcelable {
         dest.writeString(description);
         dest.writeString(photograph);
         dest.writeString(owner);
+        dest.writeValue(unique);
         if (requestedBy == null) {
             dest.writeByte((byte) (0x00));
         } else {
