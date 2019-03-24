@@ -130,10 +130,10 @@ public class Book implements Parcelable {
             output = output + "\nACCEPTED";
         }
         else if (this.requestedBy.isEmpty()) {
-            output = output + "\nREQUESTED";
+            output = output + "\nAVAILABLE";
         }
         else {
-            output = output + "\nAVAILABLE";
+            output = output + "\nREQUESTED";
         }
         return (output);
     }
