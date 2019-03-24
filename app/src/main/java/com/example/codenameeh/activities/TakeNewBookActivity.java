@@ -1,15 +1,24 @@
 package com.example.codenameeh.activities;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.codenameeh.R;
+import com.example.codenameeh.classes.CurrentUser;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -35,6 +44,10 @@ import static com.example.codenameeh.activities.BookListActivity.EXTRA_MESSAGE_T
  * have detected or am aware of.
  */
 public class TakeNewBookActivity extends BaseActivity {
+    String photograph = null;
+    FirebaseStorage storage;
+    StorageReference storageRef;
+    Button photoButton;
     /**
      * onCreate here initializes the layout of the activity screen
      * and calls the superclass constructor.
@@ -46,7 +59,9 @@ public class TakeNewBookActivity extends BaseActivity {
 
         Intent intent = getIntent();
         String isbn = intent.getStringExtra("isbn");
-
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+        photoButton = findViewById(R.id.new_book_photo);
         if(isbn != null) {
             inputDataFromScan(isbn);
         }
@@ -79,10 +94,76 @@ public class TakeNewBookActivity extends BaseActivity {
             intent.putExtra(EXTRA_MESSAGE_AUTHOR, message1);
             intent.putExtra(EXTRA_MESSAGE_ISBN, message2);
             intent.putExtra(EXTRA_MESSAGE_DESCRIPTION, message3);
+            intent.putExtra("photo", photograph);
             setResult(RESULT_OK, intent);
             finish();
         }
 
+    }
+    /**
+     * Add or delete the photograph path, depending on the status of a photograph being there.
+     * Change button text if not going to another activity (say, to find the photograph
+     * @param v
+     */
+    public void photoClick(View v){
+        if (photograph==null){
+            Intent chooseFile;
+            Intent intent;
+            chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+            chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
+            chooseFile.setType("image/*");
+            intent = Intent.createChooser(chooseFile, "Choose a file");
+            startActivityForResult(intent, 1);
+        } else{
+            StorageReference photoRef = storageRef.child(CurrentUser.getInstance().getUsername() +"/"+photograph);
+            photoRef.delete().addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // An error occurred. Log it
+                    Log.e("TakeNewBookActivity", e.getStackTrace().toString());
+                }
+            });
+            photograph = null;
+            photoButton.setText("Click to add a photo");
+        }
+    }
+
+    /**
+     * Uploads and saves the photograph
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+                Uri uri = data.getData();
+                StorageReference photoRef = storageRef.child(CurrentUser.getInstance().getUsername() +"/"+uri.getLastPathSegment());
+                UploadTask uploadTask = photoRef.putFile(uri);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        Toast.makeText(TakeNewBookActivity.this, "Upload Failure.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                        Toast.makeText(TakeNewBookActivity.this, "Upload Success.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+                // wait until upload is finished
+                while(uploadTask.isInProgress()){}
+                // If successful, change accordingly
+                if(uploadTask.isSuccessful()) {
+                    photograph = uri.getLastPathSegment();
+                    photoButton.setText("Remove photo");
+                }
+            }
+        }
     }
 
     public void inputDataFromScan(String isbn) {

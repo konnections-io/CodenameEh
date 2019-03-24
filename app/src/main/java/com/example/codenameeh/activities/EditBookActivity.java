@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -89,6 +90,14 @@ public class EditBookActivity extends AppCompatActivity {
             intent = Intent.createChooser(chooseFile, "Choose a file");
             startActivityForResult(intent, 1);
         } else{
+            StorageReference photoRef = storageRef.child(book.getOwner()+"/"+book.getPhotograph());
+            photoRef.delete().addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // An error occurred. Log it
+                    Log.e("EditBookActivity", e.getStackTrace().toString());
+                }
+            });
             book.setPhotograph(null);
             photoButton.setText("Click to add a photo");
         }
@@ -113,8 +122,6 @@ public class EditBookActivity extends AppCompatActivity {
                         // Handle unsuccessful uploads
                         Toast.makeText(EditBookActivity.this, "Upload Failure.",
                                 Toast.LENGTH_SHORT).show();
-                        // Break out of next statements
-                        return;
                     }
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -124,8 +131,13 @@ public class EditBookActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-                book.setPhotograph(uri.getLastPathSegment());
-                photoButton.setText("Remove photo");
+                // wait until upload is finished
+                while(uploadTask.isInProgress()){}
+                // If successful, change accordingly
+                if(uploadTask.isSuccessful()) {
+                    book.setPhotograph(uri.getLastPathSegment());
+                    photoButton.setText("Remove photo");
+                }
             }
         }
     }
