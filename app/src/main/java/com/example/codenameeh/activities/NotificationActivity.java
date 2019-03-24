@@ -35,6 +35,7 @@ import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +76,32 @@ public class NotificationActivity extends BaseActivity {
         getLayoutInflater().inflate(R.layout.activity_notification, frameLayout);
         bookAcceptedListView = (ListView) findViewById(R.id.bookAcceptedList);
         requestedListView = (ListView) findViewById(R.id.requestBookList);
+        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(documentSnapshot != null && documentSnapshot.exists()){
+                    requested.clear();
+                    booksAccepted.clear();
+                    for(Notification notification: CurrentUser.getInstance().getNotifications()){
+                        if(notification.getTypeNotification().equals("Borrow Request")){
+                            requested.add(notification.toString());
+                        }
+                        else if(notification.getTypeNotification().equals("Accepted Request")){
+                            booksAccepted.add(notification.toString());
+                        }
+                    }
+                    bookAcceptedListView.setAdapter(bookAcceptedAdapter);
+                    requestedListView.setAdapter(requestedAdapter);
+
+                }
+            }
+        });
+//        ArrayList<Notification> nlist = new ArrayList<Notification>();
+//        Notification n1 = new Notification("Alex","Boring","There");
+//        Notification n2 = new Notification("Brian","Cooking");
+//        nlist.add(n1);
+//        nlist.add(n2);
+//        ref.update("notifications",nlist);
     }
 
 
@@ -88,33 +115,7 @@ public class NotificationActivity extends BaseActivity {
         Intent intent = getIntent();
         bookAcceptedAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,booksAccepted);
         requestedAdapter = new ArrayAdapter<String>(NotificationActivity.this,android.R.layout.simple_list_item_1,requested);
-        loadNotifications();
+
     }
 
-    /**
-     * Method reads from Firestore for all notifications, then updates the adapters based on these
-     * notifications. There are 2 adapters for 2 types of notifications; Borrow requests and accepted
-     * requests.
-     */
-    public void loadNotifications(){
-        ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    User user = documentSnapshot.toObject(User.class);
-                    CurrentUser.getInstance().setNotifications(user.getNotifications());
-                    for(Notification notification: CurrentUser.getInstance().getNotifications()){
-                        if(notification.getTypeNotification().equals("Borrow Request")){
-                            requested.add(notification.toString());
-                        }
-                        else if(notification.getTypeNotification().equals("Accepted Request")){
-                            booksAccepted.add(notification.toString());
-                        }
-                    }
-                    bookAcceptedListView.setAdapter(bookAcceptedAdapter);
-                    requestedListView.setAdapter(requestedAdapter);
-                }
-            }
-        });
-    }
 }
