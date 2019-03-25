@@ -28,14 +28,14 @@ import com.google.firebase.storage.UploadTask;
  * be functional.
  */
 public class EditBookActivity extends AppCompatActivity {
-    Button photoButton;
-    Book book;
-    EditText title;
-    EditText author;
-    EditText ISBN;
-    EditText desc;
-    FirebaseStorage storage;
-    StorageReference storageRef;
+    private Button photoButton;
+    private Book book;
+    private EditText title;
+    private EditText author;
+    private EditText ISBN;
+    private EditText desc;
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
 
     /**
      * Create the layout of the page, and put the appropriate labels on the EditViews, button, and get the book from the Intent
