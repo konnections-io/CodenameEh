@@ -135,9 +135,9 @@ public class LoginActivity extends AppCompatActivity {
                     //Set current user singleton
                     CurrentUser.setInstance(user);
                     CurrentUser.getInstance().setNotifications(user.getNotifications());
-                    CurrentUser.getInstance().setOwningString(user.getOwningString());
-                    CurrentUser.getInstance().setBorrowingString(user.getBorrowingString());
-                    CurrentUser.getInstance().setRequestingString(user.getRequestingString());
+                    CurrentUser.getInstance().setOwning(user.getOwning());
+                    CurrentUser.getInstance().setBorrowing(user.getBorrowing());
+                    CurrentUser.getInstance().setRequesting(user.getRequesting());
                     CurrentUser.getInstance().setBorrowedHistory(user.getBorrowedHistory());
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);

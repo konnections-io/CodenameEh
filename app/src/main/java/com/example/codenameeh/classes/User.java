@@ -119,7 +119,7 @@ public class User {
         return temp;
     }
 
-    public void setOwning(ArrayList<Book> owning) {
+    public void setBooksOwned(ArrayList<Book> owning) {
         if(this.owning!= null) {
             this.owning.clear();
         } else{
@@ -141,27 +141,27 @@ public class User {
         }
         return temp;
     }
-    public void setBorrowingString(ArrayList<String> borrowing){
+    public void setBorrowing(ArrayList<String> borrowing){
         this.borrowing = borrowing;
     }
-    public ArrayList<String> getBorrowingString(){
+    public ArrayList<String> getBorrowing(){
         return this.borrowing;
     }
 
-    public ArrayList<String> getOwningString(){
+    public ArrayList<String> getOwning(){
         return this.owning;
     }
-    public void setOwningString(ArrayList<String> owning){
+    public void setOwning(ArrayList<String> owning){
         this.owning = owning;
     }
-    public void setRequestingString(ArrayList<String> requesting){
+    public void setRequesting(ArrayList<String> requesting){
         this.requesting = requesting;
     }
-    public ArrayList<String> getRequestingString(){
+    public ArrayList<String> getRequesting(){
         return this.requesting;
     }
 
-    public void setBorrowing(ArrayList<Book> borrowing) {
+    public void setBooksBorrowed(ArrayList<Book> borrowing) {
         if(this.borrowing!= null){
             this.borrowing.clear();
         } else{
@@ -192,7 +192,7 @@ public class User {
         return temp;
     }
 
-    public void setRequesting(ArrayList<Book> requesting) {
+    public void setRequestedBooks(ArrayList<Book> requesting) {
         if(this.requesting!=null) {
             this.requesting.clear();
         }
