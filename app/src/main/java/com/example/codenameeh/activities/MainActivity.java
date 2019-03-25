@@ -54,6 +54,10 @@ public class MainActivity extends BaseActivity {
                     createNotificationChannels();
                     CurrentUser.getInstance().setNotifications(user.getNotifications());
                     addNotificationListener();
+                    CurrentUser.getInstance().getOwning().setBookList(user.getOwning().getBookList());
+
+
+
                 } // Might need an OnFailure, since I keep sometimes having user = null
             }
         });
