@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.codenameeh.GlideApp;
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
+import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -157,12 +158,24 @@ public class ViewBookActivity extends BaseActivity {
         if(currentUser.getRequesting().contains(book)){
             currentUser.getRequesting().remove(book);
             book.removeRequest(currentUser.getUsername());
+            Booklist booklist = Booklist.getInstance();
+            booklist.set(booklist.indexOf(book), book);
             requestButton.setText("Request");
         } else{
             currentUser.getRequesting().add(book);
             book.addRequest(currentUser.getUsername());
+            Booklist booklist = Booklist.getInstance();
+            booklist.set(booklist.indexOf(book), book);
             requestButton.setText("Cancel Request");
         }
+        // Update in Firestore
+        FirebaseFirestore.getInstance().collection("All Books").document(book.getUuid())
+                .set(book)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                    }
+                });
     }
 
     /**
@@ -185,19 +198,11 @@ public class ViewBookActivity extends BaseActivity {
             Book newBook = data.getParcelableExtra("book");
             if (newBook != null) {
                 // patch attempts
-                ArrayList<Book> temp = currentUser.getOwning().getBookList();
-                Log.d("Index: ",book.equals(newBook)+"");
-                temp.set(temp.indexOf(book), newBook);
+                Booklist booklist = Booklist.getInstance();
+                booklist.set(booklist.indexOf(book), newBook);
                 book = newBook;
 
                 // Update in Firestore
-                FirebaseFirestore.getInstance().collection("users").document(CurrentUser.getInstance().getUsername())
-                        .update("owning",currentUser.getOwning())
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                            }
-                        });
                 FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid())
                         .set(newBook)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {

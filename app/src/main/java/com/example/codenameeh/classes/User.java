@@ -16,6 +16,12 @@ public class User {
     private ArrayList<Notification> notifications;
     public User() {
         //Empty Constructor
+        owning = new ArrayList<>();
+        borrowing = new ArrayList<>();
+        borrowedHistory = new ArrayList<>();
+        requesting = new ArrayList<>();
+        notifications = new ArrayList<>();
+        keywords = new ArrayList<>();
     }
 
     public User(String name, String phone, String email, String username) {
@@ -114,7 +120,11 @@ public class User {
     }
 
     public void setOwning(ArrayList<Book> owning) {
-        this.owning.clear();
+        if(this.owning!= null) {
+            this.owning.clear();
+        } else{
+            this.owning = new ArrayList<>();
+        }
         for(Book own : owning){
             this.owning.add(own.getUuid());
         }
@@ -131,9 +141,32 @@ public class User {
         }
         return temp;
     }
+    public void setBorrowingString(ArrayList<String> borrowing){
+        this.borrowing = borrowing;
+    }
+    public ArrayList<String> getBorrowingString(){
+        return this.borrowing;
+    }
+
+    public ArrayList<String> getOwningString(){
+        return this.owning;
+    }
+    public void setOwningString(ArrayList<String> owning){
+        this.owning = owning;
+    }
+    public void setRequestingString(ArrayList<String> requesting){
+        this.requesting = requesting;
+    }
+    public ArrayList<String> getRequestingString(){
+        return this.requesting;
+    }
 
     public void setBorrowing(ArrayList<Book> borrowing) {
-        this.borrowing.clear();
+        if(this.borrowing!= null){
+            this.borrowing.clear();
+        } else{
+            this.borrowing = new ArrayList<>();
+        }
         for(Book borrow : borrowing){
             this.borrowing.add(borrow.getUuid());
         }
@@ -160,7 +193,12 @@ public class User {
     }
 
     public void setRequesting(ArrayList<Book> requesting) {
-        this.requesting.clear();
+        if(this.requesting!=null) {
+            this.requesting.clear();
+        }
+        else{
+            this.requesting = new ArrayList<>();
+        }
         for(Book b : requesting){
             this.requesting.add(b.getUuid());
         }

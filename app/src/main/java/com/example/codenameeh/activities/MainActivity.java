@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -13,15 +14,22 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.codenameeh.R;
+import com.example.codenameeh.classes.Book;
+import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.Notification;
 import com.example.codenameeh.classes.User;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -54,16 +62,42 @@ public class MainActivity extends BaseActivity {
                     createNotificationChannels();
                     CurrentUser.getInstance().setNotifications(user.getNotifications());
                     addNotificationListener();
-                    CurrentUser.getInstance().setOwning(user.getOwning());
-                    CurrentUser.getInstance().setBorrowing(user.getBorrowing());
-                    CurrentUser.getInstance().setRequesting(user.getRequesting());
+                    CurrentUser.getInstance().setOwningString(user.getOwningString());
+                    CurrentUser.getInstance().setBorrowingString(user.getBorrowingString());
+                    CurrentUser.getInstance().setRequestingString(user.getRequestingString());
                     CurrentUser.getInstance().setBorrowedHistory(user.getBorrowedHistory());
-
-
 
                 } // Might need an OnFailure, since I keep sometimes having user = null
             }
         });
+        CollectionReference bookRef = db.collection("All Books");
+        bookRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    ArrayList<Book> books = new ArrayList<>();
+                    for(QueryDocumentSnapshot document : task.getResult()) {
+                        books.add(document.toObject(Book.class));
+                    }
+                    Booklist.setInstance(books);
+                }
+            }
+        });
+        bookRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if(e!=null){
+                    Log.e("Listen failed.", e.toString());
+                    return;
+                }
+                ArrayList<Book> books = new ArrayList<>();
+                for(QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    books.add(document.toObject(Book.class));
+                }
+                Booklist.setInstance(books);
+            }
+        });
+
 
     }
 
