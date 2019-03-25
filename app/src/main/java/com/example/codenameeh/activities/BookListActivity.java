@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.codenameeh.R;
@@ -18,6 +19,7 @@ import com.example.codenameeh.classes.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 
@@ -65,6 +67,15 @@ public class BookListActivity extends BaseActivity {
                 viewBook(position);
             }
         });
+
+        Intent Iintent = getIntent();
+        String isbn = Iintent.getStringExtra("isbn");
+        Log.e("TestScan", "Recieved Intent");
+        if(isbn != null) {
+            Intent intent = new Intent(this, TakeNewBookActivity.class);
+            intent.putExtra("isbn", isbn);
+            startActivityForResult(intent, 1);
+        }
     }
 
     /**
