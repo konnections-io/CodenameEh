@@ -8,11 +8,9 @@ import android.widget.ListView;
 
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
-import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.BooklistAdapter;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -55,7 +53,7 @@ public class BorrowingListActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         currentUser = CurrentUser.getInstance();
-        ourBookList = currentUser.getBorrowing();
+        ourBookList = currentUser.BorrowedBooks();
         adapter = new BooklistAdapter(ourBookList);
         dataList.setAdapter(adapter);
 

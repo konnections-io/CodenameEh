@@ -107,7 +107,7 @@ public class User {
         this.searchWords = searchWords;
     }
 
-    public ArrayList<Book> getOwning() {
+    public ArrayList<Book> BooksOwned() {
         Booklist books =  Booklist.getInstance();
         ArrayList<Book> temp = new ArrayList<>();
         for(String own : this.owning){
@@ -130,7 +130,7 @@ public class User {
         }
     }
 
-    public ArrayList<Book> getBorrowing() {
+    public ArrayList<Book> BorrowedBooks() {
         Booklist books =  Booklist.getInstance();
         ArrayList<Book> temp = new ArrayList<>();
         for(String borrow : this.borrowing){
@@ -180,7 +180,7 @@ public class User {
         this.borrowedHistory = borrowedHistory;
     }
 
-    public ArrayList<Book> getRequesting() {
+    public ArrayList<Book> RequestedBooks() {
         Booklist books =  Booklist.getInstance();
         ArrayList<Book> temp = new ArrayList<>();
         for(String request : this.requesting){
