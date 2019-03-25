@@ -4,8 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Book implements Parcelable {
+    private String uuid;
     private String title;
     private String author;
     private String ISBN;
@@ -29,6 +31,7 @@ public class Book implements Parcelable {
         this.owner = Owner;
         this.requestedBy = new ArrayList<>();
         this.acceptedStatus = false;
+        this.uuid = UUID.randomUUID().toString();
     }
     // no photograph
     public Book(String title, String author, String ISBN, String description, String Owner) {
@@ -41,6 +44,7 @@ public class Book implements Parcelable {
         this.owner = Owner;
         this.requestedBy = new ArrayList<>();
         this.acceptedStatus = false;
+        this.uuid = UUID.randomUUID().toString();
     }
     public void addRequest(String user){
         this.requestedBy.add(user);
@@ -116,6 +120,13 @@ public class Book implements Parcelable {
     public void setAcceptedStatus(boolean status){this.acceptedStatus = status;}
     public boolean getAcceptedStatus(){return this.acceptedStatus;}
 
+    public String getUuid() {
+        return uuid;
+    }
+    public void setUuid(String uuid){
+        this.uuid = uuid;
+    }
+
     @Override
     public String toString() {
         String output = "Title: "+this.title+ "\t\tAuthor: "+ this.author
@@ -145,6 +156,7 @@ public class Book implements Parcelable {
         description = in.readString();
         photograph = in.readString();
         owner =  in.readString();
+        uuid = in.readString();
         if (in.readByte() == 0x01) {
             requestedBy = new ArrayList<String>();
             in.readList(requestedBy, String.class.getClassLoader());
@@ -168,6 +180,7 @@ public class Book implements Parcelable {
         dest.writeString(description);
         dest.writeString(photograph);
         dest.writeString(owner);
+        dest.writeString(uuid);
         if (requestedBy == null) {
             dest.writeByte((byte) (0x00));
         } else {

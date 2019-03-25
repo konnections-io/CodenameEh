@@ -179,6 +179,7 @@ public class ViewBookActivity extends BaseActivity {
             Book newBook = data.getParcelableExtra("book");
             if (newBook != null) {
                 book = newBook;
+
             }
         }
     }

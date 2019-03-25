@@ -1,8 +1,10 @@
 package com.example.codenameeh.activities;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +15,8 @@ import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -87,15 +91,30 @@ public class BookListActivity extends BaseActivity {
             booksOwnedList = booksOwned.getBookList();
             adapter.notifyDataSetChanged();
             FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
+            FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid()).set(newBook)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                        }
+                    });
         }
         if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
             //view details of book returned
             if ((data.getStringExtra(EXTRA_MESSAGE_DELETE)).equals("TRUE")) {
+                FirebaseFirestore.getInstance().collection("All Books").document(booksOwnedList.get(positionclicked).getUuid())
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            }
+                        });
                 booksOwned.remove(booksOwnedList.get(positionclicked));
                 booksOwnedList = booksOwned.getBookList();
             }
             adapter.notifyDataSetChanged();
             FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
+
+
         }
     }
 
