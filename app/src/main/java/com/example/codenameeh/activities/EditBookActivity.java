@@ -132,12 +132,12 @@ public class EditBookActivity extends AppCompatActivity {
                     }
                 });
                 // wait until upload is finished
-                while(uploadTask.isInProgress()){}
+                // while(uploadTask.isInProgress()){}
                 // If successful, change accordingly
-                if(uploadTask.isSuccessful()) {
+                //if(uploadTask.isSuccessful()) {
                     book.setPhotograph(uri.getLastPathSegment());
                     photoButton.setText("Remove photo");
-                }
+                // }
             }
         }
     }
