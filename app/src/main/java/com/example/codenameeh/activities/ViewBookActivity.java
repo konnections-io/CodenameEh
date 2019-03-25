@@ -199,6 +199,7 @@ public class ViewBookActivity extends BaseActivity {
             if (newBook != null) {
                 // patch attempts
                 Booklist booklist = Booklist.getInstance();
+
                 booklist.set(booklist.indexOf(book), newBook);
                 book = newBook;
 
