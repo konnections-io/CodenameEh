@@ -16,6 +16,8 @@ import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -187,6 +189,22 @@ public class ViewBookActivity extends BaseActivity {
                 Log.d("Index: ",book.equals(newBook)+"");
                 temp.set(temp.indexOf(book), newBook);
                 book = newBook;
+
+                // Update in Firestore
+                FirebaseFirestore.getInstance().collection("users").document(CurrentUser.getInstance().getUsername())
+                        .update("owning",currentUser.getOwning())
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            }
+                        });
+                FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid())
+                        .set(newBook)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            }
+                        });
 
             }
         }
