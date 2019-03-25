@@ -9,13 +9,19 @@ public class User {
     private String username;
     private ArrayList<String> keywords;
     private KeywordTracker searchWords;
-    private Booklist owning;
-    private Booklist borrowing;
-    private Booklist borrowedHistory;
-    private Booklist requesting;
+    private ArrayList<String> owning;
+    private ArrayList<String> borrowing;
+    private ArrayList<String> borrowedHistory;
+    private ArrayList<String> requesting;
     private ArrayList<Notification> notifications;
     public User() {
         //Empty Constructor
+        owning = new ArrayList<>();
+        borrowing = new ArrayList<>();
+        borrowedHistory = new ArrayList<>();
+        requesting = new ArrayList<>();
+        notifications = new ArrayList<>();
+        keywords = new ArrayList<>();
     }
 
     public User(String name, String phone, String email, String username) {
@@ -23,32 +29,32 @@ public class User {
         this.phone = phone;
         this.email = email;
         this.username = username;
-        this.owning = new Booklist();
-        this.borrowing = new Booklist();
-        this.borrowedHistory = new Booklist();
-        this.requesting = new Booklist();
+        this.owning = new ArrayList<>();
+        this.borrowing = new ArrayList<>();
+        this.borrowedHistory = new ArrayList<>();
+        this.requesting = new ArrayList<>();
         this.searchWords = new KeywordTracker();
         this.notifications = new ArrayList<Notification>();
     }
 
     public void newOwn(Book book) {
-        this.owning.add(book);
-        book.setOwner(this.name);
+        this.owning.add(book.getUuid());
+        book.setOwner(this.username);
     }
 
     public void removeOwn(Book book) {
-        this.owning.remove(book);
+        this.owning.remove(book.getUuid());
         book.setOwner(null);
     }
 
     public void newBorrow(Book book) {
-        this.borrowing.add(book);
-        this.borrowedHistory.add(book);
+        this.borrowing.add(book.getUuid());
+        this.borrowedHistory.add(book.getUuid());
         book.setBorrowed(true);
     }
 
     public void removeBorrow(Book book) {
-        this.borrowing.remove(book);
+        this.borrowing.remove(book.getUuid());
         book.setBorrowed(false);
         // Don't think we want this to remove the borrow history
     }
@@ -101,36 +107,101 @@ public class User {
         this.searchWords = searchWords;
     }
 
-    public Booklist getOwning() {
-        return owning;
+    public ArrayList<Book> getOwning() {
+        Booklist books =  Booklist.getInstance();
+        ArrayList<Book> temp = new ArrayList<>();
+        for(String own : this.owning){
+            int index = books.findIndex(own);
+            if(index != -1){
+                temp.add(books.get(index));
+            }
+        }
+        return temp;
     }
 
-    public void setOwning(Booklist owning) {
-        this.owning = owning;
+    public void setOwning(ArrayList<Book> owning) {
+        if(this.owning!= null) {
+            this.owning.clear();
+        } else{
+            this.owning = new ArrayList<>();
+        }
+        for(Book own : owning){
+            this.owning.add(own.getUuid());
+        }
     }
 
-    public Booklist getBorrowing() {
-        return borrowing;
+    public ArrayList<Book> getBorrowing() {
+        Booklist books =  Booklist.getInstance();
+        ArrayList<Book> temp = new ArrayList<>();
+        for(String borrow : this.borrowing){
+            int index = books.findIndex(borrow);
+            if(index != -1){
+                temp.add(books.get(index));
+            }
+        }
+        return temp;
     }
-
-    public void setBorrowing(Booklist borrowing) {
+    public void setBorrowingString(ArrayList<String> borrowing){
         this.borrowing = borrowing;
     }
+    public ArrayList<String> getBorrowingString(){
+        return this.borrowing;
+    }
 
-    public Booklist getBorrowedHistory() {
+    public ArrayList<String> getOwningString(){
+        return this.owning;
+    }
+    public void setOwningString(ArrayList<String> owning){
+        this.owning = owning;
+    }
+    public void setRequestingString(ArrayList<String> requesting){
+        this.requesting = requesting;
+    }
+    public ArrayList<String> getRequestingString(){
+        return this.requesting;
+    }
+
+    public void setBorrowing(ArrayList<Book> borrowing) {
+        if(this.borrowing!= null){
+            this.borrowing.clear();
+        } else{
+            this.borrowing = new ArrayList<>();
+        }
+        for(Book borrow : borrowing){
+            this.borrowing.add(borrow.getUuid());
+        }
+    }
+
+    public ArrayList<String> getBorrowedHistory() {
         return borrowedHistory;
     }
 
-    public void setBorrowedHistory(Booklist borrowedHistory) {
+    public void setBorrowedHistory(ArrayList<String> borrowedHistory) {
         this.borrowedHistory = borrowedHistory;
     }
 
-    public Booklist getRequesting() {
-        return requesting;
+    public ArrayList<Book> getRequesting() {
+        Booklist books =  Booklist.getInstance();
+        ArrayList<Book> temp = new ArrayList<>();
+        for(String request : this.requesting){
+            int index = books.findIndex(request);
+            if(index != -1){
+                temp.add(books.get(index));
+            }
+        }
+        return temp;
     }
 
-    public void setRequesting(Booklist requesting) {
-        this.requesting = requesting;
+    public void setRequesting(ArrayList<Book> requesting) {
+        if(this.requesting!=null) {
+            this.requesting.clear();
+        }
+        else{
+            this.requesting = new ArrayList<>();
+        }
+        for(Book b : requesting){
+            this.requesting.add(b.getUuid());
+        }
     }
 
     public void setNotifications(ArrayList<Notification> notifications){

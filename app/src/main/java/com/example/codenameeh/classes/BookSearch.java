@@ -1,7 +1,7 @@
 package com.example.codenameeh.classes;
 
 public class BookSearch {
-    private User user;
+    /*private User user;
 
     public BookSearch(User user) {
         this.user = user;
@@ -27,5 +27,5 @@ public class BookSearch {
 
     public void setUser(User user) {
         this.user = user;
-    }
+    }*/
 }

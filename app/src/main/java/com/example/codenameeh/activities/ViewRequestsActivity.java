@@ -91,7 +91,7 @@ public class ViewRequestsActivity extends BaseActivity {
         super.onStart();
 
 
-            for (Book requestedBook : currentUser.getRequesting().getBookList()) {
+            for (Book requestedBook : currentUser.getRequesting()) {
                 if (requestedBook.getAcceptedStatus()) {
                     booksAccepted.add(requestedBook);
                 } else {

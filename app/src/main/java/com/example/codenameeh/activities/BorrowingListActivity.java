@@ -14,13 +14,15 @@ import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+
 /**
  * @author Ryan Jensen
  * Views what the user is borrowing, and allows clicks for more details on the specific book
  *
  */
 public class BorrowingListActivity extends BaseActivity {
-    Booklist ourBookList;
+    ArrayList<Book> ourBookList;
     BooklistAdapter adapter;
     User currentUser;
     ListView dataList;
@@ -53,8 +55,6 @@ public class BorrowingListActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         currentUser = CurrentUser.getInstance();
-        // currentUser.getBorrowing().add(new Book("test", "testing","123456","desc", "Diodone"));
-        // Uncomment for testing/showing
         ourBookList = currentUser.getBorrowing();
         adapter = new BooklistAdapter(ourBookList);
         dataList.setAdapter(adapter);
