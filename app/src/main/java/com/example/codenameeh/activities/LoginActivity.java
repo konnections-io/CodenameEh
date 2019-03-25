@@ -3,6 +3,7 @@ package com.example.codenameeh.activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.codenameeh.R;
+import com.example.codenameeh.classes.Book;
+import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,9 +24,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 /**
  * @author Cole Boytinck
@@ -125,12 +135,43 @@ public class LoginActivity extends AppCompatActivity {
                     //Set current user singleton
                     CurrentUser.setInstance(user);
                     CurrentUser.getInstance().setNotifications(user.getNotifications());
-                    CurrentUser.getInstance().getOwning().setBookList(user.getOwning().getBookList());
+                    CurrentUser.getInstance().setOwningString(user.getOwningString());
+                    CurrentUser.getInstance().setBorrowingString(user.getBorrowingString());
+                    CurrentUser.getInstance().setRequestingString(user.getRequestingString());
+                    CurrentUser.getInstance().setBorrowedHistory(user.getBorrowedHistory());
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
             }
         });
+        CollectionReference bookRef = db.collection("All Books");
+        bookRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    ArrayList<Book> books = new ArrayList<>();
+                    for(QueryDocumentSnapshot document : task.getResult()) {
+                        books.add(document.toObject(Book.class));
+                    }
+                    Booklist.setInstance(books);
+                }
+            }
+        });
+        bookRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if(e!=null){
+                    Log.e("Listen failed.", e.toString());
+                    return;
+                }
+                ArrayList<Book> books = new ArrayList<>();
+                for(QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    books.add(document.toObject(Book.class));
+                }
+                Booklist.setInstance(books);
+            }
+        });
+
     }
 }
 

@@ -9,7 +9,7 @@ import java.util.UUID;
 import androidx.annotation.Nullable;
 
 public class Book implements Parcelable {
-    private UUID uuid;
+    private String uuid;
     private String title;
     private String author;
     private String ISBN;
@@ -35,7 +35,7 @@ public class Book implements Parcelable {
         this.owner = Owner;
         this.requestedBy = new ArrayList<>();
         this.acceptedStatus = false;
-        this.uuid = UUID.randomUUID();
+        this.uuid = UUID.randomUUID().toString();
 
     }
     // no photograph
@@ -50,7 +50,7 @@ public class Book implements Parcelable {
         this.requestedBy = new ArrayList<>();
         this.acceptedStatus = false;
 
-        this.uuid = UUID.randomUUID();
+        this.uuid = UUID.randomUUID().toString();
     }
     public void addRequest(String user){
         this.requestedBy.add(user);
@@ -127,10 +127,10 @@ public class Book implements Parcelable {
     public boolean getAcceptedStatus(){return this.acceptedStatus;}
 
     public String getUuid() {
-        return uuid.toString();
+        return uuid;
     }
     public void setUuid(String uuid){
-        this.uuid = UUID.fromString(uuid);
+        this.uuid = uuid;
     }
 
     @Override
@@ -180,7 +180,7 @@ public class Book implements Parcelable {
         photograph = in.readString();
         owner =  in.readString();
 
-        uuid = (UUID) in.readValue(UUID.class.getClassLoader());
+        uuid = in.readString();
 
         if (in.readByte() == 0x01) {
             requestedBy = new ArrayList<String>();
@@ -206,7 +206,7 @@ public class Book implements Parcelable {
         dest.writeString(photograph);
         dest.writeString(owner);
 
-        dest.writeValue(uuid);
+        dest.writeString(uuid);
 
         if (requestedBy == null) {
             dest.writeByte((byte) (0x00));
