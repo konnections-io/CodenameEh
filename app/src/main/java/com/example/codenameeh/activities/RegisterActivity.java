@@ -132,7 +132,7 @@ public class RegisterActivity extends AppCompatActivity {
                     //Set current user singleton
                     CurrentUser.setInstance(user);
                     CurrentUser.getInstance().setNotifications(user.getNotifications());;
-                    CurrentUser.getInstance().setOwningString(user.getOwningString());
+                    CurrentUser.getInstance().setOwning(user.getOwning());
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     startActivity(intent);
                 }

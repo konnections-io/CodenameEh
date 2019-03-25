@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.rule.ActivityTestRule;
 
 import static androidx.test.espresso.Espresso.onData;
@@ -57,7 +56,7 @@ public class ViewBookActivityTest {
             onView(withId(R.id.drawer_layout)).perform(click());
             Book testBook = new Book("TestTitle", "George Washington", "0284e98", "An excellent read.", myUser.getUsername());
             // Manually add to owning, since this is easier and this is not to test adding a book to this, but to View a book
-            myUser.getOwning().add(testBook);
+            myUser.BooksOwned().add(testBook);
             onView(withId(R.id.nav_my_books)).perform(click());
             onData(anything()).inAdapterView(withId(R.id.BooksOwnedView)).atPosition(0).perform(click());
             // Check that this is as expected
