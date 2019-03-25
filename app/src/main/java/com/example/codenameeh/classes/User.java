@@ -39,7 +39,7 @@ public class User {
 
     public void newOwn(Book book) {
         this.owning.add(book.getUuid());
-        book.setOwner(this.name);
+        book.setOwner(this.username);
     }
 
     public void removeOwn(Book book) {
