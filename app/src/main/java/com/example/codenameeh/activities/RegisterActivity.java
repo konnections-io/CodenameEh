@@ -11,12 +11,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.codenameeh.R;
+import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
@@ -106,9 +110,23 @@ public class RegisterActivity extends AppCompatActivity {
      * Changes the activity to the MainActivity
      */
     public void updateUI(String username) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("username", username);
-        startActivity(intent);
+        //Get user information from firebase
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("users").document(username);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()) {
+                    User user = documentSnapshot.toObject(User.class);
+                    //Set current user singleton
+                    CurrentUser.setInstance(user);
+                    CurrentUser.getInstance().setNotifications(user.getNotifications());;
+                    CurrentUser.getInstance().getOwning().setBookList(user.getOwning().getBookList());
+                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     /**

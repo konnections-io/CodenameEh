@@ -36,31 +36,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_main, frameLayout);
 
-        Intent intent = getIntent();
-        String username = intent.getStringExtra("username");
-
-        //Get user information from firebase
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("users").document(username);
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()) {
-                    User user = documentSnapshot.toObject(User.class);
-                    //Set current user singleton
-                    CurrentUser.setInstance(user);
-                    Toast.makeText(MainActivity.this, "User Loaded.",
-                            Toast.LENGTH_SHORT).show();
-                    createNotificationChannels();
-                    CurrentUser.getInstance().setNotifications(user.getNotifications());
-                    addNotificationListener();
-                    CurrentUser.getInstance().getOwning().setBookList(user.getOwning().getBookList());
-
-
-
-                } // Might need an OnFailure, since I keep sometimes having user = null
-            }
-        });
+        createNotificationChannels();
+        addNotificationListener();
 
     }
 
