@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import androidx.annotation.Nullable;
+
 public class Book implements Parcelable {
     private String uuid;
     private String title;
@@ -129,6 +131,23 @@ public class Book implements Parcelable {
     }
     public void setUuid(String uuid){
         this.uuid = uuid;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(this==obj){
+            return true;
+        } else if(obj==null){
+            return false;
+        } else{
+            Book other;
+            try {
+                other = (Book) obj;
+            } catch(Exception e){
+                return false;
+            }
+            return (this.uuid.equals(other.getUuid()));
+        }
     }
 
     @Override

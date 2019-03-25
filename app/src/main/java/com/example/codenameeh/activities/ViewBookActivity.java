@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static com.example.codenameeh.activities.BookListActivity.EXTRA_MESSAGE_DELETE;
 
@@ -56,6 +58,8 @@ public class ViewBookActivity extends BaseActivity {
         getLayoutInflater().inflate(R.layout.activity_view_book, frameLayout);
         //mStorageRef = FirebaseStorage.getInstance().getReference();
         Intent intent = getIntent();
+        // May change this to find the book which matches this in the full booklist, or need to return
+        // to fix Requesting from the owner's viewpoint (requester should be fine)
         book = intent.getParcelableExtra("book");
         currentUser = CurrentUser.getInstance();
         requestButton = findViewById(R.id.requestBookButton);
@@ -178,6 +182,10 @@ public class ViewBookActivity extends BaseActivity {
         if(resultCode==RESULT_OK && !(data==null)) {
             Book newBook = data.getParcelableExtra("book");
             if (newBook != null) {
+                // patch attempts
+                ArrayList<Book> temp = currentUser.getOwning().getBookList();
+                Log.d("Index: ",book.equals(newBook)+"");
+                temp.set(temp.indexOf(book), newBook);
                 book = newBook;
 
             }
