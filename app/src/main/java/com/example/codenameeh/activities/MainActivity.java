@@ -43,60 +43,9 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_main, frameLayout);
-
-        Intent intent = getIntent();
-        String username = intent.getStringExtra("username");
-
-        //Get user information from firebase
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("users").document(username);
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()) {
-                    User user = documentSnapshot.toObject(User.class);
-                    //Set current user singleton
-                    CurrentUser.setInstance(user);
-                    Toast.makeText(MainActivity.this, "User Loaded.",
-                            Toast.LENGTH_SHORT).show();
-                    createNotificationChannels();
-                    CurrentUser.getInstance().setNotifications(user.getNotifications());
-                    addNotificationListener();
-                    CurrentUser.getInstance().setOwningString(user.getOwningString());
-                    CurrentUser.getInstance().setBorrowingString(user.getBorrowingString());
-                    CurrentUser.getInstance().setRequestingString(user.getRequestingString());
-                    CurrentUser.getInstance().setBorrowedHistory(user.getBorrowedHistory());
-
-                } // Might need an OnFailure, since I keep sometimes having user = null
-            }
-        });
-        CollectionReference bookRef = db.collection("All Books");
-        bookRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    ArrayList<Book> books = new ArrayList<>();
-                    for(QueryDocumentSnapshot document : task.getResult()) {
-                        books.add(document.toObject(Book.class));
-                    }
-                    Booklist.setInstance(books);
-                }
-            }
-        });
-        bookRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(e!=null){
-                    Log.e("Listen failed.", e.toString());
-                    return;
-                }
-                ArrayList<Book> books = new ArrayList<>();
-                for(QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    books.add(document.toObject(Book.class));
-                }
-                Booklist.setInstance(books);
-            }
-        });
+      
+        createNotificationChannels();
+        addNotificationListener();
 
 
     }
