@@ -7,8 +7,9 @@ import java.util.ArrayList;
 
 public class Booklist implements Parcelable {
     private ArrayList<Book> bookList;
+    private static Booklist instance;
 
-    public Booklist() {
+    private Booklist() {
         this.bookList = new ArrayList<Book>();
     }
 
@@ -33,9 +34,23 @@ public class Booklist implements Parcelable {
     public ArrayList<Book> getBookList() {
         return bookList;
     }
+    public int findIndex(String uuid){
+        for(int i = 0; i<bookList.size();i++){
+            if(bookList.get(i).getUuid().equals(uuid)){
+                return i;
+            }
+        }
+        return -1;
+    }
+    public static Booklist getInstance() {
+        return instance;
+    }
 
-    public void setBookList(ArrayList<Book> bookList) {
-        this.bookList = bookList;
+    public static void setInstance(ArrayList<Book> newBookList) {
+        if(instance == null){
+            instance = new Booklist();
+        }
+        instance.bookList = newBookList;
     }
 
     protected Booklist(Parcel in) {

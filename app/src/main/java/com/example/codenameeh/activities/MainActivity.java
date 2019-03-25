@@ -54,7 +54,10 @@ public class MainActivity extends BaseActivity {
                     createNotificationChannels();
                     CurrentUser.getInstance().setNotifications(user.getNotifications());
                     addNotificationListener();
-                    CurrentUser.getInstance().getOwning().setBookList(user.getOwning().getBookList());
+                    CurrentUser.getInstance().setOwning(user.getOwning());
+                    CurrentUser.getInstance().setBorrowing(user.getBorrowing());
+                    CurrentUser.getInstance().setRequesting(user.getRequesting());
+                    CurrentUser.getInstance().setBorrowedHistory(user.getBorrowedHistory());
 
 
 

@@ -37,7 +37,6 @@ import java.util.ArrayList;
 public class BookListActivity extends BaseActivity {
     private ListView bookView;
     private int positionclicked;
-    private Booklist booksOwned;
     private ArrayList<Book> booksOwnedList;
     private ArrayAdapter<Book> adapter;
     private User currentUser;
@@ -98,8 +97,8 @@ public class BookListActivity extends BaseActivity {
             String description = data.getStringExtra(EXTRA_MESSAGE_DESCRIPTION);
             String photograph = data.getStringExtra("photo");
             Book newBook = new Book(title, author, isbn, description, photograph, currentUser.getUsername());
-            booksOwned.add(newBook);
-            booksOwnedList = booksOwned.getBookList();
+            currentUser.newOwn(newBook);
+            booksOwnedList.add(newBook);
             adapter.notifyDataSetChanged();
             FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
             FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid()).set(newBook)
@@ -119,8 +118,9 @@ public class BookListActivity extends BaseActivity {
                             public void onSuccess(Void aVoid) {
                             }
                         });
-                booksOwned.remove(booksOwnedList.get(positionclicked));
-                booksOwnedList = booksOwned.getBookList();
+                currentUser.removeOwn(booksOwnedList.get(positionclicked));
+                booksOwnedList.remove(booksOwnedList.get(positionclicked));
+
             }
             adapter.notifyDataSetChanged();
             FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
@@ -138,8 +138,7 @@ public class BookListActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         currentUser = CurrentUser.getInstance();
-        booksOwned = currentUser.getOwning();
-        booksOwnedList = booksOwned.getBookList();
+        booksOwnedList = currentUser.getOwning();
 
         adapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksOwnedList);
         bookView.setAdapter(adapter);
