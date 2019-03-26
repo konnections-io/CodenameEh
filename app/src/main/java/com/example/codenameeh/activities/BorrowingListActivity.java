@@ -20,10 +20,10 @@ import java.util.ArrayList;
  *
  */
 public class BorrowingListActivity extends BaseActivity {
-    ArrayList<Book> ourBookList;
-    BooklistAdapter adapter;
-    User currentUser;
-    ListView dataList;
+    private ArrayList<Book> ourBookList;
+    private BooklistAdapter adapter;
+    private User currentUser;
+    private ListView dataList;
 
     /**
      * Sets the layout of the BorrowingList, adds the onClick Listener

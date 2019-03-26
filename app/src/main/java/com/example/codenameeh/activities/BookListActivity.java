@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
+import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -93,6 +94,7 @@ public class BookListActivity extends BaseActivity {
             Book newBook = new Book(title, author, isbn, description, photograph, currentUser.getUsername());
             currentUser.newOwn(newBook);
             booksOwnedList.add(newBook);
+            Booklist.getInstance().add(newBook);
 
             FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
             FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid()).set(newBook)
