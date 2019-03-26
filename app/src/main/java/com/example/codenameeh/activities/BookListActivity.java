@@ -67,7 +67,7 @@ public class BookListActivity extends BaseActivity {
 
         Intent Iintent = getIntent();
         String isbn = Iintent.getStringExtra("isbn");
-        Log.e("TestScan", "Recieved Intent");
+        Log.e("TestScan", "Received Intent");
         if(isbn != null) {
             Intent intent = new Intent(this, TakeNewBookActivity.class);
             intent.putExtra("isbn", isbn);
