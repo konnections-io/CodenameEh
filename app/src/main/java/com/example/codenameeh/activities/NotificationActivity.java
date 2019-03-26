@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.example.codenameeh.R;
+import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.Notification;
 import com.example.codenameeh.classes.User;
@@ -98,9 +99,14 @@ public class NotificationActivity extends BaseActivity {
                 }
             }
         });
+//        ArrayList<String> k = new ArrayList<String>();
+//        k.add("ABRA");
+//        Book book = new Book("ABC","JIMBO","123123","DESCRIPBE","ARTHUR",k);
+//
+//
 //        ArrayList<Notification> nlist = new ArrayList<Notification>();
-//        Notification n1 = new Notification("Alex","Boring","There");
-//        Notification n2 = new Notification("Brian","Cooking");
+//        Notification n1 = new Notification("Alex",book);
+//        Notification n2 = new Notification("Brian","THERE",book);
 //        nlist.add(n1);
 //        nlist.add(n2);
 //        ref.update("notifications",nlist);
