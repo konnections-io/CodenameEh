@@ -35,7 +35,7 @@ public class SearchBooksAdapter extends ArrayAdapter<Book> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
+      
         Book book = getItem(position);
 
         LayoutInflater inflater = LayoutInflater.from(context);
