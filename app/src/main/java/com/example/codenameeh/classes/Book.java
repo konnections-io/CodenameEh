@@ -3,6 +3,7 @@ package com.example.codenameeh.classes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -19,13 +20,14 @@ public class Book implements Parcelable {
     private ArrayList<String> requestedBy;
     private boolean borrowed;
     private boolean acceptedStatus;
+    private ArrayList<String> keywords;
 
 
     // empty constructor for serial reconstruction
     public Book (){
 
     }
-    public Book(String title, String author, String ISBN, String description, String photograph, String Owner) {
+    public Book(String title, String author, String ISBN, String description, String photograph, String Owner, ArrayList<String> keywords) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -36,10 +38,11 @@ public class Book implements Parcelable {
         this.requestedBy = new ArrayList<>();
         this.acceptedStatus = false;
         this.uuid = UUID.randomUUID().toString();
+        this.keywords = keywords;
 
     }
     // no photograph
-    public Book(String title, String author, String ISBN, String description, String Owner) {
+    public Book(String title, String author, String ISBN, String description, String Owner, ArrayList<String> keywords) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -49,8 +52,8 @@ public class Book implements Parcelable {
         this.owner = Owner;
         this.requestedBy = new ArrayList<>();
         this.acceptedStatus = false;
-
         this.uuid = UUID.randomUUID().toString();
+        this.keywords = keywords;
     }
     public void addRequest(String user){
         this.requestedBy.add(user);
@@ -131,6 +134,14 @@ public class Book implements Parcelable {
     }
     public void setUuid(String uuid){
         this.uuid = uuid;
+    }
+
+    public ArrayList<String> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(ArrayList<String> keywords) {
+        this.keywords = keywords;
     }
 
     @Override

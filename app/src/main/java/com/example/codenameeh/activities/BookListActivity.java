@@ -1,6 +1,7 @@
 package com.example.codenameeh.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import io.cortical.retina.client.LiteClient;
 
 /**
  * @author Daniel Dick
@@ -90,7 +94,16 @@ public class BookListActivity extends BaseActivity {
             String isbn = data.getStringExtra(EXTRA_MESSAGE_ISBN);
             String description = data.getStringExtra(EXTRA_MESSAGE_DESCRIPTION);
             String photograph = data.getStringExtra("photo");
-            Book newBook = new Book(title, author, isbn, description, photograph, currentUser.getUsername());
+            ArrayList<String> keywords = new ArrayList<>();
+
+            try {
+               keywords = new GetKeywords().execute(description).get();
+            } catch (Exception e) {
+                Log.e("Keywords", e.toString());
+            }
+
+
+            Book newBook = new Book(title, author, isbn, description, photograph, currentUser.getUsername(), keywords);
             currentUser.newOwn(newBook);
             booksOwnedList.add(newBook);
 
@@ -161,5 +174,22 @@ public class BookListActivity extends BaseActivity {
     public void newBook (View view) {
         Intent intent = new Intent(this, TakeNewBookActivity.class);
         startActivityForResult(intent, 1);
+    }
+
+    class GetKeywords extends AsyncTask<String, Void, ArrayList<String>> {
+
+        protected ArrayList<String> doInBackground(String... descs) {
+            List<String> keywords = new ArrayList<>();
+            try {
+                String desc = descs[0];
+                LiteClient lite = new io.cortical.retina.client.LiteClient("1e1d18d0-4f42-11e9-8f72-af685da1b20e");
+                keywords = lite.getKeywords(desc);
+            } catch (Exception e) {
+                Log.e("Keywords", e.toString());
+            }
+            return new ArrayList<>(keywords);
+        }
+
+
     }
 }
