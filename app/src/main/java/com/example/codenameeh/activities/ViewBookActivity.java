@@ -151,7 +151,7 @@ public class ViewBookActivity extends BaseActivity {
      */
     public void changeRequestStatus(View v){
         if(currentUser.RequestedBooks().contains(book)){
-            currentUser.RequestedBooks().remove(book);
+            currentUser.removeRequested(book);
             book.removeRequest(currentUser.getUsername());
             Booklist booklist = Booklist.getInstance();
             booklist.set(booklist.indexOf(book), book);
@@ -165,7 +165,7 @@ public class ViewBookActivity extends BaseActivity {
                         }
                     });
         } else{
-            currentUser.RequestedBooks().add(book);
+            currentUser.newRequested(book);
             book.addRequest(currentUser.getUsername());
             Booklist booklist = Booklist.getInstance();
             booklist.set(booklist.indexOf(book), book);
