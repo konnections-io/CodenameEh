@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
@@ -65,7 +66,7 @@ public class BookListActivity extends BaseActivity {
 
         Intent Iintent = getIntent();
         String isbn = Iintent.getStringExtra("isbn");
-        Log.e("TestScan", "Recieved Intent");
+        Log.e("TestScan", "Received Intent");
         if(isbn != null) {
             Intent intent = new Intent(this, TakeNewBookActivity.class);
             intent.putExtra("isbn", isbn);
@@ -87,32 +88,36 @@ public class BookListActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             //new book returned
-            String title = data.getStringExtra(EXTRA_MESSAGE_TITLE);
-            String author = data.getStringExtra(EXTRA_MESSAGE_AUTHOR);
-            String isbn = data.getStringExtra(EXTRA_MESSAGE_ISBN);
-            String description = data.getStringExtra(EXTRA_MESSAGE_DESCRIPTION);
-            String photograph = data.getStringExtra("photo");
-            ArrayList<String> keywords = new ArrayList<>();
-
             try {
-               //keywords = new GetKeywords().execute(description).get();
+                String title = data.getStringExtra(EXTRA_MESSAGE_TITLE);
+                String author = data.getStringExtra(EXTRA_MESSAGE_AUTHOR);
+                String isbn = data.getStringExtra(EXTRA_MESSAGE_ISBN);
+                String description = data.getStringExtra(EXTRA_MESSAGE_DESCRIPTION);
+                String photograph = data.getStringExtra("photo");
+                ArrayList<String> keywords = new ArrayList<>();
+
+                try {
+                    keywords = new GetKeywords().execute(description).get();
+                } catch (Exception e) {
+                    Log.e("Keywords", e.toString());
+                }
+
+
+                Book newBook = new Book(title, author, isbn, description, photograph, currentUser.getUsername(), keywords);
+                currentUser.newOwn(newBook);
+                booksOwnedList.add(newBook);
+
+                FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
+                FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid()).set(newBook)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            }
+                        });
+                adapter.notifyDataSetChanged();
             } catch (Exception e) {
-                Log.e("Keywords", e.toString());
+                Log.e("Returned", e.toString());
             }
-
-
-            Book newBook = new Book(title, author, isbn, description, photograph, currentUser.getUsername(), keywords);
-            currentUser.newOwn(newBook);
-            booksOwnedList.add(newBook);
-
-            FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
-            FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid()).set(newBook)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                        }
-                    });
-            adapter.notifyDataSetChanged();
         }
         if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
             //view details of book returned
@@ -133,6 +138,7 @@ public class BookListActivity extends BaseActivity {
 
 
         }
+
     }
 
     /**
@@ -161,6 +167,32 @@ public class BookListActivity extends BaseActivity {
         intent.putExtra("book", booksOwnedList.get(i));
         startActivityForResult(intent, 2);
     }
+
+    public void OwnedBooks(View view) {
+        TextView title = findViewById(R.id.textView2);
+        title.setText("Books Owned");
+        booksOwnedList = currentUser.BooksOwned();
+        adapter.notifyDataSetChanged();
+    }
+    public void BeingBorrowedBooks(View view) {
+        TextView title = findViewById(R.id.textView2);
+        title.setText("Books Being Borrowed");
+        booksOwnedList = currentUser.BooksOwnedBorrowed();
+        adapter.notifyDataSetChanged();
+    }
+    public void AvailableBooks(View view) {
+        TextView title = findViewById(R.id.textView2);
+        title.setText("Available Books");
+        booksOwnedList = currentUser.BooksOwnedAvailable();
+        adapter.notifyDataSetChanged();
+    }
+    public void RequestedBooks(View view) {
+        TextView title = findViewById(R.id.textView2);
+        title.setText("Requested Books");
+        booksOwnedList = currentUser.BooksOwnedRequested();
+        adapter.notifyDataSetChanged();
+    }
+
 
     /**
      * newBook calls the activity to add a new book.  When that
