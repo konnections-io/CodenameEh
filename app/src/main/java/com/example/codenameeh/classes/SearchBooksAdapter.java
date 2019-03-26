@@ -38,10 +38,10 @@ public class SearchBooksAdapter extends ArrayAdapter<Book> {
         Boolean borrowed = getItem(position).isBorrowed();
         String uuid = getItem(position).getUuid();
 
-        Book book = new Book(title, author, "Lorem Ipsum", "Lorem Ipsum", "image.png", owner);
-        book.setAcceptedStatus(status);
-        book.setBorrowed(borrowed);
-        book.setUuid(uuid);
+        //Book book = new Book(title, author, "Lorem Ipsum", "Lorem Ipsum", "image.png", owner);
+        //book.setAcceptedStatus(status);
+        //book.setBorrowed(borrowed);
+        //book.setUuid(uuid);
 
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(resource, parent, false);

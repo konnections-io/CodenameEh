@@ -14,6 +14,7 @@ public class User {
     private ArrayList<String> borrowedHistory;
     private ArrayList<String> requesting;
     private ArrayList<Notification> notifications;
+
     public User() {
         //Empty Constructor
         owning = new ArrayList<>();
