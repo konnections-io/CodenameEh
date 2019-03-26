@@ -47,6 +47,13 @@ public class User {
         this.owning.remove(book.getUuid());
         book.setOwner(null);
     }
+    public void newRequested(Book book) {
+        this.requesting.add(book.getUuid());
+    }
+
+    public void removeRequested(Book book) {
+        this.requesting.remove(book.getUuid());
+    }
 
     public void newBorrow(Book book) {
         this.borrowing.add(book.getUuid());

@@ -90,32 +90,36 @@ public class BookListActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             //new book returned
-            String title = data.getStringExtra(EXTRA_MESSAGE_TITLE);
-            String author = data.getStringExtra(EXTRA_MESSAGE_AUTHOR);
-            String isbn = data.getStringExtra(EXTRA_MESSAGE_ISBN);
-            String description = data.getStringExtra(EXTRA_MESSAGE_DESCRIPTION);
-            String photograph = data.getStringExtra("photo");
-            ArrayList<String> keywords = new ArrayList<>();
-
             try {
-               keywords = new GetKeywords().execute(description).get();
+                String title = data.getStringExtra(EXTRA_MESSAGE_TITLE);
+                String author = data.getStringExtra(EXTRA_MESSAGE_AUTHOR);
+                String isbn = data.getStringExtra(EXTRA_MESSAGE_ISBN);
+                String description = data.getStringExtra(EXTRA_MESSAGE_DESCRIPTION);
+                String photograph = data.getStringExtra("photo");
+                ArrayList<String> keywords = new ArrayList<>();
+
+                try {
+                    keywords = new GetKeywords().execute(description).get();
+                } catch (Exception e) {
+                    Log.e("Keywords", e.toString());
+                }
+
+
+                Book newBook = new Book(title, author, isbn, description, photograph, currentUser.getUsername(), keywords);
+                currentUser.newOwn(newBook);
+                booksOwnedList.add(newBook);
+
+                FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
+                FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid()).set(newBook)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            }
+                        });
+                adapter.notifyDataSetChanged();
             } catch (Exception e) {
-                Log.e("Keywords", e.toString());
+                Log.e("Returned", e.toString());
             }
-
-
-            Book newBook = new Book(title, author, isbn, description, photograph, currentUser.getUsername(), keywords);
-            currentUser.newOwn(newBook);
-            booksOwnedList.add(newBook);
-
-            FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
-            FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid()).set(newBook)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                        }
-                    });
-            adapter.notifyDataSetChanged();
         }
         if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
             //view details of book returned
@@ -136,6 +140,7 @@ public class BookListActivity extends BaseActivity {
 
 
         }
+
     }
 
     /**
