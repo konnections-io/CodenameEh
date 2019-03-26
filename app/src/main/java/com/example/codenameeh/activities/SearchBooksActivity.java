@@ -97,8 +97,8 @@ public class SearchBooksActivity extends BaseActivity {
 
     private Booklist convertMapToBookList(Map map) {
         Booklist books = new Booklist();
-        Uri image = Uri.parse("image.png");
-        Book book1 = new Book("Book1", "name", "1235121", "Lorem Ipsum", image , "user");
+        // Uri image = Uri.parse("image.png");
+        Book book1 = new Book("Book1", "name", "1235121", "Lorem Ipsum" , "user");
         books.add(book1);
 
         return books;

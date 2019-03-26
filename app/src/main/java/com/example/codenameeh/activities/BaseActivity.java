@@ -2,6 +2,7 @@ package com.example.codenameeh.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +19,10 @@ import android.widget.Toast;
 
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.CurrentUser;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
@@ -130,7 +135,8 @@ public class BaseActivity extends AppCompatActivity
             Intent intent = new Intent(this, SearchBooksActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
-
+            FirebaseAuth.getInstance().signOut();
+            this.finishAffinity();
         } else if (id == R.id.nav_my_books) {
             Intent intent = new Intent(this, BookListActivity.class);
             startActivity(intent);

@@ -1,17 +1,28 @@
 package com.example.codenameeh.activities;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.codenameeh.R;
+import com.example.codenameeh.classes.CurrentUser;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -35,6 +46,10 @@ import static com.example.codenameeh.activities.BookListActivity.EXTRA_MESSAGE_T
  * have detected or am aware of.
  */
 public class TakeNewBookActivity extends BaseActivity {
+    String photograph = null;
+    FirebaseStorage storage;
+    StorageReference storageRef;
+    Button photoButton;
     /**
      * onCreate here initializes the layout of the activity screen
      * and calls the superclass constructor.
@@ -46,9 +61,16 @@ public class TakeNewBookActivity extends BaseActivity {
 
         Intent intent = getIntent();
         String isbn = intent.getStringExtra("isbn");
-
+        Log.e("TestScan", "Recieved Intent");
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+        photoButton = findViewById(R.id.new_book_photo);
         if(isbn != null) {
-            inputDataFromScan(isbn);
+            EditText isbnText = findViewById(R.id.editText3); // ISBN
+            isbnText.setText(isbn);
+
+            Log.e("TestScan", "Inside If");
+            new DownloadBookDetails().execute(isbn);
         }
     }
 
@@ -79,56 +101,165 @@ public class TakeNewBookActivity extends BaseActivity {
             intent.putExtra(EXTRA_MESSAGE_AUTHOR, message1);
             intent.putExtra(EXTRA_MESSAGE_ISBN, message2);
             intent.putExtra(EXTRA_MESSAGE_DESCRIPTION, message3);
+            intent.putExtra("photo", photograph);
             setResult(RESULT_OK, intent);
             finish();
         }
 
     }
-
-    public void inputDataFromScan(String isbn) {
-        String url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn;
-
-        EditText isbnText = findViewById(R.id.editText3); // ISBN
-        isbnText.setText(isbn);
-
-        try {
-            JSONObject json = new JSONObject(readUrl(url));
-            String title = (String)json.getJSONObject("volumeInfo").get("title");
-            String[] authors = (String[])json.getJSONObject("volumeInfo").get("authors");
-            String desc = (String)json.get("description");
-
-
-            EditText titleText = findViewById(R.id.editText); // title
-            titleText.setText(title);
-
-            EditText authorText = findViewById(R.id.editText2); // author
-            authorText.setText(authors[0]);
-
-            EditText descriptionText = findViewById(R.id.editText4); // Description
-            descriptionText.setText(desc);
-
-        } catch (Exception e) {
-            Toast.makeText(TakeNewBookActivity.this, "Cannot find info online", Toast.LENGTH_SHORT)
-                    .show();
-            Log.e("readUrl", e.toString());
+    /**
+     * Add or delete the photograph path, depending on the status of a photograph being there.
+     * Change button text if not going to another activity (say, to find the photograph
+     * @param v
+     */
+    public void photoClick(View v){
+        if (photograph==null){
+            Intent chooseFile;
+            Intent intent;
+            chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+            chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
+            chooseFile.setType("image/*");
+            intent = Intent.createChooser(chooseFile, "Choose a file");
+            startActivityForResult(intent, 1);
+        } else{
+            StorageReference photoRef = storageRef.child(CurrentUser.getInstance().getUsername() +"/"+photograph);
+            photoRef.delete().addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // An error occurred. Log it
+                    Log.e("TakeNewBookActivity", e.getStackTrace().toString());
+                }
+            });
+            photograph = null;
+            photoButton.setText("Click to add a photo");
         }
     }
 
-    private static String readUrl(String urlString) throws Exception {
-        BufferedReader reader = null;
-        try {
-            URL url = new URL(urlString);
-            reader = new BufferedReader(new InputStreamReader(url.openStream()));
-            StringBuffer buffer = new StringBuffer();
-            int read;
-            char[] chars = new char[1024];
-            while ((read = reader.read(chars)) != -1)
-                buffer.append(chars, 0, read);
-
-            return buffer.toString();
-        } finally {
-            if (reader != null)
-                reader.close();
+    /**
+     * Uploads and saves the photograph
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+                Uri uri = data.getData();
+                StorageReference photoRef = storageRef.child(CurrentUser.getInstance().getUsername() +"/"+uri.getLastPathSegment());
+                UploadTask uploadTask = photoRef.putFile(uri);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        Toast.makeText(TakeNewBookActivity.this, "Upload Failure.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                        Toast.makeText(TakeNewBookActivity.this, "Upload Success.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+                // wait until upload is finished
+                while(uploadTask.isInProgress()){}
+                // If successful, change accordingly
+                if(uploadTask.isSuccessful()) {
+                    photograph = uri.getLastPathSegment();
+                    photoButton.setText("Remove photo");
+                }
+            }
         }
     }
+
+    /**
+     * @author Cole Boytinck
+     * @version 1.0
+     *
+     * This is an Async class for getting boo information via a google books api.
+     * It attempt to get some information from the isbn provided. It information is avaliable,
+     * it fills it in, if no information is found, it exits and only ISBN will be filled.
+     */
+    private class DownloadBookDetails extends AsyncTask<String, Void, Void> {
+
+        String title;
+        String author;
+        String desc;
+
+        /**
+         * Main part of the Async function, pulls the JSON from the url (by calling readURL),
+         * and pulls information from it.
+         *
+         * @param isbns array of the single isbn passed to this function
+         * @return
+         */
+        protected Void doInBackground(String... isbns) {
+            Log.e("TestScan", "in Background");
+            String isbn = isbns[0];
+            String url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn;
+
+            try {
+                JSONObject bigJson = new JSONObject(readUrl(url));
+                JSONArray jsonArray = bigJson.getJSONArray("items");
+                JSONObject json = jsonArray.getJSONObject(0);
+                JSONObject volumeInfo = json.getJSONObject("volumeInfo");
+                JSONArray authors = volumeInfo.getJSONArray("authors");
+
+                title = volumeInfo.getString("title");
+                author = authors.getString(0);
+                desc = volumeInfo.getString("description");
+
+                Log.e("TestScan", "Title = " + title);
+                Log.e("TestScan", "Author = " + author);
+                Log.e("TestScan", "Desc = " + desc);
+
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        EditText titleText = findViewById(R.id.editText); // title
+                        titleText.setText(title);
+
+                        EditText authorText = findViewById(R.id.editText2); // author
+                        authorText.setText(author);
+
+                        EditText descriptionText = findViewById(R.id.editText4); // Description
+                        descriptionText.setText(desc);
+
+                    }
+                });
+
+            } catch (Exception e) {
+                Log.e("readUrl", e.toString());
+            }
+            return null;
+        }
+
+        /**
+         * Reads the url and returns a JSON with the data read
+         * @param urlString the url to query
+         * @return Json
+         * @throws Exception
+         */
+        private String readUrl(String urlString) throws Exception {
+            BufferedReader reader = null;
+            try {
+                URL url = new URL(urlString);
+                reader = new BufferedReader(new InputStreamReader(url.openStream()));
+                StringBuffer buffer = new StringBuffer();
+                int read;
+                char[] chars = new char[1024];
+                while ((read = reader.read(chars)) != -1)
+                    buffer.append(chars, 0, read);
+
+                return buffer.toString();
+            } finally {
+                if (reader != null)
+                    reader.close();
+            }
+        }
+    }
+
 }

@@ -1,37 +1,55 @@
 package com.example.codenameeh.classes;
 
 
-import java.util.ArrayList;
-
-
 public class Notification {
-    private ArrayList<String> notifications;
-    public Notification() {
-        this.notifications = new ArrayList<String>();
+    private String geolocation = "NA";
+    private String otherUser = "NA";
+    private String bookTitle = "NA";
+    private String typeNotification = "NA";
+
+    public Notification(){
+        this.bookTitle = "hm";
+        this.otherUser = "well";
+    }
+    public Notification(String otherUser, String bookTitle){
+        this.bookTitle = bookTitle;
+        this.otherUser = otherUser;
+        this.typeNotification = "Borrow Request";
+    }
+    public Notification(String otherUser, String bookTitle, String geolocation){
+        this.otherUser = otherUser;
+        this.bookTitle = bookTitle;
+        this.geolocation = geolocation;
+        this.typeNotification = "Accepted Request";
+    }
+    public String getTypeNotification(){
+        return this.typeNotification;
     }
 
-    public void add(String userWanting, String bookWanted) {
-        //Use user to access and add specified notification, this one for requests
-        notifications.add("Requester "+userWanting+" would like to borrow: "+bookWanted);
+    public String getGeolocation() {
+        return geolocation;
     }
 
-    public void add(String userGiving, String bookGiven, String geolocation) {
-        //Use user to access and add specified notification, this one for accepted requests
-        notifications.add(userGiving+" has accepted your request for: "+bookGiven+"! Geolocation is: "+geolocation);
+    public String getOtherUser() {
+        return otherUser;
     }
 
-    public void remove(String userWanting, String bookWanted) {
-        //Use user to access and remove specific notification, this one is for requests
-        notifications.remove("Requester "+userWanting+" would like to borrow: "+bookWanted);
+    public String getBookTitle() {
+        return bookTitle;
     }
 
-    public void remove(String userGiving, String bookGiven, String geolocation) {
-        //Use user to access and remove specific notification, this one is for accepted requests
-        notifications.remove(userGiving+" has accepted your request for: "+bookGiven+"! Geolocation is: "+geolocation);
+    public void setTypeNotification(String typeNotification){
+        this.typeNotification = typeNotification;
     }
 
-    public ArrayList<String> getNotificationsList() {
-            return notifications;
+    @androidx.annotation.NonNull
+    @Override
+    public String toString() {
+        if(this.typeNotification.equals("Borrow Request")){
+            return "Requester "+this.otherUser+" would like to borrow: "+this.bookTitle;
+        }
+        else{
+            return this.otherUser+" has accepted your request for: "+this.bookTitle+"! Geolocation is: "+this.geolocation;
+        }
     }
-
 }

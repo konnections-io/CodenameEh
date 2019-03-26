@@ -1,11 +1,14 @@
 package com.example.codenameeh.activities;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.codenameeh.R;
@@ -13,7 +16,10 @@ import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 
@@ -61,6 +67,15 @@ public class BookListActivity extends BaseActivity {
                 viewBook(position);
             }
         });
+
+        Intent Iintent = getIntent();
+        String isbn = Iintent.getStringExtra("isbn");
+        Log.e("TestScan", "Recieved Intent");
+        if(isbn != null) {
+            Intent intent = new Intent(this, TakeNewBookActivity.class);
+            intent.putExtra("isbn", isbn);
+            startActivityForResult(intent, 1);
+        }
     }
 
     /**
@@ -81,20 +96,36 @@ public class BookListActivity extends BaseActivity {
             String author = data.getStringExtra(EXTRA_MESSAGE_AUTHOR);
             String isbn = data.getStringExtra(EXTRA_MESSAGE_ISBN);
             String description = data.getStringExtra(EXTRA_MESSAGE_DESCRIPTION);
-            Book newBook = new Book(title, author, isbn, description, currentUser.getUsername());
+            String photograph = data.getStringExtra("photo");
+            Book newBook = new Book(title, author, isbn, description, photograph, currentUser.getUsername());
             booksOwned.add(newBook);
             booksOwnedList = booksOwned.getBookList();
             adapter.notifyDataSetChanged();
             FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
+            FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid()).set(newBook)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                        }
+                    });
         }
         if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
             //view details of book returned
             if ((data.getStringExtra(EXTRA_MESSAGE_DELETE)).equals("TRUE")) {
+                FirebaseFirestore.getInstance().collection("All Books").document(booksOwnedList.get(positionclicked).getUuid())
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            }
+                        });
                 booksOwned.remove(booksOwnedList.get(positionclicked));
                 booksOwnedList = booksOwned.getBookList();
             }
             adapter.notifyDataSetChanged();
             FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
+
+
         }
     }
 

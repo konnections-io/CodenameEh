@@ -3,24 +3,29 @@ package com.example.codenameeh.classes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import android.net.Uri;
 import java.util.ArrayList;
+import java.util.UUID;
+
+import androidx.annotation.Nullable;
 
 public class Book implements Parcelable {
+    private String uuid;
     private String title;
     private String author;
     private String ISBN;
     private String description;
-    private Uri photograph; //filename of the image
+    private String photograph; //filename of the image in database
     private String owner;
     private ArrayList<String> requestedBy;
     private boolean borrowed;
     private boolean acceptedStatus;
+
+
     // empty constructor for serial reconstruction
     public Book (){
 
     }
-    public Book(String title, String author, String ISBN, String description, Uri photograph, String Owner) {
+    public Book(String title, String author, String ISBN, String description, String photograph, String Owner) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -30,6 +35,8 @@ public class Book implements Parcelable {
         this.owner = Owner;
         this.requestedBy = new ArrayList<>();
         this.acceptedStatus = false;
+        this.uuid = UUID.randomUUID().toString();
+
     }
     // no photograph
     public Book(String title, String author, String ISBN, String description, String Owner) {
@@ -42,6 +49,8 @@ public class Book implements Parcelable {
         this.owner = Owner;
         this.requestedBy = new ArrayList<>();
         this.acceptedStatus = false;
+
+        this.uuid = UUID.randomUUID().toString();
     }
     public void addRequest(String user){
         this.requestedBy.add(user);
@@ -98,11 +107,11 @@ public class Book implements Parcelable {
         this.description = description;
     }
 
-    public Uri getPhotograph() {
+    public String getPhotograph() {
         return photograph;
     }
 
-    public void setPhotograph(Uri photograph) {
+    public void setPhotograph(String photograph) {
         this.photograph = photograph;
     }
 
@@ -117,11 +126,35 @@ public class Book implements Parcelable {
     public void setAcceptedStatus(boolean status){this.acceptedStatus = status;}
     public boolean getAcceptedStatus(){return this.acceptedStatus;}
 
+    public String getUuid() {
+        return uuid;
+    }
+    public void setUuid(String uuid){
+        this.uuid = uuid;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(this==obj){
+            return true;
+        } else if(obj==null){
+            return false;
+        } else{
+            Book other;
+            try {
+                other = (Book) obj;
+            } catch(Exception e){
+                return false;
+            }
+            return (this.uuid.equals(other.getUuid()));
+        }
+    }
+
     @Override
     public String toString() {
         String output = "Title: "+this.title+ "\t\tAuthor: "+ this.author
                 + "\t\t ISBN: " + this.ISBN;
-        if (this.description != "") {
+        if (!this.description.equals("")) {
             output = output + "\nDescription: " + this.description;
         }
         if (this.borrowed) {
@@ -131,10 +164,10 @@ public class Book implements Parcelable {
             output = output + "\nACCEPTED";
         }
         else if (this.requestedBy.isEmpty()) {
-            output = output + "\nREQUESTED";
+            output = output + "\nAVAILABLE";
         }
         else {
-            output = output + "\nAVAILABLE";
+            output = output + "\nREQUESTED";
         }
         return (output);
     }
@@ -144,8 +177,11 @@ public class Book implements Parcelable {
         author = in.readString();
         ISBN = in.readString();
         description = in.readString();
-        photograph = (Uri) in.readValue(Uri.class.getClassLoader());
+        photograph = in.readString();
         owner =  in.readString();
+
+        uuid = in.readString();
+
         if (in.readByte() == 0x01) {
             requestedBy = new ArrayList<String>();
             in.readList(requestedBy, String.class.getClassLoader());
@@ -167,8 +203,11 @@ public class Book implements Parcelable {
         dest.writeString(author);
         dest.writeString(ISBN);
         dest.writeString(description);
-        dest.writeValue(photograph);
+        dest.writeString(photograph);
         dest.writeString(owner);
+
+        dest.writeString(uuid);
+
         if (requestedBy == null) {
             dest.writeByte((byte) (0x00));
         } else {
