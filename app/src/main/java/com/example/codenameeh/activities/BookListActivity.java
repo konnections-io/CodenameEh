@@ -172,25 +172,29 @@ public class BookListActivity extends BaseActivity {
         TextView title = findViewById(R.id.textView2);
         title.setText("Books Owned");
         booksOwnedList = currentUser.BooksOwned();
-        adapter.notifyDataSetChanged();
+        adapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksOwnedList);
+        bookView.setAdapter(adapter);
     }
     public void BeingBorrowedBooks(View view) {
         TextView title = findViewById(R.id.textView2);
         title.setText("Books Being Borrowed");
         booksOwnedList = currentUser.BooksOwnedBorrowed();
-        adapter.notifyDataSetChanged();
+        adapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksOwnedList);
+        bookView.setAdapter(adapter);
     }
     public void AvailableBooks(View view) {
         TextView title = findViewById(R.id.textView2);
         title.setText("Available Books");
         booksOwnedList = currentUser.BooksOwnedAvailable();
-        adapter.notifyDataSetChanged();
+        adapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksOwnedList);
+        bookView.setAdapter(adapter);
     }
     public void RequestedBooks(View view) {
         TextView title = findViewById(R.id.textView2);
         title.setText("Requested Books");
         booksOwnedList = currentUser.BooksOwnedRequested();
-        adapter.notifyDataSetChanged();
+        adapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksOwnedList);
+        bookView.setAdapter(adapter);
     }
 
 
