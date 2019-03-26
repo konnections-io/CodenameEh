@@ -37,8 +37,8 @@ public class SearchBooksAdapter extends ArrayAdapter<Book> {
         Boolean status = getItem(position).getAcceptedStatus();
         Boolean borrowed = getItem(position).isBorrowed();
         String uuid = getItem(position).getUuid();
-
-        Book book = new Book(title, author, "Lorem Ipsum", "Lorem Ipsum", "image.png", owner);
+        ArrayList<String> keys = new ArrayList<>();
+        Book book = new Book(title, author, "Lorem Ipsum", "Lorem Ipsum", owner, keys);
         book.setAcceptedStatus(status);
         book.setBorrowed(borrowed);
         book.setUuid(uuid);
