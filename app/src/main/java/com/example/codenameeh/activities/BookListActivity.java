@@ -1,6 +1,7 @@
 package com.example.codenameeh.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,8 +18,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.List;
 
-//import io.cortical.retina.client.LiteClient;
+import io.cortical.retina.client.LiteClient;
 
 /**
  * @author Daniel Dick
@@ -210,7 +212,7 @@ public class BookListActivity extends BaseActivity {
         startActivityForResult(intent, 1);
     }
 
-    /**
+
     class GetKeywords extends AsyncTask<String, Void, ArrayList<String>> {
 
         protected ArrayList<String> doInBackground(String... descs) {
@@ -226,5 +228,5 @@ public class BookListActivity extends BaseActivity {
         }
 
 
-    }*/
+    }
 }
