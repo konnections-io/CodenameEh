@@ -41,27 +41,27 @@ public class UserUnitTest {
         User test = new User(testName, testPhone, testEmail, testUsername);
         Book newBook = new Book("1", "2", "3", "4", "5");
         Book alternateBook = new Book("6", "7", "8", "9", "10");
-        assertEquals(0, test.getOwning().size());
+        assertEquals(0, test.BooksOwned().size());
         test.newOwn(newBook);
         // something is in there now
-        assertEquals(1, test.getOwning().size());
+        assertEquals(1, test.BooksOwned().size());
         // that something is right
-        assertTrue(test.getOwning().contains(newBook));
+        assertTrue(test.BooksOwned().contains(newBook));
         // multiple
         test.newOwn(newBook);
-        assertEquals(2, test.getOwning().size());
-        assertTrue(test.getOwning().contains(newBook));
+        assertEquals(2, test.BooksOwned().size());
+        assertTrue(test.BooksOwned().contains(newBook));
         // different book
 
         test.newOwn(alternateBook);
-        assertEquals(3, test.getOwning().size());
-        assertTrue(test.getOwning().contains(alternateBook));
+        assertEquals(3, test.BooksOwned().size());
+        assertTrue(test.BooksOwned().contains(alternateBook));
 
         // null is ignored
         test.newOwn(null);
-        assertEquals(3, test.getOwning().size());
+        assertEquals(3, test.BooksOwned().size());
         // adding to owning does not add to Borrowing
-        assertEquals(0, test.getBorrowing().size());
+        assertEquals(0, test.BorrowedBooks().size());
     }
 
     @Test
@@ -75,11 +75,11 @@ public class UserUnitTest {
         test.newOwn(alternateBook);
         test.removeOwn(alternateBook);
         // only drop expected book
-        assertTrue(test.getOwning().contains(newBook));
-        assertFalse(test.getOwning().contains(alternateBook));
+        assertTrue(test.BooksOwned().contains(newBook));
+        assertFalse(test.BooksOwned().contains(alternateBook));
         // do not drop last book, but the requested book
         test.removeOwn(alternateBook);
-        assertTrue(test.getOwning().contains(newBook));
+        assertTrue(test.BooksOwned().contains(newBook));
         try{
             test.removeOwn(null);
         } catch(Error e){
@@ -87,7 +87,7 @@ public class UserUnitTest {
             fail();
         }
         test.removeOwn(newBook);
-        assertFalse(test.getOwning().contains(newBook));
+        assertFalse(test.BooksOwned().contains(newBook));
         // on empty, should do nothing, no errors
         try {
             test.removeOwn(newBook);
@@ -101,27 +101,27 @@ public class UserUnitTest {
         User test = new User(testName, testPhone, testEmail, testUsername);
         Book newBook = new Book("1", "2", "3", "4", "5");
         Book alternateBook = new Book("6", "7", "8", "9", "10");
-        assertEquals(0, test.getBorrowing().size());
+        assertEquals(0, test.BorrowedBooks().size());
         test.newBorrow(newBook);
         // something is in there now
-        assertEquals(1, test.getBorrowing().size());
+        assertEquals(1, test.BorrowedBooks().size());
         // that something is right
-        assertTrue(test.getBorrowing().contains(newBook));
+        assertTrue(test.BorrowedBooks().contains(newBook));
         // multiple
         test.newBorrow(newBook);
-        assertEquals(2, test.getBorrowing().size());
-        assertTrue(test.getBorrowing().contains(newBook));
+        assertEquals(2, test.BorrowedBooks().size());
+        assertTrue(test.BorrowedBooks().contains(newBook));
         // different book
 
         test.newBorrow(alternateBook);
-        assertEquals(3, test.getBorrowing().size());
-        assertTrue(test.getBorrowing().contains(alternateBook));
+        assertEquals(3, test.BorrowedBooks().size());
+        assertTrue(test.BorrowedBooks().contains(alternateBook));
 
         // null is ignored
         test.newBorrow(null);
-        assertEquals(3, test.getBorrowing().size());
+        assertEquals(3, test.BorrowedBooks().size());
         // adding to borrow does not add to owning
-        assertEquals(0, test.getOwning().size());
+        assertEquals(0, test.BooksOwned().size());
     }
 
     @Test
@@ -135,11 +135,11 @@ public class UserUnitTest {
         test.newBorrow(alternateBook);
         test.removeBorrow(alternateBook);
         // only drop expected book
-        assertTrue(test.getBorrowing().contains(newBook));
-        assertFalse(test.getBorrowing().contains(alternateBook));
+        assertTrue(test.BorrowedBooks().contains(newBook));
+        assertFalse(test.BorrowedBooks().contains(alternateBook));
         // do not drop last book, but the requested book
         test.removeBorrow(alternateBook);
-        assertTrue(test.getBorrowing().contains(newBook));
+        assertTrue(test.BorrowedBooks().contains(newBook));
         try{
             test.removeBorrow(null);
         } catch(Error e){
@@ -147,7 +147,7 @@ public class UserUnitTest {
             fail();
         }
         test.removeBorrow(newBook);
-        assertFalse(test.getBorrowing().contains(newBook));
+        assertFalse(test.BorrowedBooks().contains(newBook));
         // on empty, should do nothing, no errors
         try {
             test.removeBorrow(newBook);
