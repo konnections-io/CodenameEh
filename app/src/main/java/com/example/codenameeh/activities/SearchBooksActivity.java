@@ -60,7 +60,7 @@ public class SearchBooksActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                arrayBook = newSearch.searchDatabase(newText);
+                bookAdapter.getFilter().filter(newText);
                 return false;
             }
         });

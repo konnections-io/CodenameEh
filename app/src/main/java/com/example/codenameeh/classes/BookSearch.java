@@ -17,74 +17,21 @@ import java.util.Map;
 
 public class BookSearch {
     private User user;
-    private DocumentSnapshot lastQueriedAuthor;
-    private DocumentSnapshot lastQueriedTitle;
+    private Booklist allBooks = Booklist.getInstance();
 
     public BookSearch(User user) {
         this.user = user;
     }
 
     public ArrayList<Book> searchDatabase(String keyword) {
-        final ArrayList<Book> filteredBooks = new ArrayList<>();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        ArrayList<Book> books = allBooks.getBookList();
+        ArrayList<Book> filteredBooks = new ArrayList<>();
 
-        CollectionReference allBooks = db.collection("All Books");
-
-        Query booksQuery = null;
-        if (lastQueriedAuthor != null) {
-            booksQuery = allBooks.whereEqualTo("acceptedStatus", false)
-                    .whereEqualTo("borrowed", false).whereEqualTo("author", keyword)
-                    .orderBy("title", Query.Direction.ASCENDING)
-                    .startAfter(lastQueriedAuthor);
-        } else {
-            booksQuery = allBooks.whereEqualTo("acceptedStatus", false)
-                    .whereEqualTo("borrowed", false).whereEqualTo("author", keyword)
-                    .orderBy("title", Query.Direction.ASCENDING);
-        }
-
-        booksQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document: task.getResult()) {
-                        Book book = document.toObject(Book.class);
-                        filteredBooks.add(book);
-                    }
-                    if (task.getResult().size() != 0) {
-                        lastQueriedAuthor = task.getResult().getDocuments()
-                                .get(task.getResult().size() - 1);
-                    }
-                }
+        for (Book book: books) {
+            if (book.getTitle().contains(keyword) || book.getAuthor().contains(keyword)) {
+                filteredBooks.add(book);
             }
-        });
-
-        booksQuery = null;
-        if (lastQueriedTitle != null) {
-            booksQuery = allBooks.whereEqualTo("acceptedStatus", false)
-                    .whereEqualTo("borrowed", false).whereEqualTo("title", keyword)
-                    .orderBy("title", Query.Direction.ASCENDING)
-                    .startAfter(lastQueriedTitle);
-        } else {
-            booksQuery = allBooks.whereEqualTo("acceptedStatus", false)
-                    .whereEqualTo("borrowed", false).whereEqualTo("title", keyword)
-                    .orderBy("title", Query.Direction.ASCENDING);
         }
-
-        booksQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Book book = document.toObject(Book.class);
-                        filteredBooks.add(book);
-                    }
-                    if (task.getResult().size() != 0) {
-                        lastQueriedTitle = task.getResult().getDocuments()
-                                .get(task.getResult().size() - 1);
-                    }
-                }
-            }
-        });
 
         return filteredBooks;
     }
