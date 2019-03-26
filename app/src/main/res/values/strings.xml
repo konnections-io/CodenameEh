@@ -34,10 +34,10 @@
     <string name="bookRequest">Request</string>
     <string name="search_title">Search</string>
     <string-array name="my_books">
-        <item>one</item>
-        <item>two</item>
-        <item>three</item>
-        <item>four</item>
-        <item>five</item>
+        <item>one two</item>
+        <item>two five</item>
+        <item>three one</item>
+        <item>four three</item>
+        <item>five four</item>
     </string-array>
 </resources>

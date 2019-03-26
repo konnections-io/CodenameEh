@@ -10,14 +10,30 @@ import android.widget.ScrollView;
 import android.widget.SearchView;
 
 import com.example.codenameeh.R;
+import com.example.codenameeh.classes.Book;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
+import javax.annotation.Nullable;
+
+/**
+ * This activity allows the user to search for books through our entire book database.
+ * @author Daniel Shim
+ */
 public class SearchBooksActivity extends BaseActivity {
 
     ListView search_book;
     ArrayAdapter<String> adapter;
+    Map allBooks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +43,8 @@ public class SearchBooksActivity extends BaseActivity {
         search_book = (ListView) findViewById(R.id.search_books);
 
         ArrayList<String> arrayBook = new ArrayList<>();
-        arrayBook.addAll(Arrays.asList(getResources().getStringArray(R.array.my_books)));
+        //arrayBook.addAll(Arrays.asList(getResources().getStringArray(R.array.my_books)));
+
 
         adapter = new ArrayAdapter<String>(SearchBooksActivity.this, android.R.layout.simple_list_item_1, arrayBook);
 
@@ -53,6 +70,6 @@ public class SearchBooksActivity extends BaseActivity {
             }
         });
 
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 }
