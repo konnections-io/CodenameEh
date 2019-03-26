@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
@@ -163,6 +164,32 @@ public class BookListActivity extends BaseActivity {
         intent.putExtra("book", booksOwnedList.get(i));
         startActivityForResult(intent, 2);
     }
+
+    public void OwnedBooks(View view) {
+        TextView title = findViewById(R.id.textView2);
+        title.setText("Books Owned");
+        booksOwnedList = currentUser.BooksOwned();
+        adapter.notifyDataSetChanged();
+    }
+    public void BeingBorrowedBooks(View view) {
+        TextView title = findViewById(R.id.textView2);
+        title.setText("Books Being Borrowed");
+        booksOwnedList = currentUser.BooksOwnedBorrowed();
+        adapter.notifyDataSetChanged();
+    }
+    public void AvailableBooks(View view) {
+        TextView title = findViewById(R.id.textView2);
+        title.setText("Available Books");
+        booksOwnedList = currentUser.BooksOwnedAvailable();
+        adapter.notifyDataSetChanged();
+    }
+    public void RequestedBooks(View view) {
+        TextView title = findViewById(R.id.textView2);
+        title.setText("Requested Books");
+        booksOwnedList = currentUser.BooksOwnedRequested();
+        adapter.notifyDataSetChanged();
+    }
+
 
     /**
      * newBook calls the activity to add a new book.  When that
