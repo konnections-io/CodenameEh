@@ -8,12 +8,14 @@ import android.widget.TextView;
 
 import com.example.codenameeh.R;
 
+import java.util.ArrayList;
+
 /**
  * A simple Adapter for showing a Booklist, showing more detail than an ArrayAdapter would
  */
 public class BooklistAdapter extends BaseAdapter {
-    Booklist booklist;
-    public BooklistAdapter(Booklist dataset){
+    private ArrayList<Book> booklist;
+    public BooklistAdapter(ArrayList<Book> dataset){
         this.booklist = dataset;
     }
     public int getCount(){

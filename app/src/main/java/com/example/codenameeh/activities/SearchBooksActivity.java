@@ -27,7 +27,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 public class SearchBooksActivity extends BaseActivity {
-
+/*
     private BookSearch newSearch = new BookSearch(CurrentUser.getInstance());
     private Map<String, Object> data;
     private Booklist bookList;
@@ -102,5 +102,5 @@ public class SearchBooksActivity extends BaseActivity {
         books.add(book1);
 
         return books;
-    }
+    }*/
 }

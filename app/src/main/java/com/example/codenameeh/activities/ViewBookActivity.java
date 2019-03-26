@@ -1,11 +1,8 @@
 package com.example.codenameeh.activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,13 +11,13 @@ import android.widget.TextView;
 import com.example.codenameeh.GlideApp;
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
+import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 import static com.example.codenameeh.activities.BookListActivity.EXTRA_MESSAGE_DELETE;
 
@@ -73,7 +70,7 @@ public class ViewBookActivity extends BaseActivity {
             requestButton.setVisibility(View.INVISIBLE);
             // We don't need to know the owner here
             userView.setVisibility(View.INVISIBLE);
-        } else if (currentUser.getRequesting().contains(book)) {
+        } else if (currentUser.RequestedBooks().contains(book)) {
             // We are currently requesting the book, allow cancelling requests
             deleteButton.setVisibility(View.INVISIBLE);
             editButton.setVisibility(View.INVISIBLE);
@@ -115,7 +112,7 @@ public class ViewBookActivity extends BaseActivity {
         String availabilityText = "Availability: ";
         if(book.isBorrowed()){
             availabilityText = availabilityText+ "Borrowed";
-        } else if(currentUser.getRequesting().contains(book)){
+        } else if(currentUser.RequestedBooks().contains(book)){
             availabilityText = availabilityText+"Requested";
         } else{
             availabilityText = availabilityText+"Available";
@@ -152,15 +149,27 @@ public class ViewBookActivity extends BaseActivity {
      * @param v
      */
     public void changeRequestStatus(View v){
-        if(currentUser.getRequesting().contains(book)){
-            currentUser.getRequesting().remove(book);
+        if(currentUser.RequestedBooks().contains(book)){
+            currentUser.RequestedBooks().remove(book);
             book.removeRequest(currentUser.getUsername());
+            Booklist booklist = Booklist.getInstance();
+            booklist.set(booklist.indexOf(book), book);
             requestButton.setText("Request");
         } else{
-            currentUser.getRequesting().add(book);
+            currentUser.RequestedBooks().add(book);
             book.addRequest(currentUser.getUsername());
+            Booklist booklist = Booklist.getInstance();
+            booklist.set(booklist.indexOf(book), book);
             requestButton.setText("Cancel Request");
         }
+        // Update in Firestore
+        FirebaseFirestore.getInstance().collection("All Books").document(book.getUuid())
+                .set(book)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                    }
+                });
     }
 
     /**
@@ -183,10 +192,19 @@ public class ViewBookActivity extends BaseActivity {
             Book newBook = data.getParcelableExtra("book");
             if (newBook != null) {
                 // patch attempts
-                ArrayList<Book> temp = currentUser.getOwning().getBookList();
-                Log.d("Index: ",book.equals(newBook)+"");
-                temp.set(temp.indexOf(book), newBook);
+                Booklist booklist = Booklist.getInstance();
+
+                booklist.set(booklist.indexOf(book), newBook);
                 book = newBook;
+
+                // Update in Firestore
+                FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid())
+                        .set(newBook)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            }
+                        });
 
             }
         }

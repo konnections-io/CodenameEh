@@ -1,7 +1,6 @@
 package com.example.codenameeh.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,7 +12,6 @@ import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -91,7 +89,7 @@ public class ViewRequestsActivity extends BaseActivity {
         super.onStart();
 
 
-            for (Book requestedBook : currentUser.getRequesting().getBookList()) {
+            for (Book requestedBook : currentUser.RequestedBooks()) {
                 if (requestedBook.getAcceptedStatus()) {
                     booksAccepted.add(requestedBook);
                 } else {
