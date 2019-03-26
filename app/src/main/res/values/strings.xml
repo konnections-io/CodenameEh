@@ -33,15 +33,10 @@
     <string name="bookEdit">Edit</string>
     <string name="bookRequest">Request</string>
     <string name="search_title">Search</string>
+    <string name="avail">Available</string>
+    <string name="notAvail">Not Available</string>
     <string name="display_books_owned">Owned</string>
     <string name="display_books_available">Available</string>
     <string name="display_books_requested">Requested</string>
     <string name="display_books_borrowed">Borrowed</string>
-    <string-array name="my_books">
-        <item>one two</item>
-        <item>two five</item>
-        <item>three one</item>
-        <item>four three</item>
-        <item>five four</item>
-    </string-array>
 </resources>

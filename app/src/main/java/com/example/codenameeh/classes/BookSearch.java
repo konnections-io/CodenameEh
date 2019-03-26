@@ -1,20 +1,12 @@
 package com.example.codenameeh.classes;
 
-import android.support.annotation.NonNull;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
-import java.util.Map;
 
+/**
+ * Searches the booklist for the user's queries
+ * @author Daniel Shim
+ * @version 1.0
+ */
 public class BookSearch {
     private User user;
     private Booklist allBooks = Booklist.getInstance();
@@ -24,11 +16,13 @@ public class BookSearch {
     }
 
     public ArrayList<Book> searchDatabase(String keyword) {
+        keyword = keyword.toUpperCase();
         ArrayList<Book> books = allBooks.getBookList();
         ArrayList<Book> filteredBooks = new ArrayList<>();
 
         for (Book book: books) {
-            if (book.getTitle().contains(keyword) || book.getAuthor().contains(keyword)) {
+            if (book.getTitle().toUpperCase().indexOf(keyword) != -1 || book.getAuthor().toUpperCase().indexOf(keyword) != -1
+                    || book.getDescription().toUpperCase().indexOf(keyword) != -1) {
                 filteredBooks.add(book);
             }
         }
