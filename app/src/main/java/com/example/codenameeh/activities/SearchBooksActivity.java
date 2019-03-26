@@ -1,8 +1,11 @@
 package com.example.codenameeh.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -44,6 +47,15 @@ public class SearchBooksActivity extends BaseActivity {
         bookAdapter = new SearchBooksAdapter(this, R.layout.book_search_adapter_view, arrayBook);
 
         search_book.setAdapter(bookAdapter);
+        search_book.setClickable(true);
+        search_book.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(SearchBooksActivity.this, ViewBookActivity.class);
+                intent.putExtra("book", arrayBook.get(position));
+                startActivityForResult(intent, 2);
+            }
+        });
     }
 
     @Override
