@@ -177,7 +177,7 @@ public class TakeNewBookActivity extends BaseActivity {
      * @author Cole Boytinck
      * @version 1.0
      *
-     * This is an Async class for getting boo information via a google books api.
+     * This is an Async class for getting book information via a google books api.
      * It attempt to get some information from the isbn provided. It information is avaliable,
      * it fills it in, if no information is found, it exits and only ISBN will be filled.
      */

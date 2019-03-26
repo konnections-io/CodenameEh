@@ -1,12 +1,14 @@
 package com.example.codenameeh.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
@@ -17,6 +19,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import io.cortical.retina.client.LiteClient;
 
 /**
  * @author Daniel Dick
@@ -64,7 +69,7 @@ public class BookListActivity extends BaseActivity {
 
         Intent Iintent = getIntent();
         String isbn = Iintent.getStringExtra("isbn");
-        Log.e("TestScan", "Recieved Intent");
+        Log.e("TestScan", "Received Intent");
         if(isbn != null) {
             Intent intent = new Intent(this, TakeNewBookActivity.class);
             intent.putExtra("isbn", isbn);
@@ -86,24 +91,38 @@ public class BookListActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             //new book returned
-            String title = data.getStringExtra(EXTRA_MESSAGE_TITLE);
-            String author = data.getStringExtra(EXTRA_MESSAGE_AUTHOR);
-            String isbn = data.getStringExtra(EXTRA_MESSAGE_ISBN);
-            String description = data.getStringExtra(EXTRA_MESSAGE_DESCRIPTION);
-            String photograph = data.getStringExtra("photo");
-            Book newBook = new Book(title, author, isbn, description, photograph, currentUser.getUsername());
-            currentUser.newOwn(newBook);
-            booksOwnedList.add(newBook);
-            Booklist.getInstance().add(newBook);
 
-            FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
-            FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid()).set(newBook)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                        }
-                    });
-            adapter.notifyDataSetChanged();
+            try {
+                String title = data.getStringExtra(EXTRA_MESSAGE_TITLE);
+                String author = data.getStringExtra(EXTRA_MESSAGE_AUTHOR);
+                String isbn = data.getStringExtra(EXTRA_MESSAGE_ISBN);
+                String description = data.getStringExtra(EXTRA_MESSAGE_DESCRIPTION);
+                String photograph = data.getStringExtra("photo");
+                ArrayList<String> keywords = new ArrayList<>();
+
+                try {
+                    keywords = new GetKeywords().execute(description).get();
+                } catch (Exception e) {
+                    Log.e("Keywords", e.toString());
+                }
+
+
+                Book newBook = new Book(title, author, isbn, description, photograph, currentUser.getUsername(), keywords);
+                currentUser.newOwn(newBook);
+                booksOwnedList.add(newBook);
+                Booklist.getInstance().add(newBook);
+                FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
+                FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid()).set(newBook)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            }
+                        });
+                adapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                Log.e("Returned", e.toString());
+            }
+
         }
         if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
             //view details of book returned
@@ -124,6 +143,7 @@ public class BookListActivity extends BaseActivity {
 
 
         }
+
     }
 
     /**
@@ -153,6 +173,36 @@ public class BookListActivity extends BaseActivity {
         startActivityForResult(intent, 2);
     }
 
+    public void OwnedBooks(View view) {
+        TextView title = findViewById(R.id.textView2);
+        title.setText("Books Owned");
+        booksOwnedList = currentUser.BooksOwned();
+        adapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksOwnedList);
+        bookView.setAdapter(adapter);
+    }
+    public void BeingBorrowedBooks(View view) {
+        TextView title = findViewById(R.id.textView2);
+        title.setText("Books Being Borrowed");
+        booksOwnedList = currentUser.BooksOwnedBorrowed();
+        adapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksOwnedList);
+        bookView.setAdapter(adapter);
+    }
+    public void AvailableBooks(View view) {
+        TextView title = findViewById(R.id.textView2);
+        title.setText("Available Books");
+        booksOwnedList = currentUser.BooksOwnedAvailable();
+        adapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksOwnedList);
+        bookView.setAdapter(adapter);
+    }
+    public void RequestedBooks(View view) {
+        TextView title = findViewById(R.id.textView2);
+        title.setText("Requested Books");
+        booksOwnedList = currentUser.BooksOwnedRequested();
+        adapter = new ArrayAdapter<Book>(this, R.layout.list_item, booksOwnedList);
+        bookView.setAdapter(adapter);
+    }
+
+
     /**
      * newBook calls the activity to add a new book.  When that
      * activity returns with the book's details, the above method for
@@ -163,5 +213,23 @@ public class BookListActivity extends BaseActivity {
     public void newBook (View view) {
         Intent intent = new Intent(this, TakeNewBookActivity.class);
         startActivityForResult(intent, 1);
+    }
+
+
+    class GetKeywords extends AsyncTask<String, Void, ArrayList<String>> {
+
+        protected ArrayList<String> doInBackground(String... descs) {
+            List<String> keywords = new ArrayList<>();
+            try {
+                String desc = descs[0];
+                LiteClient lite = new io.cortical.retina.client.LiteClient("1e1d18d0-4f42-11e9-8f72-af685da1b20e");
+                keywords = lite.getKeywords(desc);
+            } catch (Exception e) {
+                Log.e("Keywords", e.toString());
+            }
+            return new ArrayList<>(keywords);
+        }
+
+
     }
 }

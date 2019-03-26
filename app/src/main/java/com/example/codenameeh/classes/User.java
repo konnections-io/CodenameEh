@@ -14,6 +14,7 @@ public class User {
     private ArrayList<String> borrowedHistory;
     private ArrayList<String> requesting;
     private ArrayList<Notification> notifications;
+
     public User() {
         //Empty Constructor
         owning = new ArrayList<>();
@@ -45,6 +46,13 @@ public class User {
     public void removeOwn(Book book) {
         this.owning.remove(book.getUuid());
         book.setOwner(null);
+    }
+    public void newRequested(Book book) {
+        this.requesting.add(book.getUuid());
+    }
+
+    public void removeRequested(Book book) {
+        this.requesting.remove(book.getUuid());
     }
 
     public void newBorrow(Book book) {
@@ -114,6 +122,48 @@ public class User {
             int index = books.findIndex(own);
             if(index != -1){
                 temp.add(books.get(index));
+            }
+        }
+        return temp;
+    }
+
+    public ArrayList<Book> BooksOwnedAvailable() {
+        Booklist books =  Booklist.getInstance();
+        ArrayList<Book> temp = new ArrayList<>();
+        for(String own : this.owning){
+            int index = books.findIndex(own);
+            if(index != -1){
+                if (!books.get(index).isBorrowed()) {
+                    temp.add(books.get(index));
+                }
+            }
+        }
+        return temp;
+    }
+
+    public ArrayList<Book> BooksOwnedBorrowed() {
+        Booklist books =  Booklist.getInstance();
+        ArrayList<Book> temp = new ArrayList<>();
+        for(String own : this.owning){
+            int index = books.findIndex(own);
+            if(index != -1){
+                if (books.get(index).isBorrowed()) {
+                    temp.add(books.get(index));
+                }
+            }
+        }
+        return temp;
+    }
+
+    public ArrayList<Book> BooksOwnedRequested() {
+        Booklist books =  Booklist.getInstance();
+        ArrayList<Book> temp = new ArrayList<>();
+        for(String own : this.owning){
+            int index = books.findIndex(own);
+            if(index != -1){
+                if (!books.get(index).getRequestedBy().isEmpty()) {
+                    temp.add(books.get(index));
+                }
             }
         }
         return temp;

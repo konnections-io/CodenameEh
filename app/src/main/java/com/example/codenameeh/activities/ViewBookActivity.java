@@ -15,6 +15,7 @@ import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -159,33 +160,34 @@ public class ViewBookActivity extends BaseActivity {
      */
     public void changeRequestStatus(View v){
         if(currentUser.RequestedBooks().contains(book)){
-            currentUser.RequestedBooks().remove(book);
+            currentUser.removeRequested(book);
             book.removeRequest(currentUser.getUsername());
             Booklist booklist = Booklist.getInstance();
             booklist.set(booklist.indexOf(book), book);
             requestButton.setText("Request");
+            // Update in Firestore
+            FirebaseFirestore.getInstance().collection("All Books").document(book.getUuid())
+                    .update("requestedBy",FieldValue.arrayRemove(CurrentUser.getInstance().getUsername()))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                        }
+                    });
         } else{
-            currentUser.RequestedBooks().add(book);
+            currentUser.newRequested(book);
             book.addRequest(currentUser.getUsername());
             Booklist booklist = Booklist.getInstance();
             booklist.set(booklist.indexOf(book), book);
             requestButton.setText("Cancel Request");
+            // Update in Firestore
+            FirebaseFirestore.getInstance().collection("All Books").document(book.getUuid())
+                    .update("requestedBy",FieldValue.arrayUnion(CurrentUser.getInstance().getUsername()))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                        }
+                    });
         }
-        // Update in Firebase
-        FirebaseFirestore.getInstance().collection("users")
-                .document(currentUser.getUsername()).set(currentUser)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-            }
-        });
-        FirebaseFirestore.getInstance().collection("All Books").document(book.getUuid())
-                .set(book)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                    }
-                });
     }
 
     /**

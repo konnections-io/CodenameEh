@@ -1,24 +1,33 @@
 package com.example.codenameeh.classes;
 
+import java.util.ArrayList;
+
+/**
+ * Searches the booklist for the user's queries
+ * @author Daniel Shim
+ * @version 1.0
+ */
 public class BookSearch {
-    /*private User user;
+    private User user;
+    private Booklist allBooks = Booklist.getInstance();
 
     public BookSearch(User user) {
         this.user = user;
     }
 
-    public Booklist searchDatabase(String keyword, Booklist booklist) {
-        //TODO: Have a booklist of books related to keyword by accessing a database
-        Booklist originalList = booklist;
-        Booklist filteredBookList = new Booklist();
-        // Add books to this booklist depending on keyword specified
-        for (Book book: originalList.getBookList()) {
-            if (book.getTitle().contains(keyword)) {
-                filteredBookList.add(book);
+    public ArrayList<Book> searchDatabase(String keyword) {
+        keyword = keyword.toUpperCase();
+        ArrayList<Book> books = allBooks.getBookList();
+        ArrayList<Book> filteredBooks = new ArrayList<>();
+
+        for (Book book: books) {
+            if (book.getTitle().toUpperCase().indexOf(keyword) != -1 || book.getAuthor().toUpperCase().indexOf(keyword) != -1
+                    || book.getDescription().toUpperCase().indexOf(keyword) != -1) {
+                filteredBooks.add(book);
             }
         }
 
-        return filteredBookList;
+        return filteredBooks;
     }
 
     public User getUser() {
@@ -27,5 +36,5 @@ public class BookSearch {
 
     public void setUser(User user) {
         this.user = user;
-    }*/
+    }
 }
