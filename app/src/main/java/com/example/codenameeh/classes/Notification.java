@@ -46,10 +46,10 @@ public class Notification {
     @Override
     public String toString() {
         if(this.typeNotification.equals("Borrow Request")){
-            return this.otherUser+" would like to borrow book:\n"+this.bookTitle;
+            return "User "+this.otherUser+"\nwould like to borrow book:\n"+this.bookTitle;
         }
         else{
-            return this.otherUser+" has accepted your request for book:\n"+this.bookTitle+"\nGeolocation to receive is:\n"+this.geolocation;
+            return "User "+this.otherUser+"\nhas accepted your request for book:\n"+this.bookTitle+"\nGeolocation to receive is:\n"+this.geolocation;
         }
     }
 }
