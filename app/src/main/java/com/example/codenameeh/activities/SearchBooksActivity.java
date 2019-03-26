@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -14,12 +13,10 @@ import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.BookSearch;
 import com.example.codenameeh.classes.Booklist;
-import com.example.codenameeh.classes.BooklistAdapter;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.SearchBooksAdapter;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * This activity allows the user to search for books through our entire book database.
@@ -31,7 +28,7 @@ public class SearchBooksActivity extends BaseActivity {
     private ListView search_book;
     private SearchBooksAdapter bookAdapter;
     private BookSearch newSearch = new BookSearch(CurrentUser.getInstance());
-    private Booklist EveryBook = Booklist.getInstance();
+    private Booklist allBooks = Booklist.getInstance();
     private ArrayList<Book> arrayBook;
 
     @Override
@@ -39,10 +36,9 @@ public class SearchBooksActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_book_search, frameLayout);
 
-        search_book = (ListView) findViewById(R.id.search_books);
+        search_book = findViewById(R.id.search_books);
 
-        arrayBook = EveryBook.getBookList();
-        //arrayBook.addAll(Arrays.asList(getResources().getStringArray(R.array.my_books)));
+        arrayBook = allBooks.getBookList();
 
         bookAdapter = new SearchBooksAdapter(this, R.layout.book_search_adapter_view, arrayBook);
 
@@ -73,6 +69,8 @@ public class SearchBooksActivity extends BaseActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 bookAdapter.getFilter().filter(newText);
+                arrayBook = newSearch.searchDatabase(newText);
+                bookAdapter.notifyDataSetChanged();
                 return false;
             }
         });

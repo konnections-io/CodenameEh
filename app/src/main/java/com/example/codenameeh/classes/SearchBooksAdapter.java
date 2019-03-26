@@ -10,11 +10,15 @@ import android.widget.TextView;
 import com.example.codenameeh.R;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+/**
+ * Custom adapter for the SearchBooksActivity ListView
+ * @author Daniel Shim
+ * @version 1.0
+ */
 public class SearchBooksAdapter extends ArrayAdapter<Book> {
 
     private static final String TAG = "SearchViewAdapter";
@@ -31,17 +35,8 @@ public class SearchBooksAdapter extends ArrayAdapter<Book> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        String title = getItem(position).getTitle();
-        String author = getItem(position).getAuthor();
-        String owner = getItem(position).getOwner();
-        Boolean status = getItem(position).getAcceptedStatus();
-        Boolean borrowed = getItem(position).isBorrowed();
-        String uuid = getItem(position).getUuid();
 
-        Book book = new Book(title, author, "Lorem Ipsum", "Lorem Ipsum", "image.png", owner);
-        book.setAcceptedStatus(status);
-        book.setBorrowed(borrowed);
-        book.setUuid(uuid);
+        Book book = getItem(position);
 
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(resource, parent, false);
@@ -51,13 +46,13 @@ public class SearchBooksAdapter extends ArrayAdapter<Book> {
         TextView tvOwner = (TextView) convertView.findViewById(R.id.textView3);
         TextView tvStatus = (TextView) convertView.findViewById(R.id.textView4);
 
-        tvTitle.setText(title);
-        tvAuthor.setText(author);
-        tvOwner.setText(owner);
-        if (status == true || borrowed == true) {
-            tvStatus.setText("Not Available");
+        tvTitle.setText(book.getTitle());
+        tvAuthor.setText(book.getAuthor());
+        tvOwner.setText(book.getOwner());
+        if (book.getAcceptedStatus() || book.isBorrowed()) {
+            tvStatus.setText(context.getString(R.string.notAvail));
         } else {
-            tvStatus.setText("Available");
+            tvStatus.setText(context.getString(R.string.avail));
         }
 
         return convertView;
