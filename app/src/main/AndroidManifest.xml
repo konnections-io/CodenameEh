@@ -23,7 +23,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.ScanActivity"></activity>
+        <activity android:name=".activities.ConfirmationActivity"></activity>
+        <activity android:name=".activities.ScanActivity" />
         <activity android:name=".activities.EditBookActivity" />
         <activity
             android:name=".activities.ViewBookActivity"
@@ -76,7 +77,7 @@
         <activity
             android:name=".activities.SearchBooksActivity"
             android:label="SearchBooksActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
+
 </manifest>

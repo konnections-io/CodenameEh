@@ -64,6 +64,14 @@ public class ViewBookActivity extends BaseActivity {
         Button deleteButton = findViewById(R.id.deleteBookButton);
         Button editButton = findViewById(R.id.editBookButton);
         userView = findViewById(R.id.book_owner_view);
+        userView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewBookActivity.this, ProfileActivity.class);
+                intent.putExtra("username", book.getOwner());
+                startActivity(intent);
+            }
+        });
         if (currentUser.getUsername().equals(book.getOwner())) {
             // We are the owner of the book, so show the owning buttons
             deleteButton.setVisibility(View.VISIBLE);
@@ -146,7 +154,8 @@ public class ViewBookActivity extends BaseActivity {
     }
 
     /**
-     * on the button press, request (or cancel the request) for the book
+     * on the button press, request (or cancel the request) for the book.
+     * Update to Firebase
      * @param v
      */
     public void changeRequestStatus(View v){
@@ -179,7 +188,6 @@ public class ViewBookActivity extends BaseActivity {
                         }
                     });
         }
-
     }
 
     /**

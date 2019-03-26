@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
+import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -90,6 +91,7 @@ public class BookListActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             //new book returned
+
             try {
                 String title = data.getStringExtra(EXTRA_MESSAGE_TITLE);
                 String author = data.getStringExtra(EXTRA_MESSAGE_AUTHOR);
@@ -108,7 +110,7 @@ public class BookListActivity extends BaseActivity {
                 Book newBook = new Book(title, author, isbn, description, photograph, currentUser.getUsername(), keywords);
                 currentUser.newOwn(newBook);
                 booksOwnedList.add(newBook);
-
+                Booklist.getInstance().add(newBook);
                 FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername()).set(currentUser);
                 FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid()).set(newBook)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -120,6 +122,7 @@ public class BookListActivity extends BaseActivity {
             } catch (Exception e) {
                 Log.e("Returned", e.toString());
             }
+
         }
         if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
             //view details of book returned
