@@ -1,83 +1,68 @@
 package com.example.codenameeh.activities;
 
-import android.app.SearchManager;
-import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.BookSearch;
 import com.example.codenameeh.classes.Booklist;
+import com.example.codenameeh.classes.BooklistAdapter;
 import com.example.codenameeh.classes.CurrentUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.example.codenameeh.classes.SearchBooksAdapter;
 
 import java.util.ArrayList;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
+/**
+ * This activity allows the user to search for books through our entire book database.
+ * @author Daniel Shim
+ * @version 1.0
+ */
 public class SearchBooksActivity extends BaseActivity {
-/*
+
+    private ListView search_book;
+    private SearchBooksAdapter bookAdapter;
     private BookSearch newSearch = new BookSearch(CurrentUser.getInstance());
-    private Map<String, Object> data;
-    private Booklist bookList;
-    private ListView filteredBooks;
-    private ArrayAdapter<Book> adapter;
+    private Booklist EveryBook = Booklist.getInstance();
+    private ArrayList<Book> arrayBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_search);
         getLayoutInflater().inflate(R.layout.activity_book_search, frameLayout);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        filteredBooks = (ListView) findViewById(R.id.filteredBookListView);
+        search_book = (ListView) findViewById(R.id.search_books);
 
-        final DocumentReference docRef = db.collection("Books").document("All");
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        arrayBook = EveryBook.getBookList();
+        //arrayBook.addAll(Arrays.asList(getResources().getStringArray(R.array.my_books)));
+
+        bookAdapter = new SearchBooksAdapter(this, R.layout.book_search_adapter_view, arrayBook);
+
+        search_book.setAdapter(bookAdapter);
+        search_book.setClickable(true);
+        search_book.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Toast.makeText(SearchBooksActivity.this, "Retrieving books failed.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (documentSnapshot != null && documentSnapshot.exists()) {
-                    data = documentSnapshot.getData();
-                    bookList = convertMapToBookList(data);
-                } else {
-                    Toast.makeText(SearchBooksActivity.this, "There are no books.", Toast.LENGTH_SHORT).show();
-                }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(SearchBooksActivity.this, ViewBookActivity.class);
+                intent.putExtra("book", arrayBook.get(position));
+                startActivityForResult(intent, 2);
             }
         });
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        adapter = new ArrayAdapter<>(this, R.layout.list_book, bookList.getBookList());
-        filteredBooks.setAdapter(adapter);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.search, menu);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        MenuItem item = menu.findItem(R.id.search_book_items);
+        SearchView searchView = (SearchView) item.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -87,20 +72,11 @@ public class SearchBooksActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                newSearch.searchDatabase(newText, bookList);
+                bookAdapter.getFilter().filter(newText);
                 return false;
             }
         });
 
         return super.onCreateOptionsMenu(menu);
     }
-
-    private Booklist convertMapToBookList(Map map) {
-        Booklist books = new Booklist();
-        // Uri image = Uri.parse("image.png");
-        Book book1 = new Book("Book1", "name", "1235121", "Lorem Ipsum" , "user");
-        books.add(book1);
-
-        return books;
-    }*/
 }
