@@ -7,7 +7,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.codenameeh.R;
+import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.Request;
+import com.example.codenameeh.classes.User;
 
 /**
  * @author Dan Sune
@@ -31,13 +33,13 @@ public class RequestActivity extends BaseActivity {
         Intent intent = getIntent();
         final Request request = (Request)getIntent().getParcelableExtra("data");
 
-        String user = request.getUser();
-        String book = request.getBook();
-        String date = request.getDateRequested();
-        Boolean status = request.getStatus();
+        final User user = request.getUser();
+        final Book book = request.getBook();
+        final String date = request.getDateRequested();
+        //Boolean status = request.getStatus();
 
         TextView tView = findViewById(R.id.textView2);
-        tView.setText(user);
+        tView.setText(user.getName());
 
         Button acceptButton = findViewById(R.id.accept);
         Button declineButton = findViewById(R.id.decline);
@@ -51,6 +53,16 @@ public class RequestActivity extends BaseActivity {
             @Override
             public void onClick(View v){
                 request.accept();
+                //user.getRequests().add(request);
+
+                /**
+                 * declines any other outstanding requests for this specific book
+                 */
+                for(Request r : user.getRequests()){
+                    if(r.getBookUuid() == book.getUuid() && r.getStatus() == null){
+                        r.decline();
+                    }
+                }
             }
         });
 
