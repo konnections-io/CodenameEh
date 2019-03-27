@@ -3,6 +3,7 @@ package com.example.codenameeh.activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,8 +16,11 @@ import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +131,15 @@ public class BookListActivity extends BaseActivity {
         if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
             //view details of book returned
             if ((data.getStringExtra(EXTRA_MESSAGE_DELETE)).equals("TRUE")) {
+                StorageReference photoRef = FirebaseStorage.getInstance().getReference().child(
+                        booksOwnedList.get(positionclicked).getOwner()+"/"+booksOwnedList.get(positionclicked).getPhotograph());
+                photoRef.delete().addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // An error occurred. Log it
+                        Log.e("EditBookActivity", e.getStackTrace().toString());
+                    }
+                });
                 FirebaseFirestore.getInstance().collection("All Books").document(booksOwnedList.get(positionclicked).getUuid())
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {

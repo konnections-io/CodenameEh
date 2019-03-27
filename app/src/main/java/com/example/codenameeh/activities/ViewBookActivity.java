@@ -173,6 +173,13 @@ public class ViewBookActivity extends BaseActivity {
                         public void onSuccess(Void aVoid) {
                         }
                     });
+            FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername())
+                    .update("requesting", FieldValue.arrayRemove(book.getUuid()))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                }
+            });
         } else{
             currentUser.newRequested(book);
             book.addRequest(currentUser.getUsername());
@@ -182,6 +189,13 @@ public class ViewBookActivity extends BaseActivity {
             // Update in Firestore
             FirebaseFirestore.getInstance().collection("All Books").document(book.getUuid())
                     .update("requestedBy",FieldValue.arrayUnion(CurrentUser.getInstance().getUsername()))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                        }
+                    });
+            FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername())
+                    .update("requesting", FieldValue.arrayUnion(book.getUuid()))
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
