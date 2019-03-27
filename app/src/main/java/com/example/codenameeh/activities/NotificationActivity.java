@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -57,13 +58,14 @@ import javax.annotation.Nullable;
  * Currently to be implemented with buttons for requests
  */
 public class NotificationActivity extends BaseActivity {
-
+    private static int REQUESTED_CODE = 1;
+    private static String NOTIFICATION_REQUEST = "NOTIFICATION REQUEST";
     private ListView bookAcceptedListView;
     private ListView requestedListView;
-    private ArrayList<String> booksAccepted = new ArrayList<String>();
-    private ArrayList<String> requested = new ArrayList<String>();
-    private ArrayAdapter<String> bookAcceptedAdapter;
-    private ArrayAdapter<String> requestedAdapter;
+    private ArrayList<Notification> booksAccepted = new ArrayList<Notification>();
+    private ArrayList<Notification> requested = new ArrayList<Notification>();
+    private ArrayAdapter<Notification> bookAcceptedAdapter;
+    private ArrayAdapter<Notification> requestedAdapter;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference ref = db.collection("users").document(CurrentUser.getInstance().getUsername());
 
@@ -87,16 +89,28 @@ public class NotificationActivity extends BaseActivity {
                     booksAccepted.clear();
                     for(Notification notification: CurrentUser.getInstance().getNotifications()){
                         if(notification.getTypeNotification().equals("Borrow Request")){
-                            requested.add(notification.toString());
+                            requested.add(notification);
                         }
                         else if(notification.getTypeNotification().equals("Accepted Request")){
-                            booksAccepted.add(notification.toString());
+                            booksAccepted.add(notification);
                         }
                     }
                     bookAcceptedListView.setAdapter(bookAcceptedAdapter);
                     requestedListView.setAdapter(requestedAdapter);
 
                 }
+            }
+        });
+        requestedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(NotificationActivity.this,RequestActivity.class);
+                Notification notificationClicked = (Notification)requestedListView.getItemAtPosition(position);
+                intent.putExtra("Sender",NOTIFICATION_REQUEST);
+                intent.putExtra("Book",notificationClicked.getBook());
+                intent.putExtra("Other Username",notificationClicked.getOtherUser());
+                startActivityForResult(intent,REQUESTED_CODE);
+
             }
         });
 //        ArrayList<String> k = new ArrayList<String>();
@@ -112,6 +126,22 @@ public class NotificationActivity extends BaseActivity {
 //        ref.update("notifications",nlist);
     }
 
+    /**
+     * Called when a notification about a request has been clicked and now returned to.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode==RESULT_OK && !(data==null)) {
+            // Make sure the request was successful
+            if (requestCode == REQUESTED_CODE) {
+            }
+        }
+    }
 
     /**
      * Displays each visual notification via the user, sets up the 2 adapters
@@ -121,8 +151,8 @@ public class NotificationActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         Intent intent = getIntent();
-        bookAcceptedAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,booksAccepted);
-        requestedAdapter = new ArrayAdapter<String>(NotificationActivity.this,android.R.layout.simple_list_item_1,requested);
+        bookAcceptedAdapter = new ArrayAdapter<Notification>(this,android.R.layout.simple_list_item_1,booksAccepted);
+        requestedAdapter = new ArrayAdapter<Notification>(NotificationActivity.this,android.R.layout.simple_list_item_1,requested);
 
     }
 

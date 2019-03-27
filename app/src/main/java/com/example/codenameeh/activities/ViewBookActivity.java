@@ -74,8 +74,15 @@ public class ViewBookActivity extends BaseActivity {
         });
         if (currentUser.getUsername().equals(book.getOwner())) {
             // We are the owner of the book, so show the owning buttons
-            deleteButton.setVisibility(View.VISIBLE);
-            editButton.setVisibility(View.VISIBLE);
+            if(book.isBorrowed() || !book.getRequestedBy().isEmpty()){
+                //If the book is currently borrowed or is requested, we cannot change or delete it
+                deleteButton.setVisibility(View.INVISIBLE);
+                editButton.setVisibility(View.INVISIBLE);
+            }
+            else{
+                deleteButton.setVisibility(View.VISIBLE);
+                editButton.setVisibility(View.VISIBLE);
+            }
             requestButton.setVisibility(View.INVISIBLE);
             // We don't need to know the owner here
             userView.setVisibility(View.INVISIBLE);
@@ -173,6 +180,13 @@ public class ViewBookActivity extends BaseActivity {
                         public void onSuccess(Void aVoid) {
                         }
                     });
+            FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername())
+                    .update("requesting", FieldValue.arrayRemove(book.getUuid()))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                }
+            });
         } else{
             currentUser.newRequested(book);
             book.addRequest(currentUser.getUsername());
@@ -182,6 +196,13 @@ public class ViewBookActivity extends BaseActivity {
             // Update in Firestore
             FirebaseFirestore.getInstance().collection("All Books").document(book.getUuid())
                     .update("requestedBy",FieldValue.arrayUnion(CurrentUser.getInstance().getUsername()))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                        }
+                    });
+            FirebaseFirestore.getInstance().collection("users").document(currentUser.getUsername())
+                    .update("requesting", FieldValue.arrayUnion(book.getUuid()))
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {

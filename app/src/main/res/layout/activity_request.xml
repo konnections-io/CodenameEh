@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".activities.RequestActivity">
 
+
+
+
     <Button
         android:id="@+id/accept"
         android:layout_width="160dp"
