@@ -22,6 +22,7 @@ public class RequestActivity extends BaseActivity {
     private static String NOTIFICATION_REQUEST = "NOTIFICATION REQUEST";
     Book book;
     String other_username;
+    String sender;
     /**
      * onCreate displays the specific request information when it is clicked
      * also initiates the accept/decline buttons
@@ -32,8 +33,17 @@ public class RequestActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
 
+        Intent intent = getIntent();
+        book = intent.getParcelableExtra("Book");
+        sender = intent.getParcelableExtra("Sender");
+        other_username = intent.getParcelableExtra("Other Username");
+
         Button acceptButton = findViewById(R.id.accept);
         Button declineButton = findViewById(R.id.decline);
+
+        TextView username = findViewById(R.id.textView2);
+
+        username.setText(sender);
 
         /**
          * Temporarily commented out what happens with accept button and decline button by Brian Qi.
@@ -48,7 +58,7 @@ public class RequestActivity extends BaseActivity {
              */
             @Override
             public void onClick(View v){
-                //request.accept();
+                setResult(1);
             }
         });
 
@@ -60,7 +70,7 @@ public class RequestActivity extends BaseActivity {
              */
             @Override
             public void onClick(View v){
-                //request.decline();
+                setResult(2);
             }
         });
         }
