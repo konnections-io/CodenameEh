@@ -49,7 +49,7 @@ import java.util.List;
 public class ScanActivity extends AppCompatActivity {
 
     private static final int TAKE_PICTURE = 1;
-
+    private boolean borrowing;
     /**
      * onCreate starts the camera activity
      */
@@ -58,7 +58,12 @@ public class ScanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-
+        try {
+            borrowing = intent.getAction().contains("BORROW");
+        } catch (Exception e){
+            // If we got a null pointer exception, clearly it doesn't contain borrow
+            borrowing = false;
+        }
         intent = new Intent("android.media.action.IMAGE_CAPTURE");
         startActivityForResult(intent, TAKE_PICTURE);
 
@@ -116,7 +121,12 @@ public class ScanActivity extends AppCompatActivity {
 
                             if(valueType == FirebaseVisionBarcode.TYPE_ISBN) {
                                 String isbn = barcode.getDisplayValue();
-                                Intent intent = new Intent(ScanActivity.this, BookListActivity.class);
+                                Intent intent;
+                                if(borrowing){
+                                    intent = new Intent(ScanActivity.this, ConfirmationActivity.class);
+                                } else {
+                                    intent = new Intent(ScanActivity.this, BookListActivity.class);
+                                }
                                 intent.putExtra("isbn", isbn);
                                 Log.e("TestScan", "Created Intent");
                                 startActivity(intent);
@@ -125,6 +135,11 @@ public class ScanActivity extends AppCompatActivity {
                                 Log.e("barcode", "Cannot find barcode");
                                 finish();
                             }
+                        }
+                        if(barcodes.size()==0){
+                            Toast.makeText(ScanActivity.this, "Cannot find barcode", Toast.LENGTH_SHORT).show();
+                            Log.e("barcode", "Cannot find barcode");
+                            finish();
                         }
                     }
                 })
