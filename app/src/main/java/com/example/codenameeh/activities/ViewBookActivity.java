@@ -82,25 +82,8 @@ public class ViewBookActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-        requestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
 
-                Notification notification = new Notification(CurrentUser.getInstance().getUsername(),book);
-                FirebaseFirestore.getInstance().collection("users").document(book.getOwner())
-                        .update("notifications",FieldValue.arrayUnion(notification))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                    }
-                });
-
-
-
-
-            }
-        });
         if (currentUser.getUsername().equals(book.getOwner())) {
             // We are the owner of the book, so show the owning buttons
             if(book.isBorrowed() || !book.getRequestedBy().isEmpty()){
@@ -196,6 +179,27 @@ public class ViewBookActivity extends BaseActivity {
      */
     public void changeRequestStatus(View v){
         if(currentUser.RequestedBooks().contains(book)){
+            final DocumentReference ref = FirebaseFirestore.getInstance().collection("users").document(book.getOwner());
+            ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            User user = document.toObject(User.class);
+                            ArrayList<Notification> nList = user.getNotifications();
+                            for(Notification n: nList){
+                                if(n.getBook().getUuid().equals(book.getUuid()) && n.getOtherUser().equals(CurrentUser.getInstance().getUsername())){
+                                    ref.update("notifications",FieldValue.arrayRemove(n));
+
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+            });
             currentUser.removeRequested(book);
             book.removeRequest(currentUser.getUsername());
             Booklist booklist = Booklist.getInstance();
@@ -217,6 +221,14 @@ public class ViewBookActivity extends BaseActivity {
                 }
             });
         } else{
+            Notification notification = new Notification(CurrentUser.getInstance().getUsername(),book);
+            FirebaseFirestore.getInstance().collection("users").document(book.getOwner())
+                    .update("notifications",FieldValue.arrayUnion(notification))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                        }
+                    });
             currentUser.newRequested(book);
             book.addRequest(currentUser.getUsername());
             Booklist booklist = Booklist.getInstance();

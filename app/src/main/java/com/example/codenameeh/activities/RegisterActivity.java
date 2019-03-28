@@ -173,7 +173,7 @@ public class RegisterActivity extends AppCompatActivity {
      * @return true if the data is valid, false otherwise
      */
     public boolean validateData() {
-        if(!viewPasswordMatch.getText().toString().equals(viewPassword)){
+        if(!viewPasswordMatch.getText().toString().equals(viewPassword.getText().toString())){
             Toast.makeText(this,"Passwords don't match",Toast.LENGTH_LONG).show();
             return false;
         }

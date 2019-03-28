@@ -161,7 +161,8 @@ public class RequestActivity extends BaseActivity {
                 ,address,book,latitude,longitude);
                 ref.update("notifications", FieldValue.arrayUnion(newNotification));
                 //Remove the notification from current user
-                ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                final DocumentReference removeRef = db.collection("users").document(CurrentUser.getInstance().getUsername());
+                removeRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
@@ -172,7 +173,8 @@ public class RequestActivity extends BaseActivity {
                                 for(Notification n: nList){
                                     if(n.getTypeNotification().equals("Borrow Request")
                                             && n.getBook().getUuid().equals(book.getUuid())){
-                                        ref.update("notifications",FieldValue.arrayRemove(n));
+
+                                        removeRef.update("notifications",FieldValue.arrayRemove(n));
 
                                     }
                                 }
@@ -181,7 +183,7 @@ public class RequestActivity extends BaseActivity {
                         }
                     }
                 });
-
+                //
                 setResult(Activity.RESULT_OK,intentToNotifications);
                 finish();
             }
