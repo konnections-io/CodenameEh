@@ -143,6 +143,7 @@ public class BaseActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_scan) {
             Intent intent = new Intent(this, ScanActivity.class);
+            intent.setAction("BORROW");
             startActivity(intent);
         } else if (id == R.id.nav_search_books) {
             Intent intent = new Intent(this, SearchBooksActivity.class);

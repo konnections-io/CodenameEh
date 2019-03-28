@@ -228,6 +228,11 @@ public class BookListActivity extends BaseActivity {
         startActivityForResult(intent, 1);
     }
 
+    public void scanNewBook(View view){
+        Intent intent = new Intent(this, ScanActivity.class);
+        startActivity(intent);
+    }
+
 
     class GetKeywords extends AsyncTask<String, Void, ArrayList<String>> {
 

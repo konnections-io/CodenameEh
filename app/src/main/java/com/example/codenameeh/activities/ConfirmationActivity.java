@@ -88,7 +88,10 @@ public class ConfirmationActivity extends BaseActivity {
         for(Book book:tempNewBooks){
             if(!book.getOwner().equals(currentUser.getUsername())){
                 if(book.getAcceptedStatus()){
-                    
+                    if(book.getISBN().equals(isbn)){
+                        // TODO additional check for being the one who it was accepted for
+                        potentialBooks.add(book);
+                    }
                 }
             }
         }
