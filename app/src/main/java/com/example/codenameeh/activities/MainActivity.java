@@ -67,6 +67,7 @@ public class MainActivity extends BaseActivity {
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if(documentSnapshot != null && documentSnapshot.exists()){
                     User user = documentSnapshot.toObject(User.class);
+
                     ArrayList<String> comparingNotificationList = new ArrayList<String>();
                     for (Notification notification: CurrentUser.getInstance().getNotifications()){
                         comparingNotificationList.add(notification.toString());
@@ -78,11 +79,13 @@ public class MainActivity extends BaseActivity {
                             android.app.Notification notificationToSend = new NotificationCompat.Builder(MainActivity.this,CHANNEL_1_ID)
                                     .setSmallIcon(R.drawable.ic_test)
                                     .setContentTitle("New "+notification.getTypeNotification())
-                                    .setContentText(notification.toString())
+                                    .setContentText("Book: "+notification.getBookTitle())
                                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                                     .setContentIntent(pendingIntent)
                                     .setAutoCancel(true)
+                                    .setStyle(new NotificationCompat.BigTextStyle()
+                                            .bigText(notification.toString()))
                                     .build();
                             notificationManager.notify(1,notificationToSend);
 
