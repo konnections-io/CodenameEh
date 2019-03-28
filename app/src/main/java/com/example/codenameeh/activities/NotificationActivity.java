@@ -108,6 +108,7 @@ public class NotificationActivity extends BaseActivity {
                 Notification notificationClicked = (Notification)requestedListView.getItemAtPosition(position);
                 intent.putExtra("Sender",NOTIFICATION_REQUEST);
                 intent.putExtra("Book",notificationClicked.getBook());
+                intent.putExtra("UUID",notificationClicked.getUuid());
                 intent.putExtra("Other Username",notificationClicked.getOtherUser());
                 startActivityForResult(intent,REQUESTED_CODE);
 
@@ -120,7 +121,7 @@ public class NotificationActivity extends BaseActivity {
 //
 //        ArrayList<Notification> nlist = new ArrayList<Notification>();
 //        Notification n1 = new Notification("Alex",book);
-//        Notification n2 = new Notification("Brian","THERE",book);
+//        Notification n2 = new Notification("Brian","THERE",book,50.0,23.4);
 //        nlist.add(n1);
 //        nlist.add(n2);
 //        ref.update("notifications",nlist);
