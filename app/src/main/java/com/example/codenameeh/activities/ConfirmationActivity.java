@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
+import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.BooklistAdapter;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
@@ -83,7 +84,14 @@ public class ConfirmationActivity extends BaseActivity {
      * Find the books we have been accepted for that match this ISBN, add to potentialBooks
      */
     private void findPotentialOtherBooks(){
-        // TODO
+        ArrayList<Book> tempNewBooks = Booklist.getInstance().getBookList();
+        for(Book book:tempNewBooks){
+            if(!book.getOwner().equals(currentUser.getUsername())){
+                if(book.getAcceptedStatus()){
+                    
+                }
+            }
+        }
     }
 
 }
