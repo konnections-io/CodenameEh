@@ -2,6 +2,7 @@ package com.example.codenameeh.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -114,6 +116,15 @@ public class NotificationActivity extends BaseActivity {
 
             }
         });
+        bookAcceptedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Notification notificationClicked = (Notification)bookAcceptedListView.getItemAtPosition(position);
+                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", notificationClicked.getLatitude(), notificationClicked.getLongitude());
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(intent);
+            }
+        });
         Button clearAcceptedButton = findViewById(R.id.ClearAcceptedNotf);
         clearAcceptedButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -145,10 +156,14 @@ public class NotificationActivity extends BaseActivity {
 //
 //
 //        ArrayList<Notification> nlist = new ArrayList<Notification>();
-//        Notification n1 = new Notification("Alex",book);
+//        Notification n1 = new Notification("testbqi1",book);
+//        Notification n3 = new Notification("Alex",book);
+//        Notification n4 = new Notification("BOYTOY",book);
 //        Notification n2 = new Notification("Brian","THERE",book,50.0,23.4);
 //        nlist.add(n1);
 //        nlist.add(n2);
+//        nlist.add(n3);
+//        nlist.add(n4);
 //        ref.update("notifications",nlist);
     }
 
