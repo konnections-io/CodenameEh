@@ -39,4 +39,5 @@
     <string name="display_books_available">Available</string>
     <string name="display_books_requested">Requested</string>
     <string name="display_books_borrowed">Borrowed</string>
+    <string name="google_map_api_key">AIzaSyD5RS6VjOV8cdFr5MExnZzPnpvUSGP6fWM</string>
 </resources>

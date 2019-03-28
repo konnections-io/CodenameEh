@@ -1,14 +1,25 @@
 package com.example.codenameeh.activities;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
+import com.example.codenameeh.classes.CurrentUser;
+import com.example.codenameeh.classes.Notification;
 import com.example.codenameeh.classes.Request;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * @author Dan Sune
@@ -19,6 +30,8 @@ import com.example.codenameeh.classes.Request;
  */
 public class RequestActivity extends BaseActivity {
     private static String NOTIFICATION_REQUEST = "NOTIFICATION REQUEST";
+    private static int GEOLOCATION_REQUEST_CODE = 1;
+
     Book book;
     String other_username;
     /**
@@ -47,7 +60,15 @@ public class RequestActivity extends BaseActivity {
              */
             @Override
             public void onClick(View v){
-                //request.accept();
+                boolean permissionGranted= ActivityCompat.checkSelfPermission(RequestActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+                if(!permissionGranted) {
+                    Toast.makeText(RequestActivity.this,"Sorry, you need to enable Locations to accept books.",Toast.LENGTH_LONG).show();
+                    ActivityCompat.requestPermissions(RequestActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
+                }else{
+                    Intent intent = new Intent(getApplicationContext(),GeolocationActivity.class);
+                    startActivityForResult(intent,GEOLOCATION_REQUEST_CODE);
+                }
+
             }
         });
 
@@ -74,5 +95,35 @@ public class RequestActivity extends BaseActivity {
             userField.setText(other_username);
         }
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode==RESULT_OK && !(data==null)) {
+            if (requestCode == GEOLOCATION_REQUEST_CODE) {
+                double latitude = data.getDoubleExtra("Latitude",0.0);
+                double longitude = data.getDoubleExtra("Longitude",0.0);
+                String address = data.getStringExtra("Address");
+                Intent intentToNotifications = new Intent();
+                //After accept button is requested, goes to geolocation.
+                //After user selects a geolocation, lat/lon and address is sent here
+                //in an Intent object
+                //Code must now go back to Notifications Activity carrying back the info
+                //that the user clicked Accept
+                //This code is accessed only if the user clicked accept
+
+
+
+                //Add the notification to that user
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                DocumentReference ref = db.collection("users").document(other_username);
+                Notification newNotification = new Notification(CurrentUser.getInstance().getUsername()
+                ,address,book);
+                ref.update("notifications", FieldValue.arrayUnion(newNotification));
+                setResult(Activity.RESULT_OK,intentToNotifications);
+                finish();
+            }
+        }
     }
 }
