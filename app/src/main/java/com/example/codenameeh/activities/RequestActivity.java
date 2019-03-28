@@ -108,7 +108,7 @@ public class RequestActivity extends BaseActivity {
                                 for(Notification n: nList){
                                     if(n.getUuid().equals(notificationUUID)){
                                         ref.update("notifications",FieldValue.arrayRemove(n));
-                                        Log.d("ERROR","deleted");
+
                                     }
                                 }
 

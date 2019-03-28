@@ -114,6 +114,31 @@ public class NotificationActivity extends BaseActivity {
 
             }
         });
+        Button clearAcceptedButton = findViewById(R.id.ClearAcceptedNotf);
+        clearAcceptedButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                User user = document.toObject(User.class);
+                                ArrayList<Notification> nList = user.getNotifications();
+                                for(Notification n: nList){
+                                    if(n.getTypeNotification().equals("Accepted Request")){
+                                        ref.update("notifications",FieldValue.arrayRemove(n));
+
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                });
+            }
+        });
 //        ArrayList<String> k = new ArrayList<String>();
 //        k.add("ABRA");
 //        Book book = new Book("ABC","JIMBO","123123","DESCRIPBE","ARTHUR",k);
