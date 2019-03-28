@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
@@ -17,9 +18,16 @@ import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.Notification;
 import com.example.codenameeh.classes.Request;
+import com.example.codenameeh.classes.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 /**
  * @author Dan Sune
@@ -33,7 +41,7 @@ public class RequestActivity extends BaseActivity {
     private static int GEOLOCATION_REQUEST_CODE = 1;
 
     Book book;
-    String other_username;
+    String other_username,notificationUUID;
     /**
      * onCreate displays the specific request information when it is clicked
      * also initiates the accept/decline buttons
@@ -80,7 +88,36 @@ public class RequestActivity extends BaseActivity {
              */
             @Override
             public void onClick(View v){
-                //request.decline();
+                final Intent intentToNotification = new Intent();
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                final DocumentReference ref = db.collection("users").document(CurrentUser.getInstance().getUsername());
+
+                //Add relevant code here when user declines
+
+
+
+                //Remove the notification to current user from FireStore
+                ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                User user = document.toObject(User.class);
+                                ArrayList<Notification> nList = user.getNotifications();
+                                for(Notification n: nList){
+                                    if(n.getUuid().equals(notificationUUID)){
+                                        ref.update("notifications",FieldValue.arrayRemove(n));
+                                        Log.d("ERROR","deleted");
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                });
+                setResult(Activity.RESULT_OK,intentToNotification);
+                finish();
             }
         });
         }
@@ -91,6 +128,7 @@ public class RequestActivity extends BaseActivity {
         if (intent.getStringExtra("Sender").equals(NOTIFICATION_REQUEST)) {
             book = intent.getParcelableExtra("Book");
             other_username = intent.getStringExtra("Other Username");
+            notificationUUID = intent.getStringExtra("UUID");
             TextView userField = findViewById(R.id.textView2);
             userField.setText(other_username);
         }
@@ -112,6 +150,7 @@ public class RequestActivity extends BaseActivity {
                 //Code must now go back to Notifications Activity carrying back the info
                 //that the user clicked Accept
                 //This code is accessed only if the user clicked accept
+                //Add relevant code when user clicks accept here instead of in the onClick method
 
 
 
@@ -119,7 +158,7 @@ public class RequestActivity extends BaseActivity {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 DocumentReference ref = db.collection("users").document(other_username);
                 Notification newNotification = new Notification(CurrentUser.getInstance().getUsername()
-                ,address,book);
+                ,address,book,latitude,longitude);
                 ref.update("notifications", FieldValue.arrayUnion(newNotification));
                 setResult(Activity.RESULT_OK,intentToNotifications);
                 finish();
