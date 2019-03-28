@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.codenameeh.R;
@@ -172,6 +173,11 @@ public class RegisterActivity extends AppCompatActivity {
      * @return true if the data is valid, false otherwise
      */
     public boolean validateData() {
+        if(!viewPasswordMatch.getText().toString().equals(viewPassword)){
+            Toast.makeText(this,"Passwords don't match",Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         return true;
     }
 
