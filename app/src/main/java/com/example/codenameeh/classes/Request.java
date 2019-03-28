@@ -10,21 +10,22 @@ public class Request implements Parcelable {
 
     // accepted request = true
     // declined request = false
-    private boolean status;
+    private Boolean status;
 
-    private String user;
+    private User user;
     private Date date;
     private String formatDate;
-    private String book;
+    private Book book;
 
     public Request(){
 
     }
 
-    public Request(String requester, String requestBook){
+    public Request(User requester, Book requestBook){
         this.user = requester;
         this.date = new Date();
         this.book = requestBook;
+        this.status = null;
     }
     public void accept(){
         this.status = true;
@@ -34,7 +35,7 @@ public class Request implements Parcelable {
         this.status = false;
     }
 
-    public boolean getStatus(){
+    public Boolean getStatus(){
         return this.status;
     }
 
@@ -46,19 +47,25 @@ public class Request implements Parcelable {
         return formatDate;
     }
 
-    public String getUser(){
+    public User getUser(){
         return user;
     }
 
-    public String getBook(){
+    public Book getBook(){
         return book;
     }
 
-    protected Request(Parcel in){
-        user = in.readString();
-        book = in.readString();
+    public String getBookUuid(){
+        return book.getUuid();
+    }
+
+    protected Request(Parcel in) {
+        status = in.readByte() != 0x00;
+        user = (User) in.readValue(User.class.getClassLoader());
+        long tmpDate = in.readLong();
+        date = tmpDate != -1 ? new Date(tmpDate) : null;
         formatDate = in.readString();
-        status = in.readByte() != 0;
+        book = (Book) in.readValue(Book.class.getClassLoader());
     }
 
     @Override
@@ -67,14 +74,16 @@ public class Request implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags){
-        dest.writeString(user);
-        dest.writeString(book);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte((byte) (status ? 0x01 : 0x00));
+        dest.writeValue(user);
+        dest.writeLong(date != null ? date.getTime() : -1L);
         dest.writeString(formatDate);
-        dest.writeByte((byte) (status ? 1 : 0));
+        dest.writeValue(book);
     }
 
-    public static final Parcelable.Creator<Request> CREATOR = new Parcelable.Creator<Request>(){
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Request> CREATOR = new Parcelable.Creator<Request>() {
         @Override
         public Request createFromParcel(Parcel in) {
             return new Request(in);

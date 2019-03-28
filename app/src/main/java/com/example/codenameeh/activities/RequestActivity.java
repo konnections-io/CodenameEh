@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.Request;
+import com.example.codenameeh.classes.User;
 
 /**
  * @author Dan Sune
