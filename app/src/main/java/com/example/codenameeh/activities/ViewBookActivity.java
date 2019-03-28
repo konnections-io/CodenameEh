@@ -2,7 +2,9 @@ package com.example.codenameeh.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,12 +15,20 @@ import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.CurrentUser;
+import com.example.codenameeh.classes.Notification;
 import com.example.codenameeh.classes.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
 
 import static com.example.codenameeh.activities.BookListActivity.EXTRA_MESSAGE_DELETE;
 
@@ -70,6 +80,25 @@ public class ViewBookActivity extends BaseActivity {
                 Intent intent = new Intent(ViewBookActivity.this, ProfileActivity.class);
                 intent.putExtra("username", book.getOwner());
                 startActivity(intent);
+            }
+        });
+        requestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Notification notification = new Notification(CurrentUser.getInstance().getUsername(),book);
+                FirebaseFirestore.getInstance().collection("users").document(book.getOwner())
+                        .update("notifications",FieldValue.arrayUnion(notification))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                    }
+                });
+
+
+
+
             }
         });
         if (currentUser.getUsername().equals(book.getOwner())) {

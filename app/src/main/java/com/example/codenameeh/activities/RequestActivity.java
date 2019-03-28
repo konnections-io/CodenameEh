@@ -156,10 +156,32 @@ public class RequestActivity extends BaseActivity {
 
                 //Add the notification to that user
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                DocumentReference ref = db.collection("users").document(other_username);
+                final DocumentReference ref = db.collection("users").document(other_username);
                 Notification newNotification = new Notification(CurrentUser.getInstance().getUsername()
                 ,address,book,latitude,longitude);
                 ref.update("notifications", FieldValue.arrayUnion(newNotification));
+                //Remove the notification from current user
+                ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                User user = document.toObject(User.class);
+                                ArrayList<Notification> nList = user.getNotifications();
+                                for(Notification n: nList){
+                                    if(n.getTypeNotification().equals("Borrow Request")
+                                            && n.getBook().getUuid().equals(book.getUuid())){
+                                        ref.update("notifications",FieldValue.arrayRemove(n));
+
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                });
+
                 setResult(Activity.RESULT_OK,intentToNotifications);
                 finish();
             }
