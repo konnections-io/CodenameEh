@@ -1,6 +1,9 @@
 package com.example.codenameeh.activities;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -146,7 +149,9 @@ public class BaseActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
+
             this.finishAffinity();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         } else if (id == R.id.nav_my_books) {
             Intent intent = new Intent(this, BookListActivity.class);
             startActivity(intent);

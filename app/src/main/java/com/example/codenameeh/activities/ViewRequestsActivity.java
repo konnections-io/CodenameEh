@@ -2,6 +2,7 @@ package com.example.codenameeh.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,12 +30,10 @@ import java.util.ArrayList;
 
 public class ViewRequestsActivity extends BaseActivity {
     private ListView acceptedView;
-    private Booklist booksAccepted;
     private ArrayList<Book> booksAcceptedList;
     private ArrayAdapter<Book> booksAcceptedAdapter;
 
     private ListView pendingView;
-    private Booklist booksPending;
     private ArrayList<Book> booksPendingList;
     private ArrayAdapter<Book> booksPendingAdapter;
 
@@ -88,12 +87,13 @@ public class ViewRequestsActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
 
-
+            booksAcceptedList = new ArrayList<Book>();
+            booksPendingList = new ArrayList<Book>();
             for (Book requestedBook : currentUser.RequestedBooks()) {
                 if (requestedBook.getAcceptedStatus()) {
-                    booksAccepted.add(requestedBook);
+                    booksAcceptedList.add(requestedBook);
                 } else {
-                    booksPending.add(requestedBook);
+                    booksPendingList.add(requestedBook);
                 }
             }
 
