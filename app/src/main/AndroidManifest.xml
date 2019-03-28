@@ -69,7 +69,10 @@
             android:name=".activities.NotificationActivity"
             android:label="NotificationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.RequestActivity" />
+        <activity android:name=".activities.RequestActivity"
+            android:label="NotificationActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity
             android:name=".activities.ViewRequestsActivity"
             android:label="ViewRequestsActivity"

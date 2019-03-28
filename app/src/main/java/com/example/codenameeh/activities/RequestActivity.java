@@ -19,7 +19,9 @@ import com.example.codenameeh.classes.User;
  * Pass the Request you would like to view in the intent which calls this activity.
  */
 public class RequestActivity extends BaseActivity {
-
+    private static String NOTIFICATION_REQUEST = "NOTIFICATION REQUEST";
+    Book book;
+    String other_username;
     /**
      * onCreate displays the specific request information when it is clicked
      * also initiates the accept/decline buttons
@@ -30,20 +32,14 @@ public class RequestActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
 
-        Intent intent = getIntent();
-        final Request request = (Request)getIntent().getParcelableExtra("data");
-
-        final User user = request.getUser();
-        final Book book = request.getBook();
-        final String date = request.getDateRequested();
-        //Boolean status = request.getStatus();
-
-        TextView tView = findViewById(R.id.textView2);
-        tView.setText(user.getName());
-
         Button acceptButton = findViewById(R.id.accept);
         Button declineButton = findViewById(R.id.decline);
 
+        /**
+         * Temporarily commented out what happens with accept button and decline button by Brian Qi.
+         * Notification Activity calls onActivityResult after the click, acting depending on which
+         * button was pressed
+         */
         acceptButton.setOnClickListener(new View.OnClickListener(){
 
             /**
@@ -52,17 +48,7 @@ public class RequestActivity extends BaseActivity {
              */
             @Override
             public void onClick(View v){
-                request.accept();
-                //user.getRequests().add(request);
-
-                /**
-                 * declines any other outstanding requests for this specific book
-                 */
-                for(Request r : user.getRequests()){
-                    if(r.getBookUuid() == book.getUuid() && r.getStatus() == null){
-                        r.decline();
-                    }
-                }
+                //request.accept();
             }
         });
 
@@ -74,8 +60,20 @@ public class RequestActivity extends BaseActivity {
              */
             @Override
             public void onClick(View v){
-                request.decline();
+                //request.decline();
             }
         });
         }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = getIntent();
+        if (intent.getStringExtra("Sender").equals(NOTIFICATION_REQUEST)) {
+            book = intent.getParcelableExtra("Book");
+            other_username = intent.getStringExtra("Other Username");
+            TextView userField = findViewById(R.id.textView2);
+            userField.setText(other_username);
+        }
+
+    }
 }

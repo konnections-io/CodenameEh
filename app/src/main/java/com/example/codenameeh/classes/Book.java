@@ -165,9 +165,9 @@ public class Book implements Parcelable {
     public String toString() {
         String output = "Title: "+this.title+ "\t\tAuthor: "+ this.author
                 + "\t\t ISBN: " + this.ISBN;
-        if (!this.description.equals("")) {
+        /*if (!this.description.equals("")) {
             output = output + "\nDescription: " + this.description;
-        }
+        } // Commented out as the long descriptions via corticol are space consuming */
         if (this.borrowed) {
             output = output + "\nBORROWED";
         }
