@@ -30,7 +30,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
- * @author Dan Sune
+ * @author Dan Sune, Brian Qi
  * @version 1.0
  * Request activity extends BaseActivity is used to view a specific request for a book.
  * The user can then choose to accept or decline the request to borrow one of their books.
@@ -54,6 +54,12 @@ public class RequestActivity extends BaseActivity {
 
         Button acceptButton = findViewById(R.id.accept);
         Button declineButton = findViewById(R.id.decline);
+
+        Intent receiveIntent = getIntent();
+
+        book = receiveIntent.getParcelableExtra("Book");
+        other_username = receiveIntent.getParcelableExtra("Other Username");
+        notificationUUID = receiveIntent.getParcelableExtra("UUID");
 
         /**
          * Temporarily commented out what happens with accept button and decline button by Brian Qi.
@@ -94,7 +100,9 @@ public class RequestActivity extends BaseActivity {
 
                 //Add relevant code here when user declines
 
-
+                //can get status from book object
+                book.setAcceptedStatus(false);
+                intentToNotification.putExtra("Book", book);
 
                 //Remove the notification to current user from FireStore
                 ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -152,7 +160,9 @@ public class RequestActivity extends BaseActivity {
                 //This code is accessed only if the user clicked accept
                 //Add relevant code when user clicks accept here instead of in the onClick method
 
-
+                //can get status from book object
+                book.setAcceptedStatus(true);
+                intentToNotifications.putExtra("Book", book);
 
                 //Add the notification to that user
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
