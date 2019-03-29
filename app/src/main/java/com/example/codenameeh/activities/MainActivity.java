@@ -1,6 +1,7 @@
 package com.example.codenameeh.activities;
 
 import android.app.NotificationChannel;
+import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.codenameeh.R;
@@ -37,13 +39,16 @@ import javax.annotation.Nullable;
 
 public class MainActivity extends BaseActivity {
     public static final String CHANNEL_1_ID = "channel1";
+    public static final String GROUP_ID = CurrentUser.getInstance().getUsername();
     private NotificationManagerCompat notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_main, frameLayout);
-      
+
+
+        notificationManager = NotificationManagerCompat.from(this);
         createNotificationChannels();
         addNotificationListener();
 
@@ -56,10 +61,6 @@ public class MainActivity extends BaseActivity {
      * borrow requests or requests accepted
      */
     public void addNotificationListener(){
-        Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        final PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, 0);
-        notificationManager = NotificationManagerCompat.from(MainActivity.this);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(CurrentUser.getInstance().getUsername());
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -76,19 +77,9 @@ public class MainActivity extends BaseActivity {
 
                     for(Notification notification: user.getNotifications()){
                         if(!comparingNotificationList.contains(notification.toString())){
-                            android.app.Notification notificationToSend = new NotificationCompat.Builder(MainActivity.this,CHANNEL_1_ID)
-                                    .setSmallIcon(R.drawable.ic_test)
-                                    .setContentTitle("New "+notification.getTypeNotification())
-                                    .setContentText("Book: "+notification.getBookTitle())
-                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                                    .setContentIntent(pendingIntent)
-                                    .setAutoCancel(true)
-                                    .setStyle(new NotificationCompat.BigTextStyle()
-                                            .bigText(notification.toString()))
-                                    .build();
-                            notificationManager.notify(1,notificationToSend);
-
+                           if(user.getUsername().equals(GROUP_ID)) {
+                               sendNotification(notification);
+                           }
                         }
                     }
                     CurrentUser.getInstance().setNotifications(user.getNotifications());
@@ -96,20 +87,43 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
-
+public void sendNotification(Notification notification){
+    Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    notificationManager = NotificationManagerCompat.from(MainActivity.this);
+    final PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, 0);
+    android.app.Notification notificationToSend = new NotificationCompat.Builder(MainActivity.this,CHANNEL_1_ID)
+            .setSmallIcon(R.drawable.ic_test)
+            .setContentTitle("New "+notification.getTypeNotification())
+            .setContentText("Book: "+notification.getBookTitle())
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .setStyle(new NotificationCompat.BigTextStyle()
+                    .bigText(notification.toString()))
+            .build();
+    notificationManager.notify(1,notificationToSend);
+}
     /**
      * Created by Brian Qi
      * Creates a single notification channel for requests and requests accepted
      */
     private void createNotificationChannels(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannelGroup group = new NotificationChannelGroup(
+                    GROUP_ID,"Group 1"
+            );
             NotificationChannel channel1 = new NotificationChannel(
                     CHANNEL_1_ID,
                     "Channel 1",
                     NotificationManager.IMPORTANCE_HIGH
             );
             channel1.setDescription("DESCRIPTION");
+            channel1.setGroup(GROUP_ID);
+
             NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannelGroup(group);
             manager.createNotificationChannel(channel1);
         }
     }

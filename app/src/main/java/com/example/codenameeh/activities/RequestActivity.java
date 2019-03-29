@@ -70,8 +70,9 @@ public class RequestActivity extends BaseActivity {
             public void onClick(View v){
                 boolean permissionGranted= ActivityCompat.checkSelfPermission(RequestActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
                 if(!permissionGranted) {
-                    Toast.makeText(RequestActivity.this,"Sorry, you need to enable Locations to accept books.",Toast.LENGTH_LONG).show();
                     ActivityCompat.requestPermissions(RequestActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
+                    Toast.makeText(RequestActivity.this,"Sorry, you need to enable Locations to accept books.",Toast.LENGTH_LONG).show();
+
                 }else{
                     Intent intent = new Intent(getApplicationContext(),GeolocationActivity.class);
                     startActivityForResult(intent,GEOLOCATION_REQUEST_CODE);
@@ -188,5 +189,18 @@ public class RequestActivity extends BaseActivity {
                 finish();
             }
         }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(getApplicationContext(),GeolocationActivity.class);
+                    startActivityForResult(intent,GEOLOCATION_REQUEST_CODE);
+                } else {
+                    Toast.makeText(RequestActivity.this,"Sorry, you need to enable Locations to accept books.",Toast.LENGTH_LONG).show();
+                }
+                return;
     }
 }
