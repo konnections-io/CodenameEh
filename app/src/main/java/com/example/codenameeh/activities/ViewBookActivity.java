@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -124,6 +125,9 @@ public class ViewBookActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        TextView noPhotoText = findViewById(R.id.noPhotoText);
+
+
         TextView txtView = findViewById(R.id.book_title_view);
         txtView.setText("Title: "+book.getTitle());
 
@@ -135,6 +139,7 @@ public class ViewBookActivity extends BaseActivity {
 
         TextView txtView4 = findViewById(R.id.book_description);
         txtView4.setText("Description: "+book.getDescription());
+        txtView4.setMovementMethod(new ScrollingMovementMethod());
 
         TextView txtView5 = findViewById(R.id.book_availability_view);
         String availabilityText = "Availability: ";
@@ -152,7 +157,9 @@ public class ViewBookActivity extends BaseActivity {
         if(book.getPhotograph()==null){
             // no photograph
             photo.setVisibility(View.INVISIBLE);
+            noPhotoText.setVisibility(View.VISIBLE);
         } else{
+            noPhotoText.setVisibility(View.INVISIBLE);
             photo.setVisibility(View.VISIBLE);
             StorageReference photoRef = storageRef.child(book.getOwner()+"/"+book.getPhotograph());
             GlideApp.with(this).load(photoRef).into(photo);
