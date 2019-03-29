@@ -62,7 +62,7 @@ public class ConfirmationActivity extends BaseActivity {
         super.onStart();
         potentialBooks = new ArrayList<>();
         currentUser = CurrentUser.getInstance();
-        findPotentialOwnedBooks();
+        findPotentialOwnedBorrowedBooks();
         findPotentialOtherBooks();
         adapter = new BooklistAdapter(potentialBooks);
         dataList.setAdapter(adapter);
@@ -72,9 +72,14 @@ public class ConfirmationActivity extends BaseActivity {
      * Find those books which are owned by this person, are accepted and match the ISBN,
      * and add them to the potentialBooks
      */
-    private void findPotentialOwnedBooks(){
+    private void findPotentialOwnedBorrowedBooks(){
         for(Book book: currentUser.BooksOwned()){
-            if(book.getISBN().equals(isbn)&&book.getAcceptedStatus()){
+            if(book.getISBN().equals(isbn)&&(book.getAcceptedStatus()||book.isBorrowed())){
+                potentialBooks.add(book);
+            }
+        }
+        for(Book book:currentUser.BorrowedBooks()){
+            if(book.getISBN().equals(isbn)){
                 potentialBooks.add(book);
             }
         }
