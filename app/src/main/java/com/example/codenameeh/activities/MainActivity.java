@@ -77,7 +77,7 @@ public class MainActivity extends BaseActivity {
 
                     for(Notification notification: user.getNotifications()){
                         if(!comparingNotificationList.contains(notification.toString())){
-                           if(user.getUsername().equals(GROUP_ID)) {
+                           if(CurrentUser.getInstance().getUsername().equals(GROUP_ID)) {
                                sendNotification(notification);
                            }
                         }
