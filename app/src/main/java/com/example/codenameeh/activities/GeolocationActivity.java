@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.codenameeh.classes.Geolocation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -140,8 +139,6 @@ public class GeolocationActivity extends BaseActivity implements OnMapReadyCallb
         };
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted
-
             locationLTLN=new LatLng(40.7143528, -74.0059731);
         }
         else {
@@ -213,7 +210,6 @@ public class GeolocationActivity extends BaseActivity implements OnMapReadyCallb
         gmap.setMinZoomPreference(12);
         gmap.moveCamera(CameraUpdateFactory.newLatLng(locationLTLN));
         mapView.onResume();
-
     }
 
 }
