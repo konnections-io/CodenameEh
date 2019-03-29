@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +35,7 @@ public class ProfileActivity extends BaseActivity {
     TextView viewPhone;
     TextView viewEmail;
     String username, name, phone, email;
+    Button edit;
 
     /**
      * onCreate gets the intent, gets the users information that needs to be displayed,
@@ -45,54 +47,7 @@ public class ProfileActivity extends BaseActivity {
         //setContentView(R.layout.activity_profile);
         getLayoutInflater().inflate(R.layout.activity_profile, frameLayout);
 
-        Button edit  = findViewById(R.id.edit);
-
-        Intent intent = getIntent();
-        String message = intent.getStringExtra("username");
-
-        if(message.equals(CurrentUser.getInstance().getUsername())) {
-            edit.setVisibility(View.VISIBLE);
-            //use CurrentUser info
-            username = CurrentUser.getInstance().getUsername();
-            name = CurrentUser.getInstance().getName();
-            phone = CurrentUser.getInstance().getPhone();
-            email = CurrentUser.getInstance().getEmail();
-        } else {
-            edit.setVisibility(View.GONE);
-            //Set default to be nothing
-            username = "";
-            name = "";
-            phone = "";
-            email = "";
-
-            //Get user information from firebase
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference docRef = db.collection("users").document(message);
-            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if(documentSnapshot.exists()) {
-                        User user = documentSnapshot.toObject(User.class);
-                        username = user.getUsername();
-                        name = user.getName();
-                        phone = user.getPhone();
-                        email = user.getEmail();
-                    }
-                }
-            });
-        }
-
-        viewUsername = findViewById(R.id.username);
-        viewName = findViewById(R.id.name);
-        viewPhone = findViewById(R.id.phone);
-        viewEmail = findViewById(R.id.email);
-
-        viewUsername.setText(username);
-        viewName.setText(name);
-        viewPhone.setText(phone);
-        viewEmail.setText(email);
-
-
+        edit  = findViewById(R.id.edit);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,6 +69,53 @@ public class ProfileActivity extends BaseActivity {
         String phone = CurrentUser.getInstance().getPhone();
         String email = CurrentUser.getInstance().getEmail();
 
+        viewName.setText(name);
+        viewPhone.setText(phone);
+        viewEmail.setText(email);
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+
+        Intent intent = getIntent();
+        String message = intent.getStringExtra("username");
+        edit  = findViewById(R.id.edit);
+        if(message.equals(CurrentUser.getInstance().getUsername())) {
+            edit.setVisibility(View.VISIBLE);
+            //use CurrentUser info
+            username = CurrentUser.getInstance().getUsername();
+            name = CurrentUser.getInstance().getName();
+            phone = CurrentUser.getInstance().getPhone();
+            email = CurrentUser.getInstance().getEmail();
+            displayInformation(username,name,phone,email);
+        } else {
+            edit.setVisibility(View.GONE);
+
+            //Get user information from firebase. Asynchronous, so cannot set values immediately
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference docRef = db.collection("users").document(message);
+            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if(documentSnapshot.exists()) {
+                        User user = documentSnapshot.toObject(User.class);
+                        displayInformation(user.getUsername(),user.getName(),user.getPhone(),user.getEmail());
+                    }
+                }
+            });
+        }
+
+
+
+    }
+    private void displayInformation(String username, String name, String phone, String email){
+        viewUsername = findViewById(R.id.username);
+        viewName = findViewById(R.id.name);
+        viewPhone = findViewById(R.id.phone);
+        viewEmail = findViewById(R.id.email);
+
+        viewUsername.setText(username);
         viewName.setText(name);
         viewPhone.setText(phone);
         viewEmail.setText(email);
