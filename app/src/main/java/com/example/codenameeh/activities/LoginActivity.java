@@ -184,7 +184,7 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
                         } else{
-                            // TODO FIND WHO WE NEED TO CHANGE
+                            // TODO FIND WHO WE NEED TO CHANGE, and copy above
                         }
                     }
                     books.add(document.toObject(Book.class));
