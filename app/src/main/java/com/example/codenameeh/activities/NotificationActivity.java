@@ -89,7 +89,9 @@ public class NotificationActivity extends BaseActivity {
                 if(documentSnapshot != null && documentSnapshot.exists()){
                     requested.clear();
                     booksAccepted.clear();
+
                     for(Notification notification: CurrentUser.getInstance().getNotifications()){
+
                         if(notification.getTypeNotification().equals("Borrow Request")){
                             requested.add(notification);
                         }
@@ -97,6 +99,7 @@ public class NotificationActivity extends BaseActivity {
                             booksAccepted.add(notification);
                         }
                     }
+                    
                     bookAcceptedListView.setAdapter(bookAcceptedAdapter);
                     requestedListView.setAdapter(requestedAdapter);
 
