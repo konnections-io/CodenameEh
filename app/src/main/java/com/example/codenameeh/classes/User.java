@@ -58,12 +58,12 @@ public class User {
     public void newBorrow(Book book) {
         this.borrowing.add(book.getUuid());
         this.borrowedHistory.add(book.getUuid());
-        book.setBorrowed(true);
+        book.borrow(this);
     }
 
     public void removeBorrow(Book book) {
         this.borrowing.remove(book.getUuid());
-        book.setBorrowed(false);
+        book.unborrow();
         // Don't think we want this to remove the borrow history
     }
 

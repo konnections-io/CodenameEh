@@ -13,6 +13,9 @@ import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.BooklistAdapter;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -41,10 +44,23 @@ public class ConfirmationActivity extends BaseActivity {
                 // Select the book at this position, and finish.
                 Book selected = potentialBooks.get(position);
                 if(currentUser.getUsername().equals(selected.getOwner())){
-                    // Confirm from owner
+                    selected.setOwnerConfirmation(true);
+                    FirebaseFirestore.getInstance().collection("All Books").document(selected.getUuid())
+                            .update("ownerConfirmation", selected.getOwnerConfirmation())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                }
+                            });
                 } else{
-                    // Confirm from borrower
-
+                    selected.setBorrowerConfirmation(true);
+                    FirebaseFirestore.getInstance().collection("All Books").document(selected.getUuid())
+                            .update("borrowerConfirmation", selected.getBorrowerConfirmation())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                }
+                            });
                 }
                 finish();
             }
