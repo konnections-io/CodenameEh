@@ -2,6 +2,7 @@ package com.example.codenameeh.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Criteria;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,6 +41,9 @@ public class GeolocationActivity extends BaseActivity implements OnMapReadyCallb
     LatLng locationLTLN;
     double latitudeClicked;
     double longitudeClicked;
+    String bestProvider;
+    public Criteria criteria;
+
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,7 @@ public class GeolocationActivity extends BaseActivity implements OnMapReadyCallb
         mapView.getMapAsync(this);
         Button saveButton = findViewById(R.id.AcceptLocationButton);
         final TextView addressText = findViewById(R.id.GeolocationText);
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,11 +120,17 @@ public class GeolocationActivity extends BaseActivity implements OnMapReadyCallb
     protected void onStart() {
         super.onStart();
 
-        LocationManager lm = (LocationManager)getSystemService(getApplicationContext().LOCATION_SERVICE);
+        final LocationManager lm = (LocationManager)getSystemService(getApplicationContext().LOCATION_SERVICE);
+        criteria = new Criteria();
+        bestProvider = String.valueOf(lm.getBestProvider(criteria, true)).toString();
         final LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
-                final double longitude = location.getLongitude();
-                final double latitude = location.getLatitude();
+                if(location != null) {
+                    final double longitude = location.getLongitude();
+                    final double latitude = location.getLatitude();
+                }else if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                    lm.requestLocationUpdates(bestProvider, 1000, 0, this);
+                }
             }
 
             @Override
