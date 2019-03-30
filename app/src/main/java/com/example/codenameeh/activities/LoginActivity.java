@@ -166,6 +166,27 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 ArrayList<Book> books = new ArrayList<>();
                 for(QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    final Book newBook = document.toObject(Book.class);
+                    // Check for a successful confirmation, and make the swap
+                    if(newBook.isConfirmed()){
+                        if(newBook.isBorrowed()){
+                            final DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(newBook.getBorrower());
+                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if (documentSnapshot.exists()) {
+                                        User user = documentSnapshot.toObject(User.class);
+                                        user.removeBorrow(newBook);
+                                        docRef.set(user);
+                                        FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid())
+                                                .set(newBook);
+                                    }
+                                }
+                            });
+                        } else{
+                            // TODO FIND WHO WE NEED TO CHANGE
+                        }
+                    }
                     books.add(document.toObject(Book.class));
                 }
                 Booklist.setInstance(books);
