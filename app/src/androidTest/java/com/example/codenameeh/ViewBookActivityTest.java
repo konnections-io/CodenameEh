@@ -71,6 +71,7 @@ public class ViewBookActivityTest {
         onView(withId(R.id.password)).perform(typeText(password));
         onView(withId(R.id.sign_in)).perform(click());
         try {
+            // Delay to get data from the server.
             sleep(10000);
         } catch(Exception e){
         }
