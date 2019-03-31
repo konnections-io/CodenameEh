@@ -94,6 +94,7 @@ public class Book implements Parcelable {
         this.borrower = borrower;
     }
     public void borrow(User borrower){
+        this.acceptedStatus = false;
         this.borrower = borrower.getUsername();
         this.borrowed = true;
         this.ownerConfirmation = false;
