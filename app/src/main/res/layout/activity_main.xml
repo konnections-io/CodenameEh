@@ -20,6 +20,28 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="650dp"
+        android:layout_marginLeft="@dimen/nav_header_vertical_spacing"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="@dimen/nav_header_vertical_spacing"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:clickable="false"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/suggestions_main" />
+
+        <ListView
+            android:id="@+id/BookSuggested"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>
