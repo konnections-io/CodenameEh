@@ -222,7 +222,7 @@ public class Book implements Parcelable {
                 output = output + "\nDescription: " + this.description;
             }
             else {
-                output = output + "\nDescription: " + this.description.substring(0, 79);
+                output = output + "\nDescription: " + this.description.substring(0, 79) + "...";
             }
         }
         if (this.borrowed) {
