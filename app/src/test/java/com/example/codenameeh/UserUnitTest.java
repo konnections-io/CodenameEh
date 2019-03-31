@@ -3,7 +3,10 @@ package com.example.codenameeh;
 import org.junit.Test;
 
 import com.example.codenameeh.classes.Book;
+import com.example.codenameeh.classes.Booklist;
 import com.example.codenameeh.classes.User;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -17,6 +20,8 @@ public class UserUnitTest {
     String testEmail = "r";
     String testUsername = "diodone";
     String testPassword = "password";
+    Book newBook;
+    Book alternateBook;
 
     @Test
     public void testBasicFunctionality(){
@@ -39,8 +44,11 @@ public class UserUnitTest {
     public void testNewOwn(){
         // Change to ensure all values are changeable that should be
         User test = new User(testName, testPhone, testEmail, testUsername);
-        Book newBook = new Book("1", "2", "3", "4", "5");
-        Book alternateBook = new Book("6", "7", "8", "9", "10");
+        newBook = new Book("1", "2", "3", "4", "5", null);
+        alternateBook = new Book("6", "7", "8", "9", "10", null);
+        Booklist.setInstance(new ArrayList<Book>());
+        Booklist.getInstance().add(alternateBook);
+        Booklist.getInstance().add(newBook);
         assertEquals(0, test.BooksOwned().size());
         test.newOwn(newBook);
         // something is in there now
@@ -67,9 +75,11 @@ public class UserUnitTest {
     @Test
     public void testRemoveOwn(){
         User test = new User(testName, testPhone, testEmail, testUsername);
-        Book newBook = new Book("1", "2", "3", "4", "5");
-        Book alternateBook = new Book("6", "7", "8", "9", "10");
-
+        newBook = new Book("1", "2", "3", "4", "5", null);
+        alternateBook = new Book("6", "7", "8", "9", "10", null);
+        Booklist.setInstance(new ArrayList<Book>());
+        Booklist.getInstance().add(alternateBook);
+        Booklist.getInstance().add(newBook);
         // assuming that newOwn works as expected
         test.newOwn(newBook);
         test.newOwn(alternateBook);
@@ -99,8 +109,11 @@ public class UserUnitTest {
     @Test
     public void testNewBorrow(){
         User test = new User(testName, testPhone, testEmail, testUsername);
-        Book newBook = new Book("1", "2", "3", "4", "5");
-        Book alternateBook = new Book("6", "7", "8", "9", "10");
+        newBook = new Book("1", "2", "3", "4", "5", null);
+        alternateBook = new Book("6", "7", "8", "9", "10", null);
+        Booklist.setInstance(new ArrayList<Book>());
+        Booklist.getInstance().add(alternateBook);
+        Booklist.getInstance().add(newBook);
         assertEquals(0, test.BorrowedBooks().size());
         test.newBorrow(newBook);
         // something is in there now
@@ -127,9 +140,11 @@ public class UserUnitTest {
     @Test
     public void testRemoveBorrow(){
         User test = new User(testName, testPhone, testEmail, testUsername);
-        Book newBook = new Book("1", "2", "3", "4", "5");
-        Book alternateBook = new Book("6", "7", "8", "9", "10");
-
+        newBook = new Book("1", "2", "3", "4", "5", null);
+        alternateBook = new Book("6", "7", "8", "9", "10", null);
+        Booklist.setInstance(new ArrayList<Book>());
+        Booklist.getInstance().add(alternateBook);
+        Booklist.getInstance().add(newBook);
         // assuming that newOwn works as expected
         test.newBorrow(newBook);
         test.newBorrow(alternateBook);

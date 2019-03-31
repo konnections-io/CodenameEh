@@ -39,13 +39,17 @@ public class User {
     }
 
     public void newOwn(Book book) {
-        this.owning.add(book.getUuid());
-        book.setOwner(this.username);
+        if(book != null) {
+            this.owning.add(book.getUuid());
+            book.setOwner(this.username);
+        }
     }
 
     public void removeOwn(Book book) {
-        this.owning.remove(book.getUuid());
-        book.setOwner(null);
+        if(book != null) {
+            this.owning.remove(book.getUuid());
+            book.setOwner(null);
+        }
     }
     public void newRequested(Book book) {
         this.requesting.add(book.getUuid());
@@ -56,14 +60,18 @@ public class User {
     }
 
     public void newBorrow(Book book) {
-        this.borrowing.add(book.getUuid());
-        this.borrowedHistory.add(book.getUuid());
-        book.borrow(this);
+        if(book != null) {
+            this.borrowing.add(book.getUuid());
+            this.borrowedHistory.add(book.getUuid());
+            book.borrow(this);
+        }
     }
 
     public void removeBorrow(Book book) {
-        this.borrowing.remove(book.getUuid());
-        book.unborrow();
+        if(book != null) {
+            this.borrowing.remove(book.getUuid());
+            book.unborrow();
+        }
         // Don't think we want this to remove the borrow history
     }
 
