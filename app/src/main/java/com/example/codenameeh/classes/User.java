@@ -33,6 +33,7 @@ public class User {
         this.owning = new ArrayList<>();
         this.borrowing = new ArrayList<>();
         this.borrowedHistory = new ArrayList<>();
+        this.keywords = new ArrayList<>();
         this.requesting = new ArrayList<>();
         this.searchWords = new KeywordTracker();
         this.notifications = new ArrayList<Notification>();
@@ -112,7 +113,12 @@ public class User {
     }
 
     public void setKeywords(ArrayList<String> keywords) {
-        this.keywords = keywords;
+        if(keywords!= null) {
+            this.keywords = keywords;
+        } else{
+            this.keywords = new ArrayList<>();
+        }
+
     }
 
     public KeywordTracker getSearchWords() {
