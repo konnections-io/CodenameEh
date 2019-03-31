@@ -105,36 +105,40 @@ public class MainActivity extends BaseActivity {
      * @return books suggested
      */
     private ArrayList<Book> getSuggestions () {
+        currentUser = CurrentUser.getInstance();
         ArrayList<Book> sugg = new ArrayList<Book>();
-        if (currentUser.BooksOwned().isEmpty() || currentUser.getKeywords().isEmpty()) {
-            int i = 0;
-            while (i<6) {
-                try {
-                    sugg.add(allBooks.get(i));
+        try {
+            if (currentUser.BooksOwned().isEmpty() || currentUser.getKeywords().isEmpty()) {
+                int i = 0;
+                while (i < 6) {
+                    try {
+                        sugg.add(allBooks.get(i));
+                    } catch (Exception e) {
+                        Log.e("Books", e.toString());
+                    }
                 }
-                catch (Exception e) {
-                    Log.e("Books", e.toString());
+            } else {
+                ArrayList<String> keys = currentUser.getKeywords();
+                ArrayList<Integer> scores = new ArrayList<>(allBooks.size());
+                ArrayList<String> bookKeys;
+                for (int i = 0; i < scores.size(); i++) {
+                    scores.set(i, 0);
+                }
+                for (int i = 0; i < scores.size(); i++) {
+                    bookKeys = allBooks.get(i).getKeywords();
+                    for (int j = 0; j < bookKeys.size(); j++) {
+                        if (keys.contains(bookKeys.get(j))) {
+                            scores.set(i, (scores.get(i) + 1));
+                        }
+                    }
+                }
+                for (int i = 0; i < 6; i++) {
+                    sugg.add(allBooks.get(scores.indexOf(max(scores))));
                 }
             }
         }
-        else {
-            ArrayList<String> keys = currentUser.getKeywords();
-            ArrayList<Integer> scores = new ArrayList<>(allBooks.size());
-            ArrayList<String> bookKeys;
-            for (int i = 0; i<scores.size(); i++) {
-                scores.set(i,0);
-            }
-            for (int i=0; i<scores.size(); i++) {
-                bookKeys = allBooks.get(i).getKeywords();
-                for (int j = 0; j<bookKeys.size(); j++) {
-                    if (keys.contains(bookKeys.get(j))) {
-                        scores.set(i, (scores.get(i) + 1));
-                    }
-                }
-            }
-            for (int i = 0; i<6; i++) {
-                sugg.add(allBooks.get(scores.indexOf(max(scores))));
-            }
+        catch (Exception e) {
+            Log.e("Suggestions", e.toString());
         }
         return sugg;
     }
