@@ -108,7 +108,7 @@ public class MainActivity extends BaseActivity {
         currentUser = CurrentUser.getInstance();
         ArrayList<Book> sugg = new ArrayList<Book>();
         try {
-            if (currentUser.BooksOwned().isEmpty() || currentUser.getKeywords().isEmpty()) {
+            if (currentUser.BooksOwned().isEmpty()) {
                 int i = 0;
                 while (i < 6) {
                     if (allBooks.get(i).getOwner() != currentUser.getName()) {
@@ -121,7 +121,7 @@ public class MainActivity extends BaseActivity {
                     }
                 }
             } else {
-                ArrayList<String> keys = currentUser.getKeywords();
+                ArrayList<String> keys = currentUser.getKeywordsFromBooks();
                 ArrayList<Integer> scores = new ArrayList<>(allBooks.size());
                 ArrayList<String> bookKeys;
                 for (int i = 0; i < allBooks.size(); i++) {
