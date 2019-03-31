@@ -93,7 +93,7 @@ public class NotificationActivity extends BaseActivity {
                 Intent intent = new Intent(NotificationActivity.this,RequestActivity.class);
                 Notification notificationClicked = (Notification)requestedListView.getItemAtPosition(position);
                 intent.putExtra("Sender",NOTIFICATION_REQUEST);
-                intent.putExtra("Book",notificationClicked.getBook());
+                intent.putExtra("Book",notificationClicked.BookRef());
                 intent.putExtra("UUID",notificationClicked.getUuid());
                 intent.putExtra("Other Username",notificationClicked.getOtherUser());
                 startActivity(intent);

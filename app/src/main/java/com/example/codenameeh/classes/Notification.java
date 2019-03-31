@@ -12,7 +12,7 @@ public class Notification {
     private String otherUser = "NA";
     private String bookTitle = "NA";
     private String typeNotification = "NA";
-    private Book bookInQuestion;
+    private String bookInQuestion;
     private String uuid;
     private double latitude;
     private double longitude;
@@ -22,7 +22,7 @@ public class Notification {
     public Notification(){
     }
     public Notification(String otherUser, Book book){
-        this.bookInQuestion = book;
+        this.bookInQuestion = book.getUuid();
         this.bookTitle = book.getTitle();
         this.otherUser = otherUser;
         this.uuid = UUID.randomUUID().toString();
@@ -32,7 +32,7 @@ public class Notification {
         this.typeNotification = "Borrow Request";
     }
     public Notification(String otherUser, String geolocation, Book book, double latitude, double longitude){
-        this.bookInQuestion = book;
+        this.bookInQuestion = book.getUuid();
         this.otherUser = otherUser;
         this.bookTitle = book.getTitle();
         this.geolocation = geolocation;
@@ -75,11 +75,22 @@ public class Notification {
     public void setUuid(String uuid){
         this.uuid = uuid;
     }
-    public Book getBook(){
-        return this.bookInQuestion;
+    public Book BookRef(){
+        int index = Booklist.getInstance().findIndex(bookInQuestion);
+        if(index != -1){
+            return Booklist.getInstance().get(index);
+        } else{
+            return null;
+        }
     }
-    public void setBook(Book book){
-        this.bookInQuestion = book;
+    public void setBookRef(Book book){
+        this.bookInQuestion = book.getUuid();
+    }
+    public void setBook(String bookRef){
+        this.bookInQuestion = bookRef;
+    }
+    public String getBook(){
+        return this.bookInQuestion;
     }
     public String getTypeNotification(){
         return this.typeNotification;
