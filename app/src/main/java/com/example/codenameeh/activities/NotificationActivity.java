@@ -1,52 +1,29 @@
 package com.example.codenameeh.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 import com.example.codenameeh.R;
-import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.Notification;
 import com.example.codenameeh.classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.MetadataChanges;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-
 import javax.annotation.Nullable;
 
 /**
@@ -54,13 +31,13 @@ import javax.annotation.Nullable;
  * @version 1.0
  * NotificationActivity extends the BaseActivity class
  * The user can come here after clicking on the Notifications tab
- * on the base activity menu
+ * on the base activity menu, or by clicking the popup notification
  * Notifications for requests and accepted user requests are here
- * and are formatted accordingly
- * Currently to be implemented with buttons for requests
+ * and are formatted accordingly in a listview
+ * When a notification is clicked, user is taken to a map to view the geolocation, or to accept/decline
+ * a request depending on the type of notification. Types are accepted requests and borrow requests.
  */
 public class NotificationActivity extends BaseActivity {
-    private static int REQUESTED_CODE = 1;
     private static String NOTIFICATION_REQUEST = "NOTIFICATION REQUEST";
     private ListView bookAcceptedListView;
     private ListView requestedListView;
@@ -68,13 +45,16 @@ public class NotificationActivity extends BaseActivity {
     private ArrayList<Notification> requested = new ArrayList<Notification>();
     private ArrayAdapter<Notification> bookAcceptedAdapter;
     private ArrayAdapter<Notification> requestedAdapter;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    DocumentReference ref = db.collection("users").document(CurrentUser.getInstance().getUsername());
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private DocumentReference ref = db.collection("users").document(CurrentUser.getInstance().getUsername());
 
     /**
-     * Listviews are identified here. Each listview contains a different type of notification
-     * Currently must implement way to access Firebase and retrieve and fill listviews
-     * with database notifications, test cases are used instead
+     * Method is called when user first enters this activity.
+     * Listviews are identified and created here. Each listview contains a different type of
+     * notification to be displayed. A snapshot listener is added for any changes to Firestore.
+     * If such one occurs, update corresponding adapters. On click listeners are initialized here
+     * for each listview, taking user to different activities. A clear button clears the accepted
+     * requests page. Each notification has a date when it was received.
      * @param savedInstanceState
      */
     @Override
@@ -116,7 +96,7 @@ public class NotificationActivity extends BaseActivity {
                 intent.putExtra("Book",notificationClicked.getBook());
                 intent.putExtra("UUID",notificationClicked.getUuid());
                 intent.putExtra("Other Username",notificationClicked.getOtherUser());
-                startActivityForResult(intent,REQUESTED_CODE);
+                startActivity(intent);
 
             }
         });
@@ -154,38 +134,6 @@ public class NotificationActivity extends BaseActivity {
                 });
             }
         });
-//        ArrayList<String> k = new ArrayList<String>();
-//        k.add("ABRA");
-//        Book book = new Book("ABC","JIMBO","123123","DESCRIPBE","ARTHUR",k);
-//
-//
-//        ArrayList<Notification> nlist = new ArrayList<Notification>();
-//        Notification n1 = new Notification("testbqi1",book);
-//        Notification n3 = new Notification("Alex",book);
-//        Notification n4 = new Notification("BOYTOY",book);
-//        Notification n2 = new Notification("Brian","THERE",book,50.0,23.4);
-//        nlist.add(n1);
-//        nlist.add(n2);
-//        nlist.add(n3);
-//        nlist.add(n4);
-//        ref.update("notifications",nlist);
-    }
-
-    /**
-     * Called when a notification about a request has been clicked and now returned to.
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode==RESULT_OK && !(data==null)) {
-            // Make sure the request was successful
-            if (requestCode == REQUESTED_CODE) {
-            }
-        }
     }
 
     /**
@@ -195,7 +143,6 @@ public class NotificationActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = getIntent();
         bookAcceptedAdapter = new ArrayAdapter<Notification>(this,android.R.layout.simple_list_item_1,booksAccepted);
         requestedAdapter = new ArrayAdapter<Notification>(NotificationActivity.this,android.R.layout.simple_list_item_1,requested);
 

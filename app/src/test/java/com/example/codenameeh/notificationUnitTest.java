@@ -1,58 +1,48 @@
-//package com.example.codenameeh;
-//
-//import org.junit.Test;
-//
-//import java.util.ArrayList;
-//
-//import com.example.codenameeh.classes.Notification;
-//import com.example.codenameeh.classes.User;
-//
-//import static org.junit.Assert.assertEquals;
-//
-//public class notificationUnitTest {
-//    // TEST IS OUT OF DATE BY BQI1
-//    @Test
-//    public void testCount() {
-//        // Initializations
-//        ArrayList<String> al1 = new ArrayList<String>();
-//        String name = "John";
-//        String phone = "587";
-//        String email = "ddick1";
-//        String username = "ddick2";
-//        // Create the user and notifications
-//        User u = new User(name, phone, email, username);
-//        Notification n = new Notification(u);
-//
-//        String newNotification = "Apples";
-//        String newNotification2 = "Oranges";
-//        // Add the strings to both the class and a test array
-//        n.add(newNotification);
-//        n.add(newNotification2);
-//        al1.add(newNotification);
-//        al1.add(newNotification2);
-//        // Check if the notifications list is correctly stored
-//        // Checks if add() works correctly
-//        // Checks if getNotifications() works correctly
-//        assertEquals(n.getNotifications(), al1);
-//        n.remove(newNotification);
-//        al1.remove(newNotification);
-//        // Checks if remove() works correctly
-//        assertEquals(n.getNotifications(), al1);
-//        // Check if user is stored correctly and can be retrieved
-//        assertEquals(n.getUser(), u);
-//        al1.add(newNotification);
-//        n.setNotifications(al1);
-//        // Checking if notifications list is correctly updated
-//        assertEquals(n.getNotifications(), al1);
-//        //Another test case with adding notifications
-//        n.add("Jacobs");
-//        al1.add("Jacobs");
-//        assertEquals(n.getNotifications(), al1);
-//        //Lastly, confirm the new user functionality works, although this will
-//        // likely be trivial and not necessarily used in the final implementation
-//        User u2 = new User("Jack", phone, email, username, password);
-//        n.setUser(u2);
-//        assertEquals(n.getUser(), u2);
-//
-//    }
-//}
+package com.example.codenameeh;
+
+import org.junit.Test;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
+import com.example.codenameeh.classes.Book;
+import com.example.codenameeh.classes.Notification;
+import com.example.codenameeh.classes.User;
+
+import static org.junit.Assert.assertEquals;
+
+public class notificationUnitTest {
+    @Test
+    public void testNotificationClass() {
+        // Initializations
+        ArrayList<String> al1 = new ArrayList<String>();
+        ArrayList<String> keywords = new ArrayList<String>();
+        String otherName = "bqi1";
+        keywords.add("Magic");
+        keywords.add("Adventure");
+        String bookTitle = "BookTitle";
+        String author = "Author";
+        String ISBN = "123";
+        String description = "A book's description";
+        String owner = "Owner";
+        String geolocation = "Nowhere";
+        Book book = new Book(bookTitle,author,ISBN,description,owner,keywords);
+        // Create the user and notifications
+        Notification acceptedNotification = new Notification(otherName,geolocation,book,12.0,-23.3);
+        Notification requestNotification = new Notification(otherName,book);
+
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.getDefault());
+        String comparingDate = dateFormat.format(c);
+
+
+        assertEquals("User "+otherName+"\nwould like to borrow book:\n"+bookTitle+
+                "\n"+comparingDate,requestNotification.toString());
+        assertEquals("User "+otherName+"\nhas accepted your request for book:\n"+bookTitle+
+                "\nGeolocation to receive is:\n"+geolocation+"\n"+comparingDate,acceptedNotification.toString());
+
+    }
+}
