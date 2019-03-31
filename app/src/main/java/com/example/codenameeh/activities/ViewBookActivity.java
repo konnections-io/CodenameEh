@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,7 +18,6 @@ import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.Notification;
 import com.example.codenameeh.classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -196,7 +194,7 @@ public class ViewBookActivity extends BaseActivity {
                             User user = document.toObject(User.class);
                             ArrayList<Notification> nList = user.getNotifications();
                             for(Notification n: nList){
-                                if(n.getBook().getUuid().equals(book.getUuid()) && n.getOtherUser().equals(CurrentUser.getInstance().getUsername())){
+                                if(n.BookRef().getUuid().equals(book.getUuid()) && n.getOtherUser().equals(CurrentUser.getInstance().getUsername())){
                                     ref.update("notifications",FieldValue.arrayRemove(n));
 
                                 }

@@ -1,13 +1,11 @@
 package com.example.codenameeh.activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,7 +15,6 @@ import com.example.codenameeh.R;
 import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.Notification;
-import com.example.codenameeh.classes.Request;
 import com.example.codenameeh.classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,7 +23,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -190,7 +186,7 @@ public class RequestActivity extends BaseActivity {
                                 ArrayList<Notification> nList = user.getNotifications();
                                 for(Notification n: nList){
                                     if(n.getTypeNotification().equals("Borrow Request")
-                                            && n.getBook().getUuid().equals(book.getUuid())){
+                                            && n.BookRef().getUuid().equals(book.getUuid())){
 
                                         removeRef.update("notifications",FieldValue.arrayRemove(n));
 
