@@ -13,6 +13,9 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.codenameeh.R;
@@ -22,6 +25,7 @@ import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.Notification;
 import com.example.codenameeh.classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -32,15 +36,33 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import static java.util.Collections.max;
+
+/**
+ * This activity is the homepage on login.
+ * It will display some book suggestions.
+ * @author Cole Boytinc
+ * @author Daniel Dick
+ * @author Brian Qi
+ */
 public class MainActivity extends BaseActivity {
     public static final String CHANNEL_1_ID = "channel1";
     public static final String GROUP_ID = CurrentUser.getInstance().getUsername();
     private NotificationManagerCompat notificationManager;
+
+    private ListView bookView;
+    private ArrayList<Book> books;
+    private ArrayAdapter<Book> adapter;
+    private User currentUser;
+    private Booklist allBooks = Booklist.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +74,91 @@ public class MainActivity extends BaseActivity {
         createNotificationChannels();
         addNotificationListener();
 
+        bookView = findViewById(R.id.BookSuggested);
+
+
+        bookView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                viewBook(position);
+            }
+        });
+
+
+    }
+    /**
+     * The onStart method sets up the adapter and the
+     * initialization of the books BookList and the
+     * list of Books suggested.
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        currentUser = CurrentUser.getInstance();
+        books = getSuggestions();
+
+        adapter = new ArrayAdapter<Book>(this, R.layout.list_item, books);
+        bookView.setAdapter(adapter);
+    }
+
+    /**
+     * Creates list of relevant suggestions.
+     * @return books suggested
+     */
+    private ArrayList<Book> getSuggestions () {
+        ArrayList<Book> sugg = new ArrayList<Book>();
+        if (currentUser.BooksOwned().isEmpty() || currentUser.getKeywords().isEmpty()) {
+            int i = 0;
+            while (i<6) {
+                try {
+                    sugg.add(allBooks.get(i));
+                }
+                catch (Exception e) {
+                    Log.e("Books", e.toString());
+                }
+            }
+        }
+        else {
+            ArrayList<String> keys = currentUser.getKeywords();
+            ArrayList<Integer> scores = new ArrayList<>(allBooks.size());
+            ArrayList<String> bookKeys;
+            for (int i = 0; i<scores.size(); i++) {
+                scores.set(i,0);
+            }
+            for (int i=0; i<scores.size(); i++) {
+                bookKeys = allBooks.get(i).getKeywords();
+                for (int j = 0; j<bookKeys.size(); j++) {
+                    if (keys.contains(bookKeys.get(j))) {
+                        scores.set(i, (scores.get(i) + 1));
+                    }
+                }
+            }
+            for (int i = 0; i<6; i++) {
+                sugg.add(allBooks.get(scores.indexOf(max(scores))));
+            }
+        }
+        return sugg;
+    }
+
+    /**
+     * Viewing a book.
+     * @param i
+     */
+    private void viewBook(int i) {
+        Intent intent = new Intent(this, ViewBookActivity.class);
+        intent.putExtra("book", books.get(i));
+        startActivityForResult(intent, 2);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
+            }
+        }
+        catch (Exception e) {
+            Log.e("Returned", e.toString());
+        }
 
     }
 
