@@ -11,26 +11,49 @@ import com.example.codenameeh.R;
 import java.util.ArrayList;
 
 /**
- * A simple Adapter for showing a Booklist, showing more detail than an ArrayAdapter would
+ * A simple Adapter for showing a Booklist, showing more detail than an ArrayAdapter would. Shows
+ * title, username of the owner, and the description.
  */
 public class BooklistAdapter extends BaseAdapter {
     private ArrayList<Book> booklist;
     public BooklistAdapter(ArrayList<Book> dataset){
         this.booklist = dataset;
     }
+
+    /**
+     * returns the size of the list
+     * @return
+     */
     public int getCount(){
         return booklist.size();
     }
 
+    /**
+     * returns the item at the specified position
+     * @param position
+     * @return
+     */
     public Object getItem(int position){
         return booklist.get(position);
     }
 
+    /**
+     * returns the ItemId, if applicable. Returns the position in the list
+     * @param position
+     * @return
+     */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * Inputs the data into a book_list_item layout
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null){
