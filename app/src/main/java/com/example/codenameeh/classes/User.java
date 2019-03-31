@@ -189,6 +189,19 @@ public class User {
             this.owning.add(own.getUuid());
         }
     }
+    public ArrayList<String> getKeywordsFromBooks() {
+        ArrayList<Book> owns = BooksOwned();
+        ArrayList<String> keys = new ArrayList<>();
+        for (int i = 0; i < owns.size(); i++) {
+            Book book = owns.get(i);
+            if (!book.getKeywords().isEmpty()) {
+                for (int j = 0; j < book.getKeywords().size(); j++) {
+                    keys.add(book.getKeywords().get(j));
+                }
+            }
+        }
+        return keys;
+    }
 
     public ArrayList<Book> BorrowedBooks() {
         Booklist books =  Booklist.getInstance();
