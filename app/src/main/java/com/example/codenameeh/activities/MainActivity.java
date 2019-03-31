@@ -111,12 +111,14 @@ public class MainActivity extends BaseActivity {
             if (currentUser.BooksOwned().isEmpty() || currentUser.getKeywords().isEmpty()) {
                 int i = 0;
                 while (i < 6) {
-                    try {
-                        sugg.add(allBooks.get(i));
-                    } catch (Exception e) {
-                        Log.e("Books", e.toString());
+                    if (allBooks.get(i).getOwner() != currentUser.getName()) {
+                        try {
+                            sugg.add(allBooks.get(i));
+                        } catch (Exception e) {
+                            Log.e("Books", e.toString());
+                        }
+                        i += 1;
                     }
-                    i += 1;
                 }
             } else {
                 ArrayList<String> keys = currentUser.getKeywords();
@@ -133,8 +135,12 @@ public class MainActivity extends BaseActivity {
                         }
                     }
                 }
+                Book b1;
                 for (int i = 0; i < 6; i++) {
-                    sugg.add(allBooks.get(scores.indexOf(max(scores))));
+                    b1 = allBooks.get(scores.indexOf(max(scores)));
+                    if (b1.getOwner() != currentUser.getName()) {
+                        sugg.add(b1);
+                    }
                 }
             }
         }
