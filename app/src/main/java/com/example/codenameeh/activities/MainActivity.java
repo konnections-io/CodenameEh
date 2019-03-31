@@ -116,15 +116,16 @@ public class MainActivity extends BaseActivity {
                     } catch (Exception e) {
                         Log.e("Books", e.toString());
                     }
+                    i += 1;
                 }
             } else {
                 ArrayList<String> keys = currentUser.getKeywords();
                 ArrayList<Integer> scores = new ArrayList<>(allBooks.size());
                 ArrayList<String> bookKeys;
-                for (int i = 0; i < scores.size(); i++) {
+                for (int i = 0; i < allBooks.size(); i++) {
                     scores.set(i, 0);
                 }
-                for (int i = 0; i < scores.size(); i++) {
+                for (int i = 0; i < allBooks.size(); i++) {
                     bookKeys = allBooks.get(i).getKeywords();
                     for (int j = 0; j < bookKeys.size(); j++) {
                         if (keys.contains(bookKeys.get(j))) {
