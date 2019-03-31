@@ -124,18 +124,25 @@ public class MainActivity extends BaseActivity {
                 }
             } else {
                 ArrayList<String> keys = currentUser.getKeywordsFromBooks();
-                ArrayList<Integer> scores = new ArrayList<>(allBooks.size());
+                ArrayList<Integer> scores = new ArrayList<>();
                 ArrayList<String> bookKeys;
-                for (int i = 0; i < allBooks.size(); i++) {
+                int bookCount = allBooks.size();
+                for (int i = 0; i < bookCount; i++) {
                     scores.add(0);
                 }
-                for (int i = 0; i < allBooks.size(); i++) {
-                    bookKeys = allBooks.get(i).getKeywords();
-                    for (int j = 0; j < bookKeys.size(); j++) {
-                        if (keys.contains(bookKeys.get(j))) {
-                            scores.set(i, (scores.get(i) + 1));
+                for (int i = 0; i < bookCount; i++) {
+                    try {
+                        bookKeys = allBooks.get(i).getKeywords();
+                        for (int j = 0; j < bookKeys.size(); j++) {
+                            if (keys.contains(bookKeys.get(j))) {
+                                scores.set(i, (scores.get(i) + 1));
+                            }
                         }
                     }
+                    catch (Exception e){
+                        Log.e("Keywords", e.toString());
+                    }
+
                 }
                 Book b1;
                 for (int i = 0; i < 6; i++) {
