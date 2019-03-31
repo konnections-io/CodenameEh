@@ -18,13 +18,6 @@ public class Notification {
     private double longitude;
     private String date;
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
 
     public Notification(){
     }
@@ -51,6 +44,13 @@ public class Notification {
         date = dateFormat.format(c);
         this.typeNotification = "Accepted Request";
 
+    }
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public double getLatitude() {

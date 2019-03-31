@@ -32,6 +32,40 @@ public class Book implements Parcelable {
         this.borrowerConfirmation = false;
         this.borrower = null;
     }
+    public Book(String title, String author, String ISBN, String description, String photograph, String Owner, ArrayList<String> keywords) {
+        this.title = title;
+        this.author = author;
+        this.ISBN = ISBN;
+        this.description = description;
+        this.photograph = photograph;
+        this.borrowed = false;
+        this.owner = Owner;
+        this.requestedBy = new ArrayList<>();
+        this.acceptedStatus = false;
+        this.uuid = UUID.randomUUID().toString();
+        this.keywords = keywords;
+        this.ownerConfirmation = false;
+        this.borrowerConfirmation = false;
+        this.borrower = null;
+
+    }
+    // no photograph
+    public Book(String title, String author, String ISBN, String description, String Owner, ArrayList<String> keywords) {
+        this.title = title;
+        this.author = author;
+        this.ISBN = ISBN;
+        this.description = description;
+        this.photograph = null;
+        this.borrowed = false;
+        this.owner = Owner;
+        this.requestedBy = new ArrayList<>();
+        this.acceptedStatus = false;
+        this.uuid = UUID.randomUUID().toString();
+        this.keywords = keywords;
+        this.ownerConfirmation = false;
+        this.borrowerConfirmation = false;
+        this.borrower = null;
+    }
 
     public boolean getOwnerConfirmation() {
         return ownerConfirmation;
@@ -51,23 +85,7 @@ public class Book implements Parcelable {
         this.borrowerConfirmation = borrowerConfirmation;
     }
 
-    public Book(String title, String author, String ISBN, String description, String photograph, String Owner, ArrayList<String> keywords) {
-        this.title = title;
-        this.author = author;
-        this.ISBN = ISBN;
-        this.description = description;
-        this.photograph = photograph;
-        this.borrowed = false;
-        this.owner = Owner;
-        this.requestedBy = new ArrayList<>();
-        this.acceptedStatus = false;
-        this.uuid = UUID.randomUUID().toString();
-        this.keywords = keywords;
-        this.ownerConfirmation = false;
-        this.borrowerConfirmation = false;
-        this.borrower = null;
 
-    }
 
     public String getBorrower() {
         return borrower;
@@ -89,23 +107,7 @@ public class Book implements Parcelable {
         this.borrowerConfirmation = false;
     }
 
-    // no photograph
-    public Book(String title, String author, String ISBN, String description, String Owner, ArrayList<String> keywords) {
-        this.title = title;
-        this.author = author;
-        this.ISBN = ISBN;
-        this.description = description;
-        this.photograph = null;
-        this.borrowed = false;
-        this.owner = Owner;
-        this.requestedBy = new ArrayList<>();
-        this.acceptedStatus = false;
-        this.uuid = UUID.randomUUID().toString();
-        this.keywords = keywords;
-        this.ownerConfirmation = false;
-        this.borrowerConfirmation = false;
-        this.borrower = null;
-    }
+
     public void addRequest(String user){
         this.requestedBy.add(user);
     }

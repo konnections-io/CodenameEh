@@ -45,6 +45,8 @@ public class RequestActivity extends BaseActivity {
     /**
      * onCreate displays the specific request information when it is clicked
      * also initiates the accept/decline buttons
+     * When accept button is clicked, take user to GeoLocation Activity to specify a meet up location.
+     * When decline button is clicked, return to Notification Activity and remove the notification.
      * @param savedInstanceState
      */
     @Override
@@ -61,11 +63,6 @@ public class RequestActivity extends BaseActivity {
         other_username = receiveIntent.getParcelableExtra("Other Username");
         notificationUUID = receiveIntent.getParcelableExtra("UUID");
 
-        /**
-         * Temporarily commented out what happens with accept button and decline button by Brian Qi.
-         * Notification Activity calls onActivityResult after the click, acting depending on which
-         * button was pressed
-         */
         acceptButton.setOnClickListener(new View.OnClickListener(){
 
             /**
@@ -125,11 +122,14 @@ public class RequestActivity extends BaseActivity {
                         }
                     }
                 });
-                setResult(Activity.RESULT_OK,intentToNotification);
                 finish();
             }
         });
         }
+
+    /**
+     * Retrieves book object, username, notification UUID, and displays appropriate data on textview
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -143,6 +143,14 @@ public class RequestActivity extends BaseActivity {
         }
 
     }
+
+    /**
+     * If coming from Geolocation Activity, retrieve longitude, latitude, address, and send
+     * notification to the corresponding user. Removes the notification from current user.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -171,7 +179,6 @@ public class RequestActivity extends BaseActivity {
                 Notification newNotification = new Notification(CurrentUser.getInstance().getUsername()
                 ,address,book,latitude,longitude);
                 ref.update("notifications", FieldValue.arrayUnion(newNotification));
-                //Remove the notification from current user
                 final DocumentReference removeRef = db.collection("users").document(CurrentUser.getInstance().getUsername());
                 removeRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -194,12 +201,18 @@ public class RequestActivity extends BaseActivity {
                         }
                     }
                 });
-                //
-                setResult(Activity.RESULT_OK,intentToNotifications);
                 finish();
             }
         }
     }
+
+    /**
+     * Called when user has had to accept permission to access Locations. If user accepted, move
+     * to Geolocation activity. Else display error message and cannot borrow.
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions, int[] grantResults) {
