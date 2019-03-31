@@ -111,7 +111,7 @@ public class MainActivity extends BaseActivity {
             if (currentUser.BooksOwned().isEmpty()) {
                 int i = 0;
                 while (i < 6) {
-                    if (!allBooks.get(i).isBorrowed()) {
+                    if (!allBooks.get(i).isBorrowed() && !allBooks.get(i).getAcceptedStatus() && allBooks.get(i).getRequestedBy().isEmpty()) {
                         try {
                             sugg.add(allBooks.get(i));
                         } catch (Exception e) {
@@ -138,7 +138,7 @@ public class MainActivity extends BaseActivity {
                 Book b1;
                 for (int i = 0; i < 6; i++) {
                     b1 = allBooks.get(scores.indexOf(max(scores)));
-                    if (b1.getOwner() != currentUser.getName() && (!b1.isBorrowed())) {
+                    if (b1.getOwner() != currentUser.getName() && (!b1.isBorrowed()) && !b1.getAcceptedStatus() && b1.getRequestedBy().isEmpty()) {
                         sugg.add(b1);
                     }
                 }
