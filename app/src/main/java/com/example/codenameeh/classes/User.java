@@ -66,6 +66,13 @@ public class User {
         if(book != null) {
             this.borrowing.add(book.getUuid());
             this.borrowedHistory.add(book.getUuid());
+            for (Notification notification: this.notifications){
+                if(notification.getTypeNotification().equals("Accepted Request")){
+                    if(notification.BookRef().equals(book)){
+                        this.notifications.remove(notification);
+                    }
+                }
+            }
             book.borrow(this);
         }
     }

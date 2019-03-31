@@ -194,7 +194,7 @@ public class ViewBookActivity extends BaseActivity {
                             User user = document.toObject(User.class);
                             ArrayList<Notification> nList = user.getNotifications();
                             for(Notification n: nList){
-                                if(n.BookRef().getUuid().equals(book.getUuid()) && n.getOtherUser().equals(CurrentUser.getInstance().getUsername())){
+                                if(n.BookRef().equals(book) && n.getOtherUser().equals(CurrentUser.getInstance().getUsername())){
                                     ref.update("notifications",FieldValue.arrayRemove(n));
 
                                 }
