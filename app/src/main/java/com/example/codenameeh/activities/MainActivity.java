@@ -145,11 +145,14 @@ public class MainActivity extends BaseActivity {
 
                 }
                 Book b1;
-                for (int i = 0; i < 6; i++) {
+                int k = 0;
+                while (k<6) {
                     b1 = allBooks.get(scores.indexOf(max(scores)));
-                    if (b1.getOwner() != currentUser.getName() && (!b1.isBorrowed()) && !b1.getAcceptedStatus()) {
+                    if (!currentUser.BooksOwned().contains(b1) && (!b1.isBorrowed()) && !b1.getAcceptedStatus()) {
                         sugg.add(b1);
+                        k += 1;
                     }
+                    allBooks.remove(b1);
                 }
             }
         }
