@@ -110,8 +110,9 @@ public class MainActivity extends BaseActivity {
         try {
             if (currentUser.BooksOwned().isEmpty()) {
                 int i = 0;
-                while (i < 6) {
-                    if (!allBooks.get(i).isBorrowed() && !allBooks.get(i).getAcceptedStatus()) {
+                int j = 0;
+                while (i < 6 && j < allBooks.size()) {
+                    if (!allBooks.get(j).isBorrowed() && !allBooks.get(j).getAcceptedStatus()) {
                         try {
                             sugg.add(allBooks.get(i));
                         } catch (Exception e) {
@@ -119,6 +120,7 @@ public class MainActivity extends BaseActivity {
                         }
                         i += 1;
                     }
+                    j += 1;
                 }
             } else {
                 ArrayList<String> keys = currentUser.getKeywordsFromBooks();
