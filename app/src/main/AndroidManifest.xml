@@ -27,29 +27,37 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="Book eXchange"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activities.ConfirmationActivity" />
-        <activity android:name=".activities.ScanActivity" />
-        <activity android:name=".activities.EditBookActivity" />
+        <activity
+            android:name=".activities.ConfirmationActivity"
+            android:label="" />
+        <activity android:name=".activities.ScanActivity"
+            android:label="" />
+        <activity android:name=".activities.EditBookActivity"
+            android:label="" />
         <activity
             android:name=".activities.ViewBookActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="" />
         <activity
             android:name=".activities.TakeNewBookActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="" />
         <activity
             android:name=".activities.BookListActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="" />
         <activity
             android:name=".activities.BorrowingListActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="" />
         <activity
             android:name=".activities.EditProfileActivity"
-            android:label="@string/title_activity_edit_profile"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.RegisterActivity"
@@ -65,33 +73,36 @@
         </activity>
         <activity
             android:name=".activities.ProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="" />
         <activity
             android:name=".activities.MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="" />
         <activity
             android:name=".activities.BaseActivity"
-            android:label="@string/title_activity_base"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="" />
         <activity
             android:name=".activities.NotificationActivity"
-            android:label="NotificationActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="" />
         <activity
             android:name=".activities.RequestActivity"
-            android:label="NotificationActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="" />
         <activity
             android:name=".activities.ViewRequestsActivity"
-            android:label="ViewRequestsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="" />
         <activity
             android:name=".activities.SearchBooksActivity"
-            android:label="SearchBooksActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.GeolocationActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="" />
+        <activity
+            android:name=".activities.GeolocationActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_map_api_key" />
