@@ -148,7 +148,9 @@ public class User {
             int index = books.findIndex(own);
             if(index != -1){
                 if (!books.get(index).isBorrowed()) {
-                    temp.add(books.get(index));
+                    if (books.get(index).getRequestedBy().isEmpty()) {
+                        temp.add(books.get(index));
+                    }
                 }
             }
         }
