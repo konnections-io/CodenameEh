@@ -227,16 +227,16 @@ public class Book implements Parcelable {
             }
         }
         if (this.borrowed) {
-            output = output + "\nBORROWED";
+            output = output + "\nCURRENTLY BORROWED";
         }
         else if (this.acceptedStatus){
-            output = output + "\nACCEPTED";
+            output = output + "\nCURRENTLY ACCEPTED";
         }
         else if (this.requestedBy.isEmpty()) {
-            output = output + "\nAVAILABLE";
+            output = output + "\nCURRENTLY AVAILABLE";
         }
         else {
-            output = output + "\nREQUESTED";
+            output = output + "\nHAS PENDING REQUESTS";
         }
         return (output);
     }
