@@ -167,10 +167,13 @@ public class RequestActivity extends BaseActivity {
 
                 //can get status from book object
                 book.setAcceptedStatus(true);
+                book.removeAllRequests();
+                book.setBorrower(other_username);
                 intentToNotifications.putExtra("Book", book);
 
                 //Add the notification to that user
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                final FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("All Books").document(book.getUuid()).set(book);
                 final DocumentReference ref = db.collection("users").document(other_username);
                 Notification newNotification = new Notification(CurrentUser.getInstance().getUsername()
                 ,address,book,latitude,longitude);
@@ -186,8 +189,9 @@ public class RequestActivity extends BaseActivity {
                                 ArrayList<Notification> nList = user.getNotifications();
                                 for(Notification n: nList){
                                     if(n.getTypeNotification().equals("Borrow Request")
-                                            && n.BookRef().getUuid().equals(book.getUuid())){
-
+                                            && n.BookRef().equals(book)){
+                                        db.collection("users").document(n.getOtherUser())
+                                                .update("requesting", FieldValue.arrayRemove(book.getUuid()));
                                         removeRef.update("notifications",FieldValue.arrayRemove(n));
 
                                     }

@@ -144,6 +144,26 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+        // Listen for changes, if any.
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if(e!=null){
+                    Log.e("User Listen failed", e.toString());
+                    return;
+                }
+                if(documentSnapshot.exists()) {
+                    User user = documentSnapshot.toObject(User.class);
+                    //Set current user singleton
+                    CurrentUser.setInstance(user);
+                    CurrentUser.getInstance().setNotifications(user.getNotifications());
+                    CurrentUser.getInstance().setOwning(user.getOwning());
+                    CurrentUser.getInstance().setBorrowing(user.getBorrowing());
+                    CurrentUser.getInstance().setRequesting(user.getRequesting());
+                    CurrentUser.getInstance().setBorrowedHistory(user.getBorrowedHistory());
+                }
+            }
+        });
         CollectionReference bookRef = db.collection("All Books");
         bookRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -184,7 +204,19 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
                         } else{
-                            // TODO FIND WHO WE NEED TO CHANGE, and copy above
+                            final DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(newBook.getBorrower());
+                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if (documentSnapshot.exists()) {
+                                        User user = documentSnapshot.toObject(User.class);
+                                        user.newBorrow(newBook);
+                                        docRef.set(user);
+                                        FirebaseFirestore.getInstance().collection("All Books").document(newBook.getUuid())
+                                                .set(newBook);
+                                    }
+                                }
+                            });
                         }
                     }
                     books.add(newBook);
