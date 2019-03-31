@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity {
                 ArrayList<Integer> scores = new ArrayList<>(allBooks.size());
                 ArrayList<String> bookKeys;
                 for (int i = 0; i < allBooks.size(); i++) {
-                    scores.set(i, 0);
+                    scores.add(0);
                 }
                 for (int i = 0; i < allBooks.size(); i++) {
                     bookKeys = allBooks.get(i).getKeywords();

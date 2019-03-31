@@ -1,5 +1,7 @@
 package com.example.codenameeh.classes;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 public class User {
@@ -194,10 +196,15 @@ public class User {
         ArrayList<String> keys = new ArrayList<>();
         for (int i = 0; i < owns.size(); i++) {
             Book book = owns.get(i);
-            if (!book.getKeywords().isEmpty()) {
-                for (int j = 0; j < book.getKeywords().size(); j++) {
-                    keys.add(book.getKeywords().get(j));
+            try {
+                if (!book.getKeywords().isEmpty()) {
+                    for (int j = 0; j < book.getKeywords().size(); j++) {
+                        keys.add(book.getKeywords().get(j));
+                    }
                 }
+            }
+            catch (Exception e) {
+                Log.e("Keywords", e.toString());
             }
         }
         return keys;
