@@ -187,7 +187,7 @@ public class LoginActivity extends AppCompatActivity {
                             // TODO FIND WHO WE NEED TO CHANGE, and copy above
                         }
                     }
-                    books.add(document.toObject(Book.class));
+                    books.add(newBook);
                 }
                 Booklist.setInstance(books);
             }
