@@ -135,6 +135,7 @@ public class ViewBookActivity extends BaseActivity {
         TextView txtView3 = findViewById(R.id.book_ISBN_view);
         txtView3.setText("ISBN: "+book.getISBN());
 
+
         TextView txtView4 = findViewById(R.id.book_description);
         txtView4.setText("Description: "+book.getDescription());
         txtView4.setMovementMethod(new ScrollingMovementMethod());
@@ -142,11 +143,13 @@ public class ViewBookActivity extends BaseActivity {
         TextView txtView5 = findViewById(R.id.book_availability_view);
         String availabilityText = "Availability: ";
         if(book.isBorrowed()){
-            availabilityText = availabilityText+ "Borrowed";
-        } else if(currentUser.RequestedBooks().contains(book)){
-            availabilityText = availabilityText+"Requested";
-        } else{
-            availabilityText = availabilityText+"Available";
+            availabilityText = availabilityText+ "Currently Borrowed";
+        } else if(book.getAcceptedStatus()){
+            availabilityText = availabilityText+"Accepted For Borrow";
+        } else if (book.getRequestedBy().isEmpty()){
+            availabilityText = availabilityText+"Available For Borrow";
+        } else {
+            availabilityText = availabilityText+"Pending Requests";
         }
         txtView5.setText(availabilityText);
 
