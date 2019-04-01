@@ -9,20 +9,30 @@ import java.util.ArrayList;
  */
 public class BookSearch {
     private User user;
-    private Booklist allBooks = Booklist.getInstance();
+    private ArrayList<Book> allBooks;
 
-    public BookSearch(User user) {
+    /**
+     * @param user The current user of the session
+     * @param booklist The master booklist containing all the books
+     */
+    public BookSearch(User user, ArrayList<Book> booklist) {
         this.user = user;
+        allBooks = booklist;
     }
 
+    /**
+     * Searches the master booklist for books that contains the keyword
+     * @param keyword
+     * @return A collection of books that contains books with the keyword in their title, author, or description
+     */
     public ArrayList<Book> searchDatabase(String keyword) {
         keyword = keyword.toUpperCase();
-        ArrayList<Book> books = allBooks.getBookList();
+        ArrayList<Book> books = allBooks;
         ArrayList<Book> filteredBooks = new ArrayList<>();
 
         for (Book book: books) {
-            if (book.getTitle().toUpperCase().indexOf(keyword) != -1 || book.getAuthor().toUpperCase().indexOf(keyword) != -1
-                    || book.getDescription().toUpperCase().indexOf(keyword) != -1) {
+            if (book.getTitle().toUpperCase().contains(keyword) || book.getAuthor().toUpperCase().contains(keyword)
+                    || book.getDescription().toUpperCase().contains(keyword)) {
                 filteredBooks.add(book);
             }
         }
@@ -31,7 +41,7 @@ public class BookSearch {
     }
 
     public User getUser() {
-        return user;
+            return user;
     }
 
     public void setUser(User user) {
