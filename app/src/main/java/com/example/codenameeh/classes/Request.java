@@ -6,6 +6,10 @@ import android.os.Parcelable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * The request class is used to represent & store
+ * book requests made between users.
+ */
 public class Request implements Parcelable {
 
     private Boolean status;

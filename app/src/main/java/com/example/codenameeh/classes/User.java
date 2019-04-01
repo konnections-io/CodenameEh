@@ -170,8 +170,9 @@ public class User {
     }
 
     /**
-     * Returns array list of all books objects owned
-     * @return
+     * Returns array list of all books objects owned by
+     * the user.
+     * @return books owned.
      */
     public ArrayList<Book> BooksOwned() {
         Booklist books =  Booklist.getInstance();
@@ -186,8 +187,9 @@ public class User {
     }
 
     /**
-     * Returns arraylist of all books owned that are available (status wise)
-     * @return
+     * Returns arraylist of all books owned that are available,
+     * i.e. not currently accepted for borrow or borrowed.
+     * @return list of available books
      */
     public ArrayList<Book> BooksOwnedAvailable() {
         Booklist books =  Booklist.getInstance();
@@ -206,8 +208,9 @@ public class User {
     }
 
     /**
-     * Returns arraylist of all books owned that are borrowed (status wise)
-     * @return
+     * Returns arraylist of all books owned that are
+     * currently borrowed by another user.
+     * @return booklist of borrowed books
      */
     public ArrayList<Book> BooksOwnedBorrowed() {
         Booklist books =  Booklist.getInstance();
@@ -224,8 +227,9 @@ public class User {
     }
 
     /**
-     * Returns arraylist of all books owned that are requested (status wise)
-     * @return
+     * Returns arraylist of all books owned that currently
+     * have pending requests.
+     * @return arraylist of pending requests
      */
     public ArrayList<Book> BooksOwnedRequested() {
         Booklist books =  Booklist.getInstance();
