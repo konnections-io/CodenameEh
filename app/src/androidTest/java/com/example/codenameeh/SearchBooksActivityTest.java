@@ -21,7 +21,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
  * @author Daniel Shim
  */
 @RunWith(AndroidJUnit4.class)
-public class SearchBooksTest {
+public class SearchBooksActivityTest {
     @Rule public ActivityTestRule<BaseActivity> activityRule =
             new ActivityTestRule<>(BaseActivity.class);
 
