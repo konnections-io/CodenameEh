@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -188,9 +189,12 @@ public class RequestActivity extends BaseActivity {
                                 ArrayList<Notification> nList = user.getNotifications();
                                 for(Notification n: nList){
                                     if(n.getTypeNotification().equals("Borrow Request")
-                                            && n.BookRef().equals(book)){
-                                        db.collection("users").document(n.getOtherUser())
-                                                .update("requesting", FieldValue.arrayRemove(book.getUuid()));
+                                            && n.BookRef().equals(book)) {
+                                        if (!n.getOtherUser().equals(other_username)){
+                                            db.collection("users").document(n.getOtherUser())
+                                                    .update("requesting", FieldValue.arrayRemove(book.getUuid()));
+                                        }
+
                                         removeRef.update("notifications",FieldValue.arrayRemove(n));
 
                                     }
