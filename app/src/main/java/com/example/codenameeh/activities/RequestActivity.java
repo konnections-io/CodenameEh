@@ -115,6 +115,8 @@ public class RequestActivity extends BaseActivity {
                         }
                     }
                 });
+                db.collection("All Books").document(book.getUuid())
+                        .update("requestedBy",FieldValue.arrayRemove(other_username));
                 finish();
             }
         });
