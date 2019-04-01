@@ -38,13 +38,13 @@ import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.instanceOf;
 
 /**
+ * A test class to test aspects about editing a book
  *
- *
- * This is a class to test creating a new book
+ * This is a class to test various actions about the EditBookActivity
  * @author Ryan Jensen
  */
 @RunWith(AndroidJUnit4.class)
-public class NewBookActivityTest {
+public class EditBookActivityTest {
     String username = "Diodone123";
     String password = "Diodone123";
     User myUser;
@@ -62,7 +62,7 @@ public class NewBookActivityTest {
         onView(withId(R.id.password)).perform(typeText(password));
         onView(withId(R.id.sign_in)).perform(click());
         try {
-            // Delay to get data from the server.
+            // Delay to get data from the server. Should be a better option.
             sleep(10000);
         } catch(Exception e){
         }
@@ -97,12 +97,35 @@ public class NewBookActivityTest {
             // Close the typing animation
             Espresso.pressBack();
             onView(withId(R.id.button2)).perform(click());
-            testBook = new Book("Title", "Author", "ISBN", "Desc", username,null);
-            onData(anything()).inAdapterView(withId(R.id.BooksOwnedView)).atPosition(0).check(matches(withText(testBook.toString())));
+            try {
+                sleep(1000);
+            } catch(Exception e){
 
+            }
+            onData(anything()).inAdapterView(withId(R.id.BooksOwnedView)).atPosition(0).perform(click());
+            onView(withId(R.id.editBookButton)).perform(click());
+            onView(withId(R.id.book_title_edit)).check(matches(withText("Title")));
+            onView(withId(R.id.book_desc_edit)).check(matches(withText("Desc")));
+            onView(withId(R.id.book_author_edit)).check(matches(withText("Author")));
+            onView(withId(R.id.book_ISBN_edit)).check(matches(withText("ISBN")));
+            onView(withId(R.id.book_title_edit)).perform(typeText("Hi"));
+            onView(withId(R.id.book_desc_edit)).perform(typeText("Hi"));
+            onView(withId(R.id.book_author_edit)).perform(typeText("Hi"));
+            onView(withId(R.id.book_ISBN_edit)).perform(typeText("Hi"));
+            Espresso.pressBack();
+            onView(withId(R.id.save_book_edits_button)).perform(click());
+            testBook = new Book("TitleHi", "AuthorHi", "ISBNHi", "DescHi", username,null);
+            onView(withId(R.id.book_title_view)).check(matches(withText("Title: "+testBook.getTitle())));
+            onView(withId(R.id.book_author_view)).check(matches(withText("Author: "+testBook.getAuthor())));
+            onView(withId(R.id.book_ISBN_view)).check(matches(withText("ISBN: "+testBook.getISBN())));
+            onView(withId(R.id.book_description)).check(matches(withText("Description: "+testBook.getDescription())));
+            Espresso.pressBack();
+            onData(anything()).inAdapterView(withId(R.id.BooksOwnedView)).atPosition(0).check(matches(withText(testBook.toString())));
             // Remove the book after the test
             onData(anything()).inAdapterView(withId(R.id.BooksOwnedView)).atPosition(0).perform(click());
             onView(withId(R.id.deleteBookButton)).perform(click());
+
+
 
             onView(allOf(instanceOf(AppCompatImageButton.class),
                     withParent(withResourceName("toolbar")))).perform(click());
