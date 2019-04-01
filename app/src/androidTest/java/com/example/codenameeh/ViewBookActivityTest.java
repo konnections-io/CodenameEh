@@ -13,6 +13,7 @@ import com.example.codenameeh.activities.ViewBookActivity;
 import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.hamcrest.Matchers;
 import org.junit.Rule;
@@ -66,7 +67,6 @@ public class ViewBookActivityTest {
      */
     @Test
     public void Test(){
-
         onView(withId(R.id.username)).perform(typeText(username));
         onView(withId(R.id.password)).perform(typeText(password));
         onView(withId(R.id.sign_in)).perform(click());
@@ -115,6 +115,10 @@ public class ViewBookActivityTest {
             onView(withId(R.id.requestBookButton)).check(matches(withText("Cancel Request")));
             onView(withId(R.id.requestBookButton)).perform(click());
             onView(withId(R.id.requestBookButton)).check(matches(withText("Request")));
+            onView(allOf(instanceOf(AppCompatImageButton.class),
+                    withParent(withResourceName("toolbar")))).perform(click());
+            onView(allOf(Matchers.<View>instanceOf(NavigationMenuItemView.class),withChild
+                    (allOf(Matchers.<View>instanceOf(AppCompatCheckedTextView.class), withText("Logout"))))).perform(click());
         }
     }
 }
