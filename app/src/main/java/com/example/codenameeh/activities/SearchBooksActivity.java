@@ -80,7 +80,7 @@ public class SearchBooksActivity extends BaseActivity {
         Iterator<Book> iter = arrayBook.iterator();
         while(iter.hasNext()){
             Book book = iter.next();
-            if(book.isBorrowed()||book.getAcceptedStatus()) {
+            if(book.isBorrowed()||book.getAcceptedStatus() || book.getOwner().equals(CurrentUser.getInstance().getUsername())) {
                 iter.remove();
             }
         }
@@ -97,7 +97,7 @@ public class SearchBooksActivity extends BaseActivity {
                         if (book.isBorrowed() || book.getAcceptedStatus()) {
                             arrayBook.remove(book);
                             bookAdapter.notifyDataSetChanged();
-                        }else if(!arrayBook.contains(book)){
+                        }else if(!arrayBook.contains(book) && !book.getOwner().equals(CurrentUser.getInstance().getUsername())){
                             arrayBook.add(book);
                             bookAdapter.notifyDataSetChanged();
                         }
