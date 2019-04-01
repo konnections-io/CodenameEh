@@ -96,7 +96,7 @@ public class SearchBooksActivity extends BaseActivity {
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots){
                     if (doc.exists()) {
                         Book book = doc.toObject(Book.class);
-                        if (!book.isBorrowed() && !book.getAcceptedStatus()) {
+                        if (!book.isBorrowed() && !book.getAcceptedStatus()&&!book.getOwner().equals(CurrentUser.getInstance().getUsername())) {
                             arrayBook.add(book);
                             bookAdapter.notifyDataSetChanged();
                         }
