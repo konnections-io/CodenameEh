@@ -13,6 +13,7 @@ import com.example.codenameeh.activities.ViewBookActivity;
 import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.User;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.hamcrest.Matchers;
 import org.junit.Rule;
@@ -66,7 +67,7 @@ public class ViewBookActivityTest {
      */
     @Test
     public void Test(){
-
+        FirebaseAuth.getInstance().signOut();
         onView(withId(R.id.username)).perform(typeText(username));
         onView(withId(R.id.password)).perform(typeText(password));
         onView(withId(R.id.sign_in)).perform(click());
