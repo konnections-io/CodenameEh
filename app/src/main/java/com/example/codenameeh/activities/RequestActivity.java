@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -94,8 +95,6 @@ public class RequestActivity extends BaseActivity {
                 //Add relevant code here when user declines
                 db.collection("users").document(other_username).update("requesting",
                                                                             FieldValue.arrayRemove(book.getUuid()));
-                db.collection("All Books").document(book.getUuid()).update("requestedBy",
-                                                                            FieldValue.arrayRemove(other_username));
 
                 //Remove the notification to current user from FireStore
                 ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -117,6 +116,8 @@ public class RequestActivity extends BaseActivity {
                         }
                     }
                 });
+                db.collection("All Books").document(book.getUuid())
+                        .update("requestedBy",FieldValue.arrayRemove(other_username));
                 finish();
             }
         });
@@ -188,11 +189,12 @@ public class RequestActivity extends BaseActivity {
                                 ArrayList<Notification> nList = user.getNotifications();
                                 for(Notification n: nList){
                                     if(n.getTypeNotification().equals("Borrow Request")
-                                            && n.BookRef().equals(book)){
-                                        if(!n.getOtherUser().equals(other_username)) {
+                                            && n.BookRef().equals(book)) {
+                                        if (!n.getOtherUser().equals(other_username)){
                                             db.collection("users").document(n.getOtherUser())
                                                     .update("requesting", FieldValue.arrayRemove(book.getUuid()));
                                         }
+
                                         removeRef.update("notifications",FieldValue.arrayRemove(n));
 
                                     }
