@@ -104,5 +104,9 @@ public class RequestActivityTest {
         onView(withId(R.id.accept)).check(matches(withText("ACCEPT")));
         onView(withId(R.id.decline)).check(matches(withText("DECLINE")));
 
+        //Remove notification for potential repeat tests
+        FirebaseFirestore.getInstance().collection("users").document(username)
+                .update("notifications",FieldValue.arrayRemove(borrowRequest));
+
     }
 }
