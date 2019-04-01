@@ -135,7 +135,7 @@ public class RequestActivity extends BaseActivity {
             other_username = intent.getStringExtra("Other Username");
             notificationUUID = intent.getStringExtra("UUID");
             TextView userField = findViewById(R.id.textView2);
-            userField.setText(other_username);
+            userField.setText(String.format("%s would like to borrow\n%s",other_username,book.getTitle()));
         }
 
     }
@@ -163,7 +163,6 @@ public class RequestActivity extends BaseActivity {
                 //Code must now go back to Notifications Activity carrying back the info
                 //that the user clicked Accept
                 //This code is accessed only if the user clicked accept
-                //Add relevant code when user clicks accept here instead of in the onClick method
 
                 //can get status from book object
                 book.setAcceptedStatus(true);

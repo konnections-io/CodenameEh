@@ -116,6 +116,12 @@ public class ViewBookActivityTest {
             onView(withId(R.id.requestBookButton)).check(matches(withText("Cancel Request")));
             onView(withId(R.id.requestBookButton)).perform(click());
             onView(withId(R.id.requestBookButton)).check(matches(withText("Request")));
+
+            onView(allOf(instanceOf(AppCompatImageButton.class),
+                    withParent(withResourceName("toolbar")))).perform(click());
+            onView(allOf(Matchers.<View>instanceOf(NavigationMenuItemView.class),withChild
+                    (allOf(Matchers.<View>instanceOf(AppCompatCheckedTextView.class), withText("Logout"))))).perform(click());
+
         }
     }
 }
