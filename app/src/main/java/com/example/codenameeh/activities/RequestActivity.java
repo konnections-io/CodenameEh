@@ -94,6 +94,8 @@ public class RequestActivity extends BaseActivity {
                 //Add relevant code here when user declines
                 db.collection("users").document(other_username).update("requesting",
                                                                             FieldValue.arrayRemove(book.getUuid()));
+                db.collection("All Books").document(book.getUuid()).update("requestedBy",
+                                                                            FieldValue.arrayRemove(other_username));
 
                 //Remove the notification to current user from FireStore
                 ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
