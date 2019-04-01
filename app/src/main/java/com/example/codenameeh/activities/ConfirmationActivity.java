@@ -37,6 +37,8 @@ public class ConfirmationActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_confirmation, frameLayout);
+        Intent intent = getIntent();
+        isbn = intent.getStringExtra("isbn");
         dataList = findViewById(R.id.confirmation_list);
         dataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -65,8 +67,7 @@ public class ConfirmationActivity extends BaseActivity {
                 finish();
             }
         });
-        Intent intent = getIntent();
-        isbn = intent.getStringExtra("isbn");
+
     }
 
     /**
