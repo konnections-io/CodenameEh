@@ -21,11 +21,15 @@ import androidx.annotation.Nullable;
  */
 public class SearchBooksAdapter extends ArrayAdapter<Book> {
 
-    private static final String TAG = "SearchViewAdapter";
-
     private Context context;
-    int resource;
+    private int resource;
 
+    /**
+     * Sets up the internal fields to create the custom adapter.
+     * @param context The activity and the state of the app currently
+     * @param resource The number of objects displayed
+     * @param objects The objects to be added to the adapter
+     */
     public SearchBooksAdapter(Context context, int resource, ArrayList<Book> objects) {
         super(context, resource, objects);
         this.context = context;
@@ -33,11 +37,11 @@ public class SearchBooksAdapter extends ArrayAdapter<Book> {
     }
 
     /**
-     * Finds the view for SearchBooksActivity and returns it.
-     * @param position
-     * @param convertView
-     * @param parent
-     * @return
+     * Sets up the contents of each individual item on the listview
+     * @param position the index of the item starting from the top of the list
+     * @param convertView The view of the adapter which is being manipulated
+     * @param parent The group which the view belongs to
+     * @return the manipulated view
      */
     @NonNull
     @Override

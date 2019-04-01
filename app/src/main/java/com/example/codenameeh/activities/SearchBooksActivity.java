@@ -37,11 +37,11 @@ public class SearchBooksActivity extends BaseActivity {
 
     private ListView search_book;
     private SearchBooksAdapter bookAdapter;
-    private BookSearch newSearch = new BookSearch(CurrentUser.getInstance());
+    private BookSearch newSearch;
     private Booklist allBooks = Booklist.getInstance();
     private ArrayList<Book> arrayBook;
 
-    /**
+    /** 
      * Called when activity is created. Gets all the books recorded on Firestore, sets the adapter,
      * and displays the books on the activity
      * @param savedInstanceState
@@ -51,9 +51,11 @@ public class SearchBooksActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_book_search, frameLayout);
 
+        arrayBook = allBooks.getBookList();
+
         search_book = findViewById(R.id.search_books);
 
-        arrayBook = allBooks.getBookList();
+        newSearch = new BookSearch(CurrentUser.getInstance(), arrayBook);
 
         bookAdapter = new SearchBooksAdapter(this, R.layout.book_search_adapter_view, arrayBook);
 
@@ -106,8 +108,12 @@ public class SearchBooksActivity extends BaseActivity {
         });
 
     }
-
-
+  
+    /**
+     * Inflates the custom menu interface adding the SearchView into the menu.
+     * @param menu The menu of the current activity
+     * @return runs onCreateOptionsMenu for the original functionalities it provides
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search, menu);
@@ -122,9 +128,9 @@ public class SearchBooksActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                bookAdapter.getFilter().filter(newText);
                 arrayBook = newSearch.searchDatabase(newText);
                 bookAdapter.notifyDataSetChanged();
+                bookAdapter.getFilter().filter(newText);
                 return false;
             }
         });
