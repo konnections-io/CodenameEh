@@ -85,7 +85,7 @@ public class ViewBookActivity extends BaseActivity {
 
         if (currentUser.getUsername().equals(book.getOwner())) {
             // We are the owner of the book, so show the owning buttons
-            if(book.isBorrowed() || !book.getRequestedBy().isEmpty()){
+            if(book.isBorrowed() || !book.getRequestedBy().isEmpty()||book.getAcceptedStatus()){
                 //If the book is currently borrowed or is requested, we cannot change or delete it
                 deleteButton.setVisibility(View.INVISIBLE);
                 editButton.setVisibility(View.INVISIBLE);
@@ -103,7 +103,7 @@ public class ViewBookActivity extends BaseActivity {
             editButton.setVisibility(View.INVISIBLE);
             requestButton.setVisibility(View.VISIBLE);
             requestButton.setText("Cancel Request");
-        } else if (book.isBorrowed()) {
+        } else if (book.isBorrowed()||book.getAcceptedStatus()) {
             // Disable requesting
             deleteButton.setVisibility(View.INVISIBLE);
             editButton.setVisibility(View.INVISIBLE);
