@@ -7,6 +7,12 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+/**
+ * Notification objects are displayed on Notification Activity. They help the
+ * user to identify what book they have is requested, what place to meetup, etc.
+ * A notification has two types: Borrow Request and Accepted Request. Each type
+ * displays a different string.
+ */
 public class Notification {
     private String geolocation = "NA";
     private String otherUser = "NA";
@@ -21,6 +27,13 @@ public class Notification {
 
     public Notification(){
     }
+
+    /**
+     * This notification is a borrow request: All that is needed is the username
+     * and the book object to create.
+     * @param otherUser
+     * @param book
+     */
     public Notification(String otherUser, Book book){
         this.bookInQuestion = book.getUuid();
         this.bookTitle = book.getTitle();
@@ -31,6 +44,16 @@ public class Notification {
         date = dateFormat.format(c);
         this.typeNotification = "Borrow Request";
     }
+
+    /**
+     * This notification is an accepted request: All that is needed is the username
+     * address name, book object, and lat/long to create.
+     * @param otherUser
+     * @param geolocation
+     * @param book
+     * @param latitude
+     * @param longitude
+     */
     public Notification(String otherUser, String geolocation, Book book, double latitude, double longitude){
         this.bookInQuestion = book.getUuid();
         this.otherUser = otherUser;
@@ -75,6 +98,11 @@ public class Notification {
     public void setUuid(String uuid){
         this.uuid = uuid;
     }
+
+    /**
+     * This returns reference to a book in Booklist.
+     * @return
+     */
     public Book BookRef(){
         int index = Booklist.getInstance().findIndex(bookInQuestion);
         if(index != -1){
@@ -112,6 +140,11 @@ public class Notification {
         this.typeNotification = typeNotification;
     }
 
+    /**
+     * When displayed in notification activity and popups, different strings
+     * are used based on the type.
+     * @return
+     */
     @androidx.annotation.NonNull
     @Override
     public String toString() {

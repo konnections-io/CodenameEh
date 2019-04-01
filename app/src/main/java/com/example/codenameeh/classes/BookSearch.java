@@ -10,11 +10,15 @@ import java.util.ArrayList;
 public class BookSearch {
     private User user;
     private Booklist allBooks = Booklist.getInstance();
-
     public BookSearch(User user) {
         this.user = user;
     }
 
+    /**
+     * Returns a book list on all related books based on single keyword given
+     * @param keyword
+     * @return
+     */
     public ArrayList<Book> searchDatabase(String keyword) {
         keyword = keyword.toUpperCase();
         ArrayList<Book> books = allBooks.getBookList();
