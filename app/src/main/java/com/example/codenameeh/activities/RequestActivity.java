@@ -93,10 +93,8 @@ public class RequestActivity extends BaseActivity {
                 final DocumentReference ref = db.collection("users").document(CurrentUser.getInstance().getUsername());
 
                 //Add relevant code here when user declines
-
-                //can get status from book object
-                book.setAcceptedStatus(false);
-                intentToNotification.putExtra("Book", book);
+                db.collection("users").document(other_username).update("requesting",
+                                                                            FieldValue.arrayRemove(book.getUuid()));
 
                 //Remove the notification to current user from FireStore
                 ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
