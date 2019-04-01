@@ -34,6 +34,7 @@
 
         <activity
             android:name=".activities.ConfirmationActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="" />
         <activity android:name=".activities.ScanActivity"
             android:label="" />
