@@ -156,7 +156,6 @@ public class LoginActivity extends AppCompatActivity {
                     User user = documentSnapshot.toObject(User.class);
                     //Set current user singleton
                     CurrentUser.setInstance(user);
-                    CurrentUser.getInstance().setNotifications(user.getNotifications());
                     CurrentUser.getInstance().setOwning(user.getOwning());
                     CurrentUser.getInstance().setBorrowing(user.getBorrowing());
                     CurrentUser.getInstance().setRequesting(user.getRequesting());
