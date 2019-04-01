@@ -80,7 +80,7 @@ public class SearchBooksActivity extends BaseActivity {
         Iterator<Book> iter = arrayBook.iterator();
         while(iter.hasNext()){
             Book book = iter.next();
-            if(book.isBorrowed()||book.getAcceptedStatus()) {
+            if(book.isBorrowed()||book.getAcceptedStatus() || book.getOwner().equals(CurrentUser.getInstance().getUsername())) {
                 iter.remove();
             }
         }

@@ -7,13 +7,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * The request class is used to represent & store
- * book requests made between users.
+ * @author Dan Sune
+ * This class details the function of a request. It stores a User, Date, and Book object that are
+ * able to be accessed for further information. This includes getting the requesting User's
+ * name/email/etc.
  */
 public class Request implements Parcelable {
 
+    /**
+     * initiate objects and variables
+     */
     private Boolean status;
-
     private User user;
     private Date date;
     private String formatDate;
