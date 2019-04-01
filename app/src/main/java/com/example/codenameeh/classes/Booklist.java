@@ -60,7 +60,7 @@ public class Booklist {
      * @return
      */
     public ArrayList<Book> getBookList() {
-        return bookList;
+        return (ArrayList<Book>) bookList.clone();
     }
 
     /**
