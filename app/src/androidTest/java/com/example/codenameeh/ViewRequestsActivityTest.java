@@ -16,6 +16,7 @@ import com.example.codenameeh.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.NavigationViewActions.navigateTo;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withChild;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -40,83 +42,81 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withResourceName;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static java.lang.Thread.sleep;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.instanceOf;
 
 /**
- * Test Build currently fails, with error "Cause: method ID not in [0, 0xffff]: 65536"
- * I don't see a way to fix this, so I hope that I am using the ID's properly (if not, my intent should
- * at least be clear.
- *
- * This is a class to test various actions about the ViewBookActivity
- * @author Ryan Jensen
+ * @author bqi1
+ * Tests requesting and denying books, signing in with a user already created.
  */
 @RunWith(AndroidJUnit4.class)
-public class ViewBookActivityTest {
-    String username = "test";
-    String password = "test123";
+public class ViewRequestsActivityTest{
+    String username = "testbqi1";
+    String password = "password";
     User myUser;
     @Rule
     public ActivityTestRule<LoginActivity> activityRule =
             new ActivityTestRule<LoginActivity>(LoginActivity.class);
 
     /**
-     * Do the test
+     * Test requesting a book in SearchBooks, then checking if it can be found in ViewRequestsActivity
      */
     @Test
-    public void Test(){
+    public void testRequesting(){
         FirebaseAuth.getInstance().signOut();
         onView(withId(R.id.username)).perform(typeText(username));
         onView(withId(R.id.password)).perform(typeText(password));
         onView(withId(R.id.sign_in)).perform(click());
         try {
             // Delay to get data from the server.
-            sleep(10000);
+            sleep(7000);
         } catch(Exception e){
         }
         myUser = CurrentUser.getInstance();
         if(myUser != null) {
+            //Search a book to request
             onView(allOf(instanceOf(AppCompatImageButton.class),
                     withParent(withResourceName("toolbar")))).perform(click());
             onView(allOf(Matchers.<View>instanceOf(NavigationMenuItemView.class),withChild
-                    (allOf(Matchers.<View>instanceOf(AppCompatCheckedTextView.class), withText("My Books"))))).perform(click());
-            Book testBook = myUser.BooksOwned().get(0);
-            onData(anything()).inAdapterView(withId(R.id.BooksOwnedView)).atPosition(0).perform(click());
-            // Check that this is as expected
-            onView(withId(R.id.book_owner_view)).check(matches(not(isDisplayed())));
-            onView(withId(R.id.book_title_view)).check(matches(withText("Title: "+testBook.getTitle())));
-            onView(withId(R.id.book_author_view)).check(matches(withText("Author: "+testBook.getAuthor())));
-            onView(withId(R.id.book_ISBN_view)).check(matches(withText("ISBN: "+testBook.getISBN())));
-            onView(withId(R.id.book_description)).check(matches(withText("Description: "+testBook.getDescription())));
-            onView(withId(R.id.editBookButton)).check(matches(isDisplayed()));
-            onView(withId(R.id.requestBookButton)).check(matches(not(isDisplayed())));
-            onView(withId(R.id.deleteBookButton)).check(matches(isDisplayed()));
-            onView(withId(R.id.book_photo)).check(matches(not(isDisplayed())));
-            // Maybe an edit, to add a photo. I don't know how to check if the photo is the correct photo though
-            // Can check if the photo is visible
-            Espresso.pressBack(); // Assuming no crash
-            // become not the owner for this purpose
-            testBook.setOwner(myUser.getUsername()+"5");
-            onData(anything()).inAdapterView(withId(R.id.BooksOwnedView)).atPosition(0).perform(click());
-            onView(withId(R.id.book_owner_view)).check(matches(isDisplayed()));
-            onView(withId(R.id.book_owner_view)).check(matches(withText("Owner: "+myUser.getUsername()+"5")));
-            onView(withId(R.id.book_title_view)).check(matches(withText("Title: "+testBook.getTitle())));
-            onView(withId(R.id.book_author_view)).check(matches(withText("Author: "+testBook.getAuthor())));
-            onView(withId(R.id.book_ISBN_view)).check(matches(withText("ISBN: "+testBook.getISBN())));
-            onView(withId(R.id.book_description)).check(matches(withText("Description: "+testBook.getDescription())));
-            onView(withId(R.id.editBookButton)).check(matches(not(isDisplayed())));
-            onView(withId(R.id.requestBookButton)).check(matches(isDisplayed()));
-            onView(withId(R.id.requestBookButton)).check(matches(withText("Request")));
-            onView(withId(R.id.deleteBookButton)).check(matches(not(isDisplayed())));
-            onView(withId(R.id.book_photo)).check(matches(not(isDisplayed())));
-            // Request Button works
+                    (allOf(Matchers.<View>instanceOf(AppCompatCheckedTextView.class), withText("Search Books"))))).perform(click());
+            onData(anything()).inAdapterView(withId(R.id.search_books)).atPosition(0).perform(click());
             onView(withId(R.id.requestBookButton)).perform(click());
-            onView(withId(R.id.requestBookButton)).check(matches(withText("Cancel Request")));
-            onView(withId(R.id.requestBookButton)).perform(click());
-            onView(withId(R.id.requestBookButton)).check(matches(withText("Request")));
 
+            //Go to view requests activity
+            onView(allOf(instanceOf(AppCompatImageButton.class),
+                    withParent(withResourceName("toolbar")))).perform(click());
+            onView(allOf(Matchers.<View>instanceOf(NavigationMenuItemView.class),withChild
+                    (allOf(Matchers.<View>instanceOf(AppCompatCheckedTextView.class), withText("Requests"))))).perform(click());
+            onData(anything()).inAdapterView(withId(R.id.requestedPendingListView)).atPosition(0).perform(click());
+
+            //See if book requested matches with what we requested
+            Book testBook = myUser.RequestedBooks().get(0);
+            onView(withId(R.id.book_owner_view)).check(matches(withText("Owner: "+testBook.getOwner())));
+            onView(withId(R.id.book_title_view)).check(matches(withText("Title: "+testBook.getTitle())));
+            onView(withId(R.id.book_author_view)).check(matches(withText("Author: "+testBook.getAuthor())));
+            onView(withId(R.id.book_ISBN_view)).check(matches(withText("ISBN: "+testBook.getISBN())));
+            onView(withId(R.id.book_description)).check(matches(withText("Description: "+testBook.getDescription())));
+            onView(withId(R.id.requestBookButton)).check(matches(withText("Cancel Request")));
+            onView(withId(R.id.requestBookButton)).check(matches(isDisplayed()));
+            onView(withId(R.id.deleteBookButton)).check(matches(not(isDisplayed())));
+            onView(withId(R.id.editBookButton)).check(matches(not(isDisplayed())));
+            // Unrequest the book, book should no longer be displayed
+            onView(withId(R.id.requestBookButton)).perform(click());
+            onView(allOf(instanceOf(AppCompatImageButton.class),
+                    withParent(withResourceName("toolbar")))).perform(click());
+            onView(allOf(Matchers.<View>instanceOf(NavigationMenuItemView.class),withChild
+                    (allOf(Matchers.<View>instanceOf(AppCompatCheckedTextView.class), withText("Requests"))))).perform(click());
+
+
+            //Check if the book we cancelled is not displayed at all
+            onView(withId(R.id.requestedPendingListView))
+                    .check(matches(not(hasDescendant(withText(containsString(testBook.getTitle()))))));
+
+            //Logout for further tests
             onView(allOf(instanceOf(AppCompatImageButton.class),
                     withParent(withResourceName("toolbar")))).perform(click());
             onView(allOf(Matchers.<View>instanceOf(NavigationMenuItemView.class),withChild
