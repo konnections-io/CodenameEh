@@ -32,6 +32,13 @@ public class SearchBooksAdapter extends ArrayAdapter<Book> {
         this.resource = resource;
     }
 
+    /**
+     * Finds the view for SearchBooksActivity and returns it.
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {

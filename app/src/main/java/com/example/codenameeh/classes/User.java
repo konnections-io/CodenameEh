@@ -4,6 +4,10 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+/**
+ * A user has an email,name,phone,username,keywords saved,keywordTracker,
+ * lists of what book uuids are owned, borrowed,requeste, and notifications
+ */
 public class User {
     private String name;
     private String phone;
@@ -27,6 +31,14 @@ public class User {
         keywords = new ArrayList<>();
     }
 
+    /**
+     * All that is needed to initialize a User is name, phone, email, username
+     * as String objects
+     * @param name
+     * @param phone
+     * @param email
+     * @param username
+     */
     public User(String name, String phone, String email, String username) {
         this.name = name;
         this.phone = phone;
@@ -41,6 +53,10 @@ public class User {
         this.notifications = new ArrayList<Notification>();
     }
 
+    /**
+     * Adds a book to what a user can own
+     * @param book
+     */
     public void newOwn(Book book) {
         if(book != null) {
             this.owning.add(book.getUuid());
@@ -48,12 +64,18 @@ public class User {
         }
     }
 
+    /**
+     * Remove a book from the user's possession
+     * @param book
+     */
     public void removeOwn(Book book) {
         if(book != null) {
             this.owning.remove(book.getUuid());
             book.setOwner(null);
         }
     }
+
+
     public void newRequested(Book book) {
         this.requesting.add(book.getUuid());
     }
@@ -62,6 +84,10 @@ public class User {
         this.requesting.remove(book.getUuid());
     }
 
+    /**
+     * If a notification is an accepted request, add book as a new book to borrow
+     * @param book
+     */
     public void newBorrow(Book book) {
         if(book != null) {
             this.borrowing.add(book.getUuid());
@@ -78,6 +104,10 @@ public class User {
         }
     }
 
+    /**
+     * Unborrow book based on UUID
+     * @param book
+     */
     public void removeBorrow(Book book) {
         if(book != null) {
             this.borrowing.remove(book.getUuid());
@@ -139,6 +169,10 @@ public class User {
         this.searchWords = searchWords;
     }
 
+    /**
+     * Returns array list of all books objects owned
+     * @return
+     */
     public ArrayList<Book> BooksOwned() {
         Booklist books =  Booklist.getInstance();
         ArrayList<Book> temp = new ArrayList<>();
@@ -151,6 +185,10 @@ public class User {
         return temp;
     }
 
+    /**
+     * Returns arraylist of all books owned that are available (status wise)
+     * @return
+     */
     public ArrayList<Book> BooksOwnedAvailable() {
         Booklist books =  Booklist.getInstance();
         ArrayList<Book> temp = new ArrayList<>();
@@ -167,6 +205,10 @@ public class User {
         return temp;
     }
 
+    /**
+     * Returns arraylist of all books owned that are borrowed (status wise)
+     * @return
+     */
     public ArrayList<Book> BooksOwnedBorrowed() {
         Booklist books =  Booklist.getInstance();
         ArrayList<Book> temp = new ArrayList<>();
@@ -181,6 +223,10 @@ public class User {
         return temp;
     }
 
+    /**
+     * Returns arraylist of all books owned that are requested (status wise)
+     * @return
+     */
     public ArrayList<Book> BooksOwnedRequested() {
         Booklist books =  Booklist.getInstance();
         ArrayList<Book> temp = new ArrayList<>();
@@ -195,6 +241,10 @@ public class User {
         return temp;
     }
 
+    /**
+     * Sets owning to what is provided
+     * @param owning
+     */
     public void setBooksOwned(ArrayList<Book> owning) {
         if(this.owning!= null) {
             this.owning.clear();
@@ -205,6 +255,12 @@ public class User {
             this.owning.add(own.getUuid());
         }
     }
+
+    /**
+     * For all the books owned, gets keywords from each book returning as an
+     * arraylist of strings
+     * @return
+     */
     public ArrayList<String> getKeywordsFromBooks() {
         ArrayList<Book> owns = BooksOwned();
         ArrayList<String> keys = new ArrayList<>();
@@ -224,6 +280,10 @@ public class User {
         return keys;
     }
 
+    /**
+     * Returns all borrowed books as an arraylist
+     * @return
+     */
     public ArrayList<Book> BorrowedBooks() {
         Booklist books =  Booklist.getInstance();
         ArrayList<Book> temp = new ArrayList<>();
@@ -255,6 +315,10 @@ public class User {
         return this.requesting;
     }
 
+    /**
+     * sets borrowing to what is provided
+     * @param borrowing
+     */
     public void setBooksBorrowed(ArrayList<Book> borrowing) {
         if(this.borrowing!= null){
             this.borrowing.clear();
@@ -274,6 +338,10 @@ public class User {
         this.borrowedHistory = borrowedHistory;
     }
 
+    /**
+     * Returns all books that are requested
+     * @return
+     */
     public ArrayList<Book> RequestedBooks() {
         Booklist books =  Booklist.getInstance();
         ArrayList<Book> temp = new ArrayList<>();
@@ -286,6 +354,10 @@ public class User {
         return temp;
     }
 
+    /**
+     * Sets requesting to what is provided
+     * @param requesting
+     */
     public void setRequestedBooks(ArrayList<Book> requesting) {
         if(this.requesting!=null) {
             this.requesting.clear();
