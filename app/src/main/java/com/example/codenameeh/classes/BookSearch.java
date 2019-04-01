@@ -21,8 +21,8 @@ public class BookSearch {
     }
 
     /**
-     * Searches the master booklist for books that contains the keyword
-     * @param keyword
+     * Returns a book list on all related books based on single keyword given
+     * @param keyword The constraining word used to filter the books
      * @return A collection of books that contains books with the keyword in their title, author, or description
      */
     public ArrayList<Book> searchDatabase(String keyword) {

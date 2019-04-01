@@ -8,6 +8,15 @@ import java.util.UUID;
 
 import androidx.annotation.Nullable;
 
+/**
+ * Requested, borrowed, accepted, denied by other users.
+ * Represents a real life book through representation of title, uuid,
+ * author, ISBN, decription, optional photograph, owner, keywords.
+ * Keeps track of who to is requesting this book, as well as if it's borrowed,
+ * accepted, confirmed to transact, etc.
+ * ownerConfirmation and borrowerConfirmation are used for the transaction of
+ * borrowing and returning
+ */
 public class Book implements Parcelable {
     private String uuid;
     private String title;
@@ -31,6 +40,17 @@ public class Book implements Parcelable {
         this.borrowerConfirmation = false;
         this.borrower = null;
     }
+
+    /**
+     * A photo is provided for the construction of the Book object
+     * @param title
+     * @param author
+     * @param ISBN
+     * @param description
+     * @param photograph
+     * @param Owner
+     * @param keywords
+     */
     public Book(String title, String author, String ISBN, String description, String photograph, String Owner, ArrayList<String> keywords) {
         this.title = title;
         this.author = author;
@@ -48,7 +68,16 @@ public class Book implements Parcelable {
         this.borrower = null;
 
     }
-    // no photograph
+
+    /**
+     * No photograph is provided for the construction of the Book object
+     * @param title
+     * @param author
+     * @param ISBN
+     * @param description
+     * @param Owner
+     * @param keywords
+     */
     public Book(String title, String author, String ISBN, String description, String Owner, ArrayList<String> keywords) {
         this.title = title;
         this.author = author;
@@ -93,6 +122,12 @@ public class Book implements Parcelable {
     public void setBorrower(String borrower) {
         this.borrower = borrower;
     }
+
+    /**
+     * When a book is borrowed, it is no longer accepted, the book now knows who
+     * borrowed it, and the transaction is invalid once again.
+     * @param borrower
+     */
     public void borrow(User borrower){
         this.acceptedStatus = false;
         this.borrower = borrower.getUsername();
@@ -100,6 +135,11 @@ public class Book implements Parcelable {
         this.ownerConfirmation = false;
         this.borrowerConfirmation = false;
     }
+
+    /**
+     * When a book is unborrowed, the book removes what borrower it had, and the
+     * transaction is invalid once again.
+     */
     public void unborrow(){
         this.borrowed = false;
         this.borrower = null;
@@ -197,6 +237,11 @@ public class Book implements Parcelable {
         this.keywords = keywords;
     }
 
+    /**
+     * Compares a book with another book object properly
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(@Nullable Object obj) {
         if(this==obj){
@@ -214,6 +259,10 @@ public class Book implements Parcelable {
         }
     }
 
+    /**
+     * When displayed in several activities, displays relevant information
+     * @return representative string of the book
+     */
     @Override
     public String toString() {
         String output = "Title: "+this.title+ "\t\tAuthor: "+ this.author
@@ -241,6 +290,11 @@ public class Book implements Parcelable {
         return (output);
     }
 
+    /**
+     * Used when passing through to other activities via intent.
+     * Preserves book information to be received by other activities.
+     * @param in
+     */
     protected Book(Parcel in) {
         title = in.readString();
         author = in.readString();
@@ -266,6 +320,12 @@ public class Book implements Parcelable {
         return 0;
     }
 
+    /**
+     * Writes relevant data to intent using Parcelable to be read by
+     * other activities
+     * @param dest
+     * @param flags
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(title);

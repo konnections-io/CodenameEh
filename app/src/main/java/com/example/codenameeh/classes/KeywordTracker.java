@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
+/**
+ * Keeps track of keywords as String objects for book searching
+ */
 public class KeywordTracker implements Parcelable {
     private ArrayList<String> keywords;
 

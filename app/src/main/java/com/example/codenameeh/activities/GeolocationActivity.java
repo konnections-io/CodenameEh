@@ -118,7 +118,7 @@ public class GeolocationActivity extends BaseActivity implements OnMapReadyCallb
     }
 
     /**
-     * Locates the last known user location to display on the Mapview.
+     * Locates the last known user location by longitude and latitude to display on the Mapview.
      */
     @Override
     protected void onStart() {
