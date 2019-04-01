@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -50,6 +49,9 @@ public class RequestActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
+
+
+
 
         Button acceptButton = findViewById(R.id.accept);
         Button declineButton = findViewById(R.id.decline);
@@ -121,7 +123,9 @@ public class RequestActivity extends BaseActivity {
                 finish();
             }
         });
-        }
+
+
+    }
 
     /**
      * Retrieves book object, username, notification UUID, and displays appropriate data on textview
@@ -132,11 +136,16 @@ public class RequestActivity extends BaseActivity {
         Intent intent = getIntent();
         if (intent.getStringExtra("Sender").equals(NOTIFICATION_REQUEST)) {
             book = intent.getParcelableExtra("Book");
+
             other_username = intent.getStringExtra("Other Username");
+
             notificationUUID = intent.getStringExtra("UUID");
+
             TextView userField = findViewById(R.id.textView2);
             userField.setText(String.format("%s would like to borrow\n%s",other_username,book.getTitle()));
+
         }
+
 
     }
 
