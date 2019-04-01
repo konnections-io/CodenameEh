@@ -73,6 +73,7 @@ public class User {
                     }
                 }
             }
+            this.requesting.remove(book);
             book.borrow(this);
         }
     }

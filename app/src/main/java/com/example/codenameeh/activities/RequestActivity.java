@@ -189,8 +189,10 @@ public class RequestActivity extends BaseActivity {
                                 for(Notification n: nList){
                                     if(n.getTypeNotification().equals("Borrow Request")
                                             && n.BookRef().equals(book)){
-                                        db.collection("users").document(n.getOtherUser())
-                                                .update("requesting", FieldValue.arrayRemove(book.getUuid()));
+                                        if(!n.getOtherUser().equals(other_username)) {
+                                            db.collection("users").document(n.getOtherUser())
+                                                    .update("requesting", FieldValue.arrayRemove(book.getUuid()));
+                                        }
                                         removeRef.update("notifications",FieldValue.arrayRemove(n));
 
                                     }
