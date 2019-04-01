@@ -261,7 +261,7 @@ public class Book implements Parcelable {
 
     /**
      * When displayed in several activities, displays relevant information
-     * @return
+     * @return representative string of the book
      */
     @Override
     public String toString() {
