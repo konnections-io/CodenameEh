@@ -88,7 +88,6 @@ public class RequestActivity extends BaseActivity {
              */
             @Override
             public void onClick(View v){
-                final Intent intentToNotification = new Intent();
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 final DocumentReference ref = db.collection("users").document(CurrentUser.getInstance().getUsername());
 
