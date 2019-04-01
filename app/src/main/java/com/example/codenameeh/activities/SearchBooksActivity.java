@@ -91,13 +91,12 @@ public class SearchBooksActivity extends BaseActivity {
         fb.collection("All Books").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                arrayBook.clear();
+                bookAdapter.notifyDataSetChanged();
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots){
                     if (doc.exists()) {
                         Book book = doc.toObject(Book.class);
-                        if (book.isBorrowed() || book.getAcceptedStatus()) {
-                            arrayBook.remove(book);
-                            bookAdapter.notifyDataSetChanged();
-                        }else if(!arrayBook.contains(book)){
+                        if (!book.isBorrowed() && !book.getAcceptedStatus()) {
                             arrayBook.add(book);
                             bookAdapter.notifyDataSetChanged();
                         }
