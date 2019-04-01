@@ -1,20 +1,28 @@
 package com.example.codenameeh;
 
+import android.content.Intent;
 import android.support.design.internal.NavigationMenuItemView;
+
 import android.support.v7.widget.AppCompatCheckedTextView;
 import android.support.v7.widget.AppCompatImageButton;
 import android.view.View;
 
 import androidx.core.widget.ImageViewCompat;
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
+import com.example.codenameeh.activities.GeolocationActivity;
 import com.example.codenameeh.activities.LoginActivity;
+import com.example.codenameeh.activities.MainActivity;
 import com.example.codenameeh.activities.ViewBookActivity;
 import com.example.codenameeh.classes.Book;
 import com.example.codenameeh.classes.CurrentUser;
 import com.example.codenameeh.classes.Notification;
 import com.example.codenameeh.classes.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -46,6 +54,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withResourceName;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -56,22 +65,25 @@ import static org.hamcrest.Matchers.instanceOf;
 
 /**
  * @author bqi1
- *
+ * Tests Geolocation Activity and verifying map view is clickable and removes corresponding borrow
+ * notifications from user.
  */
 @RunWith(AndroidJUnit4.class)
-public class NotificationActivityTest{
+public class GeolocationActivityTest{
     String username = "testbqi3";
     String password = "password";
     User myUser;
     @Rule
     public ActivityTestRule<LoginActivity> activityRule =
             new ActivityTestRule<LoginActivity>(LoginActivity.class);
-
+    @Rule public GrantPermissionRule permissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
     /**
-     *
+     * User logs in, goes to notification activity, and accepts a dummy notification borrow request.
+     * User then finds a location on Google Map View and select it, saving, and checking if that
+     * notification is now removed.
      */
     @Test
-    public void testNotificationVisibility(){
+    public void testGeolocationAccepting(){
         FirebaseAuth.getInstance().signOut();
         onView(withId(R.id.username)).perform(typeText(username));
         onView(withId(R.id.password)).perform(typeText(password));
@@ -88,36 +100,36 @@ public class NotificationActivityTest{
                     withParent(withResourceName("toolbar")))).perform(click());
             onView(allOf(Matchers.<View>instanceOf(NavigationMenuItemView.class),withChild
                     (allOf(Matchers.<View>instanceOf(AppCompatCheckedTextView.class), withText("Notifications"))))).perform(click());
-            //Test if dummy notifications can be displayed when added to Firestore.
+            //Add a dummy notification to be clicked. UUID is already existing in Firebase
             ArrayList<String> testKeywords = new ArrayList<String>();
             testKeywords.add("Dummy keyword");
             Book book = new Book("DummyBook","DummyAuthor","123123","DummyDescription","DummyOwner",testKeywords);
+            book.setUuid("e80788db-4f1d-4665-9cfe-6911910d44f4");
             Notification borrowRequest = new Notification("DummyUser",book);
-            Notification acceptedRequest = new Notification("DummyUser","DummyLocation",book,40.0,-70.0);
-            //Test borrow requests if they appear when added to Firestore
             FirebaseFirestore.getInstance().collection("users").document(username).update("notifications",FieldValue.arrayUnion(borrowRequest));
             try {
                 sleep(3000);
             } catch(Exception e){
             }
-            onView(withId(R.id.requestBookList))
-                    .check(matches((hasDescendant(withText(containsString(borrowRequest.toString()))))));
-            //Test accepted requests if they appear when added to Firestore
-            FirebaseFirestore.getInstance().collection("users").document(username).update("notifications",FieldValue.arrayUnion(acceptedRequest));
+            onData(anything()).inAdapterView(withId(R.id.requestBookList)).atPosition(0).perform(click());
+            //Inside Request Activity
+            onView(withId(R.id.accept)).perform(click());
+            //Now inside Geolocation Activity
             try {
                 sleep(3000);
-            } catch(Exception e){
+            } catch (Exception e) {
             }
-            onView(withId(R.id.bookAcceptedList))
-                    .check(matches((hasDescendant(withText(containsString(acceptedRequest.toString()))))));
-            //Test clear button
-            onView(withId(R.id.ClearAcceptedNotf)).perform(click());
-            onView(withId(R.id.bookAcceptedList))
-                    .check(matches(not(hasDescendant(withText(containsString(acceptedRequest.toString()))))));
-
+            onView(withContentDescription("Google Map")).perform(click());
+            //Make sure we have a location selected
+            onView(withId(R.id.GeolocationText)).check(matches(not(withText(""))));
+            onView(withId(R.id.AcceptLocationButton)).perform(click());
             //Remove notification for potential repeat tests
-            FirebaseFirestore.getInstance().collection("users").document(username).update("notifications",FieldValue.arrayRemove(borrowRequest));
-            FirebaseFirestore.getInstance().collection("users").document(username).update("notifications",FieldValue.arrayRemove(acceptedRequest));
+            FirebaseFirestore.getInstance().collection("users").document(username)
+                    .update("notifications",FieldValue.arrayRemove(borrowRequest));
+            //Check if the book notification is not displayed at all anymore
+            onView(withId(R.id.requestBookList))
+                    .check(matches(not(hasDescendant(withText(containsString(borrowRequest.toString()))))));
+
             //Logout for further tests
             onView(allOf(instanceOf(AppCompatImageButton.class),
                     withParent(withResourceName("toolbar")))).perform(click());
