@@ -92,12 +92,16 @@ public class User {
         if(book != null) {
             this.borrowing.add(book.getUuid());
             this.borrowedHistory.add(book.getUuid());
-            for (Notification notification: this.notifications){
+            int i = 0;
+            while(i< this.notifications.size()){
+                Notification notification = notifications.get(i);
                 if(notification.getTypeNotification().equals("Accepted Request")){
                     if(notification.BookRef().equals(book)){
                         this.notifications.remove(notification);
+                        i = i-1;
                     }
                 }
+                i = i+1;
             }
             this.requesting.remove(book);
             book.borrow(this);
